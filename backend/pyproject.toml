@@ -1,0 +1,28 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Jaren",email = "kaylajaren@gmail.com"},
+    {name = "Ada", email = ""},
+    {name = "Heng Rui", email = ""},
+    {name= "Yan Shuen", email = ""}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pydantic (>=2.11.3,<3.0.0)",
+    "fastapi (>=0.115.12,<0.116.0)",
+    "uvicorn (>=0.34.0,<0.35.0)"
+]
+
+[tool.poetry]
+packages = [{include = "backend", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+dev = "src.scripts.run:dev"
