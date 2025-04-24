@@ -9,19 +9,32 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.74.4",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cobe": "^0.6.3",
+    "dotenv": "^16.5.0",
+    "lodash": "^4.17.21",
+    "lucide-react": "^0.503.0",
+    "motion": "^12.8.0",
+    "next": "15.2.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.2.4"
+    "sweetalert": "^2.1.2",
+    "tailwind-merge": "^3.2.0",
+    "use-immer": "^0.11.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
-    "@eslint/eslintrc": "^3"
+    "tailwindcss": "^4",
+    "tw-animate-css": "^1.2.8",
+    "typescript": "^5"
   }
 }
