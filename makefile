@@ -3,6 +3,7 @@ install-dep:
 	@echo "Installing dependencies..."
 	@pip install pipx
 	@pipx install poetry
+	@pipx ensurepath
 	@cd backend && poetry install
 	@cd frontend && npm install
 	@echo "Dependencies installed successfully!✅"
