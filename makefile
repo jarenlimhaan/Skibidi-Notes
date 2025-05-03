@@ -2,8 +2,9 @@
 install-dep:
 	@echo "Installing dependencies..."
 	@pip install pipx
-	@pipx install poetry
+	@pipx install poetry --force
 	@pipx ensurepath
+	@echo "If it fails just reopen the terminal and rerun make install-dep!"
 	@cd backend && poetry install
 	@cd frontend && npm install
 	@echo "Dependencies installed successfully!✅"
