@@ -4,10 +4,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     
     # Frontend 
-    frontend_url: str
+    NEXT_PUBLIC_FRONTEND_URL: str
     
-    # Backend 
-    backend_url: str
+    # Backend
+    NEXT_PUBLIC_BACKEND_URL: str
     database_url: str
     open_ai_api_key: str
 
