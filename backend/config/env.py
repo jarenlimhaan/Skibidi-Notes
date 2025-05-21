@@ -1,7 +1,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class Settings(BaseSettings):
+class App_Config(BaseSettings):
     
     # Frontend 
     NEXT_PUBLIC_FRONTEND_URL: str
@@ -15,5 +15,5 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file="../.env", env_file_encoding="utf-8")
 
 
-def get_settings() -> Settings:
-    return Settings()
+def get_app_configs() -> App_Config:
+    return App_Config()
