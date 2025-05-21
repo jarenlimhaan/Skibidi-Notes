@@ -10,7 +10,7 @@ export const useUsers = () => useQuery({
   queryFn: () => axios.get(`http://localhost:8000/api/users`).then(res => res.data),
 })
 
-export const useUserById = (id: number) => {
+export const useUserById = (id: string) => {
   return useQuery({
     queryKey: ['users', id],
      queryFn: () => axios.get(`${backendURL}/api/users/${id}`).then(res => res.data),

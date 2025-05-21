@@ -5,11 +5,11 @@ import { useUserById } from "./providers/queries/users";
 
 export default function Home() {
 
-  const { data: user, isLoading } = useUserById(1);
+  const { data: user, isLoading } = useUserById("2b60325f-5eb0-48df-9a66-b961492a3ee5");
 
   if (isLoading) return <div>Loading...</div>;
 
-  console.log(user?.name);
+  console.log(user);
 
   return (
     <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden rounded-lg border bg-background">
