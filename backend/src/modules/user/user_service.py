@@ -1,8 +1,12 @@
-class UserService:
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 
-    def get(self, user_id):
-        return {
-            "id": 1,
-            "name": "user",
-            "email": "user@gmail.com"
-        }
+from .user_model import User 
+
+class UserService:
+    
+    async def get(self, user_id: int, db: AsyncSession):
+        stmt = select(User).where(User.id == user_id)
+        result = await db.execute(stmt)
+        user = result.scalar_one_or_none() 
+        return user
