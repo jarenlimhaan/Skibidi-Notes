@@ -8,6 +8,7 @@
   - [ ] Header/token validation logic
   - [ ] Query parameter validation (e.g., limits, filters)
   - [ ] Role-based access or permission checks
+- [ ] Setup logger
 ---
 
 ## 🎨 Frontend 
