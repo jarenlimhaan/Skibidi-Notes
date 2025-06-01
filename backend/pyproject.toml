@@ -9,7 +9,7 @@ authors = [
     {name= "Yan Shuen", email = "ys.lim.2024@computing.smu.edu.sg"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.8"
 dependencies = [
     "pydantic (>=2.11.3,<3.0.0)",
     "fastapi (>=0.115.12,<0.116.0)",
