@@ -113,7 +113,7 @@ Docker is required to containerize and manage the services for this project. Fol
 2. **Install Dependencies**:
     - Run the following command to install all required dependencies:
       ```bash
-      make install-dep
+      make install
       ```
 
 ## Running the Development server 
