@@ -28,7 +28,7 @@ export default function Home() {
               <div className="flex flex-col justify-center items-center text-center space-y-4">
                 <div className="flex items-center justify-center">
                 <Image
-                  src="/placeholder.svg?height=550&width=550"
+                  src="/pig.jpg"
                   alt="Hero Image"
                   width={550}
                   height={550}

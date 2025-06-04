@@ -22,7 +22,6 @@ async def get_user(
     service: UserService = Depends(get_user_service)
 ):
     user = await service.get(user_id, db)
-    print(user)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
