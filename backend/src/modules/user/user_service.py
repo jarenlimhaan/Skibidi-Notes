@@ -1,6 +1,8 @@
+# External Imports
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
+# Internal Imports
 from .user_model import User 
 
 class UserService:

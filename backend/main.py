@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # Internal Imports 
 from src.modules.root.root_controller import router as root_router
 from src.modules.user.user_controller import router as user_router
+from src.modules.preprocessing.preprocessing_controller import router as pre_router
 
 
 app = FastAPI()
@@ -19,6 +20,7 @@ app.add_middleware(
 ## Include routers
 app.include_router(root_router)
 app.include_router(user_router,prefix="/api/users", tags=["Users"])
+app.include_router(pre_router, prefix="/api/preprocessing", tags=["Preprocessing"])
 
 if __name__ == "__main__":
     import uvicorn

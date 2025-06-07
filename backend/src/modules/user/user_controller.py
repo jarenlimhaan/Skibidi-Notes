@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 # Internal Imports 
 from config.env import get_app_configs
-from ...db.driver import get_db
+from src.deps.db import get_db
 
 from .user_service import UserService
 from .user_schema import UserSchema
