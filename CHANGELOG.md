@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.3] - 2025-06-07
+- Seperate dependecies in backend to `deps` folder
+- Added sample upload controller endpoint and fe upload page for testing
+
 ## [1.0.2] - 2025-05-21
 - Added `db drivers` to interact with supabase db
 
