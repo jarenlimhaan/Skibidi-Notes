@@ -13,17 +13,3 @@ engine = create_async_engine(
     max_overflow=10,
 )
 SessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-
-async def get_db() -> AsyncGenerator[AsyncSession, None]:
-    try:
-        async with SessionLocal() as session:
-            yield session
-    except SQLAlchemyError as e:
-        print(f"Database session error: {e}")
-        raise
-
-
-async def close_db():
-    if engine:
-        await engine.dispose()
-        print("Database connection closed")
