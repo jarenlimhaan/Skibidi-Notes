@@ -8,8 +8,9 @@ class App_Config(BaseSettings):
     
     # Backend
     NEXT_PUBLIC_BACKEND_URL: str
-    database_url: str
-    open_ai_api_key: str
+    DATABASE_URL: str
+    OPEN_AI_API_KEY: str
+    UPLOAD_DIR: str
 
     # Config for loading environment variables
     model_config = SettingsConfigDict(env_file="../.env", env_file_encoding="utf-8")

@@ -3,7 +3,7 @@ from typing import AsyncGenerator
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..db.driver import engine, SessionLocal
+from src.db.driver import engine, SessionLocal
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     try:

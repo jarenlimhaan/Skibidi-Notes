@@ -11,23 +11,20 @@ from config.env import get_app_configs
 router = APIRouter()
 app_config = get_app_configs()
 
-UPLOAD_DIR = "static/uploads"
+upload_directory_path = app_config.UPLOAD_DIR
 
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+os.makedirs(upload_directory_path, exist_ok=True)
 
 
 @router.post("/upload")
 async def upload_file(request: Request, file: UploadFile = File(...)):
     filename = request.query_params.get("filename") or file.filename
     file_id = uuid.uuid4().hex
-    save_path = os.path.join(UPLOAD_DIR, f"{file_id}_{filename}")
-
-    os.makedirs(UPLOAD_DIR, exist_ok=True)
-
+    save_path = os.path.join(upload_directory_path, f"{file_id}_{filename}")
     try:
         content = await file.read()  
         with open(save_path, "wb") as buffer:
             buffer.write(content)  
-        return JSONResponse(content={"url": f"/static/uploads/{file_id}_{filename}"})
+        return JSONResponse(content={"url": f"test.url"})
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
