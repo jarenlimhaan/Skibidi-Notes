@@ -38,7 +38,7 @@ export default function Register() {
   return (
     <div style={wrapperStyle}>
       <div style={formContainerStyle}>
-        <h2 style={headingStyle}><strong>CREATE AN ACCOUNT</strong></h2>
+        <h2 style={headingStyle}>CREATE AN ACCOUNT</h2>
         <form onSubmit={handleSubmit} style={formStyle}>
           <input
             type="text"
@@ -67,11 +67,23 @@ export default function Register() {
             required
             style={inputStyle}
           />
+          <input
+            type="password"
+            name="cfmpassword"
+            placeholder="Confirm Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            style={inputStyle}
+          />
           <button type="submit" style={buttonStyle}>
             Sign Up
           </button>
         </form>
-        {message && <p>{message}</p>}
+        <div style={{ marginTop: '30px', color: '#F5ECD5' }}>
+          {message && <p>{message}</p>}
+          <p>Already have an account? login <a href="../login">here</a></p>
+        </div>
       </div>
       <div style={rightSideStyle}>
         {/* Optional: you can put an image or content here */}
@@ -98,8 +110,8 @@ const formContainerStyle: React.CSSProperties = {
 
 const rightSideStyle: React.CSSProperties = {
   flex: 1,
-  backgroundColor: '#e0e0e0', // just to visualize the right half
-};
+  backgroundColor: '#e0e0e0', 
+}
 
 const formStyle: React.CSSProperties = {
   width: '100%',
@@ -108,7 +120,7 @@ const formStyle: React.CSSProperties = {
  
 const headingStyle: React.CSSProperties = {
     fontFamily: "'Baloo 2', cursive",
-    fontSize: '3rem',
+    fontSize: '2.5rem',
     marginBottom: '2rem',
     color: '#f5ecd5'
   };
@@ -127,10 +139,11 @@ const inputStyle: React.CSSProperties = {
 const buttonStyle: React.CSSProperties = {
 fontFamily: "'JetBrains Mono', monospace",
 padding: '0.5rem 1rem',
+marginTop: '0.5rem',
 backgroundColor: '#a4b465',
 color: '#fff',
 border: 'none',
-borderRadius: '4px',
+borderRadius: '10px',
 cursor: 'pointer',
 };
   
