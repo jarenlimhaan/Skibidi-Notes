@@ -6,6 +6,7 @@ interface FormData {
   username: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
 export default function Register() {
@@ -13,6 +14,7 @@ export default function Register() {
     username: '',
     email: '',
     password: '',
+    confirmPassword: '',
   });
 
   const [message, setMessage] = useState<string>('');
@@ -24,15 +26,20 @@ export default function Register() {
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
 
-    const { username, email, password } = formData;
-    if (!username || !email || !password) {
+    const { username, email, password, confirmPassword  } = formData;
+    if (!username || !email || !password || !confirmPassword) {
       setMessage('Please fill in all fields.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setMessage('Passwords do not match.');
       return;
     }
 
     console.log('Registered:', formData);
     setMessage('Registration successful!');
-    setFormData({ username: '', email: '', password: '' });
+    setFormData({ username: '', email: '', password: '',  confirmPassword: ''});
   };
 
   return (
@@ -66,23 +73,25 @@ export default function Register() {
             onChange={handleChange}
             required
             style={inputStyle}
+            autoComplete="new-password"
           />
           <input
             type="password"
-            name="cfmpassword"
+            name="confirmPassword"
             placeholder="Confirm Password"
-            value={formData.password}
+            value={formData.confirmPassword}
             onChange={handleChange}
             required
             style={inputStyle}
+            autoComplete="new-password"
           />
           <button type="submit" style={buttonStyle}>
             Sign Up
           </button>
         </form>
-        <div style={{ marginTop: '30px', color: '#F5ECD5' }}>
-          {message && <p>{message}</p>}
-          <p>Already have an account? login <a href="../login">here</a></p>
+        <div style={{ marginTop: '30px', textAlign: 'center', fontSize: '1.3rem' }}>
+          {message && <p style={{color: '#CD5C5C'}}>{message}</p>}
+          <p style={{color: '#F5ECD5'}}>Already have an account? Login <a href="../login">here</a></p>
         </div>
       </div>
       <div style={rightSideStyle}>
