@@ -1,8 +1,8 @@
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai.chat_models import ChatOpenAI
-from langchain.chains.summarize import load_summarize_chain
 from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
 from langchain.schema import Document
 from typing import List
 import os
@@ -26,9 +26,41 @@ class Summarizer:
         )
         return splitter.split_documents(documents)
 
-    def __summarize(self, documents: List[Document]) -> str:
-        chain = load_summarize_chain(self.llm, chain_type="map_reduce")
-        return chain.invoke(documents)
+    def __summarize(self, documents: List[Document]) -> dict:
+        text = "\n\n".join(doc.page_content for doc in documents)
+
+        prompt = PromptTemplate.from_template(
+            """
+            You are a helpful assistant.
+
+            Given the following document text, do the following:
+            1. Write a concise summary (3-5 sentences).
+            2. Extract 5-7 key points as bullet points.
+
+            Return the output in this JSON format:
+
+            {{
+              "summary": "...",
+              "keypoints": ["...", "..."]
+            }}
+
+            Text:
+            {text}
+            """
+        )
+
+        chain = LLMChain(llm=self.llm, prompt=prompt)
+        response = chain.run(text=text)
+
+        # Attempt to safely eval the returned string into a dict
+        import json
+        try:
+            return json.loads(response)
+        except json.JSONDecodeError:
+            return {
+                "summary": response,
+                "keypoints": []
+            }
 
     def __generate_quiz(self, summary: str) -> str:
         prompt = PromptTemplate.from_template(
@@ -45,9 +77,10 @@ class Summarizer:
     def process_pdf(self, file_path: str) -> dict:
         raw_docs = self.__load_pdf(file_path)
         chunks = self.__chunk_documents(raw_docs)
-        summary = self.__summarize(chunks)
-        # quiz = self.generate_quiz(summary)
+        result = self.__summarize(chunks)
+
         return {
-            "summary": summary,
-            # "quiz": quiz
+            "summary": result.get("summary", ""),
+            "keypoints": result.get("keypoints", []),
+            # "quiz": self.__generate_quiz(result["summary"])  # Optional
         }

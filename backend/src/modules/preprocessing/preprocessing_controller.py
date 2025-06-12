@@ -27,9 +27,11 @@ async def upload_file(request: Request, file: UploadFile = File(...), summarizer
         with open(save_path, "wb") as buffer:
             buffer.write(content)  
         
-        # with open(save_path, "r+") as f:
-        #     print(summarizer.process_pdf(save_path))
+        with open(save_path, "r+") as f:
+            res = summarizer.process_pdf(save_path)
+            print(res)
 
-        return JSONResponse(content={"url": f"test.url"})
+        return JSONResponse(content={"url": f"test.url", "summary":res})
     except Exception as e:
+        print(e)
         return JSONResponse(status_code=500, content={"error": str(e)})

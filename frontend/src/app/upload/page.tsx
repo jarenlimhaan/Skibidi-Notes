@@ -17,8 +17,6 @@ import { Badge } from "@/components/ui/badge";
 import { Upload, File, X, CheckCircle, AlertCircle, Cloud } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
-
 interface UploadedFile {
   id: string;
   name: string;
@@ -30,10 +28,28 @@ interface UploadedFile {
   error?: string;
 }
 
+interface FileSummary {
+  fileId: string;
+  fileName: string;
+  summary: string;
+  keyPoints: string[];
+  wordCount: number;
+  status: "generating" | "completed" | "error";
+  error?: string;
+}
+
+interface Result {
+  summary: string;
+  keypoints: string[];
+}
+
+const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 export default function UploadPage() {
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [summaries, setSummaries] = useState<FileSummary[]>([]);
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return "0 Bytes";
@@ -43,6 +59,54 @@ export default function UploadPage() {
     return (
       Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
     );
+  };
+
+  const generateSummary = async (file: UploadedFile, summary: Result) => {
+    if (
+      !file.url ||
+      (file.type.indexOf("text") === -1 &&
+        file.type.indexOf("pdf") === -1 &&
+        file.type.indexOf("document") === -1)
+    ) {
+      return; // Only summarize text-based files
+    }
+
+    const newSummary: FileSummary = {
+      fileId: file.id,
+      fileName: file.name,
+      summary: "",
+      keyPoints: [],
+      wordCount: 0,
+      status: "generating",
+    };
+
+    setSummaries((prev) => [...prev, newSummary]);
+
+    try {
+      const result = summary;
+
+      setSummaries((prev) =>
+        prev.map((s) =>
+          s.fileId === file.id
+            ? {
+                ...s,
+                status: "completed",
+                summary: result.summary,
+                keyPoints: result.keypoints,
+                wordCount: 100,
+              }
+            : s
+        )
+      );
+    } catch (error) {
+      setSummaries((prev) =>
+        prev.map((s) =>
+          s.fileId === file.id
+            ? { ...s, status: "error", error: "Failed to generate summary" }
+            : s
+        )
+      );
+    }
   };
 
   const uploadFile = async (file: File) => {
@@ -95,6 +159,21 @@ export default function UploadPage() {
             ? { ...f, status: "success", progress: 100, url: result.url }
             : f
         )
+      );
+
+      // Generate summary for supported file types
+      setTimeout(
+        () =>
+          generateSummary(
+            {
+              ...newFile,
+              status: "success",
+              progress: 100,
+              url: result.url,
+            },
+            result.summary
+          ),
+        1000
       );
     } catch (error) {
       setFiles((prev) =>
@@ -311,14 +390,102 @@ export default function UploadPage() {
           </Card>
         )}
 
-        {files.filter((f) => f.status === "success").length > 0 && (
-          <Alert>
-            <CheckCircle className="h-4 w-4" />
-            <AlertDescription>
-              Files uploaded successfully! You can now use these files in your
-              application.
-            </AlertDescription>
-          </Alert>
+        {summaries.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <File className="h-5 w-5" />
+                Document Summaries
+              </CardTitle>
+              <CardDescription>
+                AI-generated summaries of your uploaded documents
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {summaries.map((summary) => (
+                  <div
+                    key={summary.fileId}
+                    className="border rounded-lg p-6 space-y-4"
+                  >
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-semibold text-lg">
+                        {summary.fileName}
+                      </h3>
+                      <Badge
+                        variant={
+                          summary.status === "completed"
+                            ? "default"
+                            : summary.status === "error"
+                              ? "destructive"
+                              : "secondary"
+                        }
+                      >
+                        {summary.status === "generating" && "Generating..."}
+                        {summary.status === "completed" && "Completed"}
+                        {summary.status === "error" && "Failed"}
+                      </Badge>
+                    </div>
+
+                    {summary.status === "generating" && (
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                        <span className="text-sm">
+                          Analyzing document and generating summary...
+                        </span>
+                      </div>
+                    )}
+
+                    {summary.status === "completed" && (
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-medium mb-2">Summary</h4>
+                          <p className="text-sm text-muted-foreground leading-relaxed bg-muted/50 p-4 rounded-md">
+                            {summary.summary}
+                          </p>
+                        </div>
+
+                        {summary.keyPoints.length > 0 && (
+                          <div>
+                            <h4 className="font-medium mb-2">Key Points</h4>
+                            <ul className="space-y-2">
+                              {summary.keyPoints.map((point, index) => (
+                                <li
+                                  key={index}
+                                  className="flex items-start gap-2 text-sm"
+                                >
+                                  <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                                  <span className="text-muted-foreground">
+                                    {point}
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t">
+                          <span>
+                            {/* Word count: {summary.wordCount.toLocaleString()} */}
+                            Word Count: No
+                          </span>
+                          <span>•</span>
+                          <span>Generated by Heng Rui One Braincell</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {summary.status === "error" && summary.error && (
+                      <Alert>
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertDescription>{summary.error}</AlertDescription>
+                      </Alert>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         )}
       </div>
     </div>
