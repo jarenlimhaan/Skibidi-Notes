@@ -91,7 +91,8 @@ export default function Register() {
         </form>
         <div style={{ marginTop: '30px', textAlign: 'center', fontSize: '1.3rem' }}>
           {message && <p style={{color: '#CD5C5C'}}>{message}</p>}
-          <p style={{color: '#F5ECD5'}}>Already have an account? Login <a href="../login">here</a></p>
+          <p style={{color: '#F5ECD5' ,fontFamily:'JetBrainMono' }}>Already have an account? Login <a href="../login"><u>here</u></a></p>
+
         </div>
       </div>
       <div style={rightSideStyle}>

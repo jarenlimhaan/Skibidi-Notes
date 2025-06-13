@@ -67,7 +67,7 @@ export default function Login() {
         </form>
         <div style={{ marginTop: '30px', textAlign: 'center', fontSize: '1.3rem' }}>
           {message && <p style={{color: '#CD5C5C'}}>{message}</p>}
-          <p style={{color: '#626F47'}}>Don't have an account? Sign up <a href="../register">here</a></p>
+          <p style={{color: '#626F47', fontFamily: 'JetBrainMono'}}>Don't have an account? Sign up <a href="../register"><u>here</u></a></p>
         </div>
       </div>
     </div>
