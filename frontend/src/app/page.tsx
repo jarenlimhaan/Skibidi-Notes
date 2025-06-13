@@ -38,21 +38,21 @@ export default function Home() {
               </div>
                 <div className="space-y-2 max-w-[600px]">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-                    Your Creative Journey Starts Here
+                    Born to Be An Academic Weapon
                   </h1>
-                  <p className="text-gray-500 md:text-xl dark:text-gray-400">
+                  {/* <p className="text-gray-500 md:text-xl dark:text-gray-400">
                     Discover, create, and share amazing content with our
                     platform. Join our community today.
-                </p>
+                </p> */}
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row justify-center">
                   <Button size="lg">
-                    Get Started
+                    Feed The Brain Rot Now
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="lg">
+                  {/* <Button variant="outline" size="lg">
                     Learn More
-                  </Button>
+                  </Button> */}
                
               </div>
             </div>
@@ -68,8 +68,8 @@ export default function Home() {
                   How It Works
                 </h2>
                 <p className="text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                  Our platform makes it easy to create, discover, and share
-                  content in just a few simple steps.
+                  Our platform makes learning fun and easy through generating concise notes
+                  and questions to test your knowledge!
                 </p>
               </div>
             </div>
@@ -77,18 +77,18 @@ export default function Home() {
               {[
                 {
                   num: "1",
-                  title: "Sign Up",
-                  desc: "Create your account in seconds and join our growing community of creators.",
+                  title: "Upload & Summarise",
+                  desc: "Upload your PDF, PPTX or JPEG lecture slides and our AI will create concise summaries",
                 },
                 {
                   num: "2",
-                  title: "Create Content",
-                  desc: "Use our intuitive tools to create amazing content that stands out.",
+                  title: "Choose Your Background",
+                  desc: "Select backgrounds from popular games like Minecraft, Temple Run or Subway Surfers",
                 },
                 {
                   num: "3",
-                  title: "Share & Discover",
-                  desc: "Share your creations with the world and discover content from other creators.",
+                  title: "Test Your Knowledge",
+                  desc: "Reinforce learning with Kahoot-style quizzes specially generated from your content.",
                 },
               ].map(({ num, title, desc }) => (
                 <div
