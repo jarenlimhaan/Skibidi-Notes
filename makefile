@@ -9,6 +9,13 @@ install:
 	@cd frontend && npm install
 	@echo "Dependencies installed successfully!✅"
 
+# Update dependencies 
+update:
+	@echo "Updating dependencies..."
+	@cd backend && poetry install
+	@cd frontend && npm install
+	@echo "Dependencies updated successfully!✅"
+
 # Run BE
 run-be:
 	@echo "Starting FastAPI Server..."
