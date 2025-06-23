@@ -9,14 +9,10 @@
   - [ ] Query parameter validation (e.g., limits, filters)
   - [ ] Role-based access or permission checks
 - [ ] Setup logger
+- [ ] Add black sort 
 ---
 
 ## 🎨 Frontend 
-
-### 🔧 Tooling & Dev Environment
-- [ ] **Switch to `pnpm`** for better performance and monorepo support
-  - [ ] Update `package-lock.json` to `.npmrc` and `pnpm-lock.yaml`
-
 
 ### 📦 Packages
 - [ ] Audit dependencies and remove unused ones
