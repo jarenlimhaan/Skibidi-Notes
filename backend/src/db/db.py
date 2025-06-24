@@ -3,7 +3,8 @@ from typing import AsyncGenerator
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.db.driver import engine, SessionLocal
+from .driver import engine, SessionLocal
+
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     try:
@@ -12,6 +13,7 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
     except SQLAlchemyError as e:
         print(f"Database session error: {e}")
         raise
+
 
 async def close_db():
     if engine:

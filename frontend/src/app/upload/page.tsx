@@ -138,7 +138,7 @@ export default function UploadPage() {
       formData.append("file", file);
 
       const response = await fetch(
-        `${backendURL}/api/preprocessing/upload?filename=${encodeURIComponent(file.name)}`,
+        `${backendURL}/api/generator/upload?filename=${encodeURIComponent(file.name)}`,
         {
           method: "POST",
           body: formData,

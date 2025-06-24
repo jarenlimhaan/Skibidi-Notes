@@ -1,6 +1,8 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useRegisterUser } from "@/app/providers/queries/auth";
+import { useRouter } from 'next/navigation'
 
 interface FormData {
   username: string;
@@ -10,14 +12,16 @@ interface FormData {
 }
 
 export default function Register() {
+  const router = useRouter()
+  const { mutate: registerUser, } = useRegisterUser();
   const [formData, setFormData] = useState<FormData>({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
-  const [message, setMessage] = useState<string>('');
+  const [message, setMessage] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,20 +30,36 @@ export default function Register() {
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
 
-    const { username, email, password, confirmPassword  } = formData;
+    const { username, email, password, confirmPassword } = formData;
+
     if (!username || !email || !password || !confirmPassword) {
-      setMessage('Please fill in all fields.');
+      setMessage("Please fill in all fields.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setMessage('Passwords do not match.');
+      setMessage("Passwords do not match.");
       return;
     }
 
-    console.log('Registered:', formData);
-    setMessage('Registration successful!');
-    setFormData({ username: '', email: '', password: '',  confirmPassword: ''});
+    registerUser(
+      { username, email, password },
+      {
+        onSuccess: (data) => {
+          setFormData({
+            username: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+          });
+          router.push("/login")
+        },
+        onError: (error: any) => {
+          // Handle API error (could be validation or server-side)
+          setMessage(error.response?.data?.detail || "Registration failed.");
+        },
+      }
+    );
   };
 
   return (
@@ -89,10 +109,16 @@ export default function Register() {
             Sign Up
           </button>
         </form>
-        <div style={{ marginTop: '30px', textAlign: 'center', fontSize: '1.3rem' }}>
-          {message && <p style={{color: '#CD5C5C'}}>{message}</p>}
-          <p style={{color: '#F5ECD5' ,fontFamily:'JetBrainMono' }}>Already have an account? Login <a href="../login"><u>here</u></a></p>
-
+        <div
+          style={{ marginTop: "30px", textAlign: "center", fontSize: "1.3rem" }}
+        >
+          {message && <p style={{ color: "#CD5C5C" }}>{message}</p>}
+          <p style={{ color: "#F5ECD5", fontFamily: "JetBrainMono" }}>
+            Already have an account? Login{" "}
+            <a href="../login">
+              <u>here</u>
+            </a>
+          </p>
         </div>
       </div>
       <div style={rightSideStyle}>
@@ -103,57 +129,56 @@ export default function Register() {
 }
 
 const wrapperStyle: React.CSSProperties = {
-  display: 'flex',
-  height: '100vh',
-  width: '100vw',
+  display: "flex",
+  height: "100vh",
+  width: "100vw",
 };
 
 const formContainerStyle: React.CSSProperties = {
   flex: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '2rem',
-  backgroundColor: '#626f47',
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: "2rem",
+  backgroundColor: "#626f47",
 };
 
 const rightSideStyle: React.CSSProperties = {
   flex: 1,
-  backgroundColor: '#e0e0e0', 
-}
+  backgroundColor: "#e0e0e0",
+};
 
 const formStyle: React.CSSProperties = {
-  width: '100%',
-  maxWidth: '400px',
+  width: "100%",
+  maxWidth: "400px",
 };
- 
+
 const headingStyle: React.CSSProperties = {
-    fontFamily: "'Baloo 2', cursive",
-    fontSize: '2.5rem',
-    marginBottom: '2rem',
-    color: '#f5ecd5'
-  };
-  
+  fontFamily: "'Baloo 2', cursive",
+  fontSize: "2.5rem",
+  marginBottom: "2rem",
+  color: "#f5ecd5",
+};
+
 const inputStyle: React.CSSProperties = {
-    fontFamily: "'JetBrains Mono', monospace",
-    display: 'block',
-    width: '100%',
-    padding: '0.5rem',
-    marginBottom: '1rem',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-    backgroundColor: '#d4d3d3'
-  };  
+  fontFamily: "'JetBrains Mono', monospace",
+  display: "block",
+  width: "100%",
+  padding: "0.5rem",
+  marginBottom: "1rem",
+  borderRadius: "4px",
+  border: "1px solid #ccc",
+  backgroundColor: "#d4d3d3",
+};
 
 const buttonStyle: React.CSSProperties = {
-fontFamily: "'JetBrains Mono', monospace",
-padding: '0.5rem 1rem',
-marginTop: '0.5rem',
-backgroundColor: '#a4b465',
-color: '#fff',
-border: 'none',
-borderRadius: '10px',
-cursor: 'pointer',
+  fontFamily: "'JetBrains Mono', monospace",
+  padding: "0.5rem 1rem",
+  marginTop: "0.5rem",
+  backgroundColor: "#a4b465",
+  color: "#fff",
+  border: "none",
+  borderRadius: "10px",
+  cursor: "pointer",
 };
-  

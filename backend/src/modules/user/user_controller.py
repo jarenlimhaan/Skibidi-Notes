@@ -1,25 +1,23 @@
-# External Imports 
+# External Imports
 from fastapi import Depends, APIRouter
 from sqlalchemy.ext.asyncio import AsyncSession
 
-# Internal Imports 
+# Internal Imports
 from config.env import get_app_configs
-from src.deps.db import get_db
+from src.deps import get_db
 
-from .user_service import UserService
+from .user_service import UserService, get_user_service
 from .user_schema import UserSchema
 
 router = APIRouter()
 app_config = get_app_configs()
 
-def get_user_service():
-    return UserService()
 
-@router.get("/{user_id}", response_model=UserSchema)
+@router.get("/{username}", response_model=UserSchema)
 async def get_user(
     user_id: str,
     db: AsyncSession = Depends(get_db),
-    service: UserService = Depends(get_user_service)
+    service: UserService = Depends(get_user_service),
 ):
     user = await service.get(user_id, db)
     if not user:

@@ -1,43 +1,66 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Menu } from "lucide-react"
+import { useState } from "react";
+import Link from "next/link";
+import { Menu } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useAuthStore } from "@/app/store/authStore";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated, logout } = useAuthStore();
 
   return (
-    <header className="w-full border-b bg-background" style={{ backgroundColor: "#A4B465"}}>
+    <header
+      className="w-full border-b bg-background"
+      style={{ backgroundColor: "#A4B465" }}
+    >
       <div className="container flex h-16 items-center px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2">
           <span className="text-xl font-bold">Logo</span>
         </Link>
         <nav className="ml-auto hidden gap-6 md:flex">
-          <Link href="/" className="text-sm font-medium transition-colors hover:text-primary">
+          <Link
+            href="/"
+            className="text-sm font-medium transition-colors hover:text-primary"
+          >
             Home
           </Link>
-          <Link href="/create" className="text-sm font-medium transition-colors hover:text-primary">
+          <Link
+            href="/create"
+            className="text-sm font-medium transition-colors hover:text-primary"
+          >
             Create
           </Link>
-          <Link href="/library" className="text-sm font-medium transition-colors hover:text-primary">
+          <Link
+            href="/library"
+            className="text-sm font-medium transition-colors hover:text-primary"
+          >
             Library
           </Link>
         </nav>
         <div className="ml-auto md:ml-4 flex items-center gap-4">
           <div className="hidden md:flex gap-2">
-            <Link href="/login">
-              <Button variant="outline" size="sm">
-                Login
+            {!isAuthenticated ? (
+              <>
+                <Link href="/login">
+                  <Button variant="outline" size="sm">
+                    Login
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button size="sm">Register</Button>
+                </Link>
+              </>
+            ) : (
+              <Button variant="destructive" size="sm" onClick={logout}>
+                Logout
               </Button>
-            </Link>
-            <Link href="/register">
-              <Button size="sm">Register</Button>
-            </Link>
+            )}
           </div>
+
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="md:hidden">
@@ -69,14 +92,29 @@ export default function Navbar() {
                   Library
                 </Link>
                 <div className="flex flex-col gap-2">
-                  <Link href="/login" onClick={() => setIsOpen(false)}>
-                    <Button variant="outline" className="w-full">
-                      Login
+                  {!isAuthenticated ? (
+                    <>
+                      <Link href="/login" onClick={() => setIsOpen(false)}>
+                        <Button variant="outline" className="w-full">
+                          Login
+                        </Button>
+                      </Link>
+                      <Link href="/register" onClick={() => setIsOpen(false)}>
+                        <Button className="w-full">Register</Button>
+                      </Link>
+                    </>
+                  ) : (
+                    <Button
+                      variant="destructive"
+                      className="w-full"
+                      onClick={() => {
+                        setIsOpen(false);
+                        logout();
+                      }}
+                    >
+                      Logout
                     </Button>
-                  </Link>
-                  <Link href="/register" onClick={() => setIsOpen(false)}>
-                    <Button className="w-full">Register</Button>
-                  </Link>
+                  )}
                 </div>
               </div>
             </SheetContent>
@@ -84,5 +122,5 @@ export default function Navbar() {
         </div>
       </div>
     </header>
-  )
+  );
 }

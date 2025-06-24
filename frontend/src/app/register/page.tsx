@@ -1,8 +1,14 @@
-import Register from '@/components/register'; // adjust if needed
-export default function Page() {
+"use client";
+
+import Register from '@/components/register'; 
+import withoutAuth from '@/components/auth/unAuthGuard';
+
+function RegisterPage() {
   return (
     <div>
       <Register />
     </div>
   );
 }
+
+export default withoutAuth(RegisterPage);

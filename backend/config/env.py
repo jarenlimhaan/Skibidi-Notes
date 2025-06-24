@@ -2,16 +2,16 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class App_Config(BaseSettings):
-    
-    # Frontend 
+
+    # Frontend
     NEXT_PUBLIC_FRONTEND_URL: str
-    
+
     # Backend
     NEXT_PUBLIC_BACKEND_URL: str
     DATABASE_URL: str
     OPEN_AI_API_KEY: str
     UPLOAD_DIR: str
-
+    ELEVEN_LAB_API_KEY: str
     # Config for loading environment variables
     model_config = SettingsConfigDict(env_file="../.env", env_file_encoding="utf-8")
 

@@ -2,14 +2,17 @@
 
 import React, { useState } from 'react';
 
+import { useAuthStore } from '@/app/store/authStore';
+
 interface FormData {
-  username: string;
+  email: string;
   password: string;
 }
 
 export default function Login() {
+  const login = useAuthStore((state) => state.login);
   const [formData, setFormData] = useState<FormData>({
-    username: '',
+    email: '',
     password: '',
   });
 
@@ -19,18 +22,24 @@ export default function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent): void => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { username, password } = formData;
-    if (!username || !password) {
+    const { email, password } = formData;
+    if (!email || !password) {
       setMessage('Please fill in all fields.');
       return;
     }
 
-    console.log('Registered:', formData);
-    setMessage('Registration successful!');
-    setFormData({ username: '', password: ''});
+    const success = await login(email, password);
+    if (success) {
+      setMessage('Login successful!');
+      window.location.href = '/dashboard'; 
+    } else {
+      setMessage('Login failed. Please check your credentials.');
+    }
+
+    setFormData({ email: '', password: ''});
   };
 
   return (
@@ -43,10 +52,10 @@ export default function Login() {
         <h2 style={headingStyle}>LOGIN</h2>
         <form onSubmit={handleSubmit} style={formStyle}>
           <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={formData.username}
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
             onChange={handleChange}
             required
             style={inputStyle}

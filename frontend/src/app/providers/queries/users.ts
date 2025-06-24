@@ -12,13 +12,13 @@ export const useUsers = () =>
       axios.get(`http://localhost:8000/api/users`).then((res) => res.data),
   });
 
-export const useUserById = (id: string) => {
+export const useUserByUsername = (username: string) => {
   return useQuery({
-    queryKey: ["users", id],
+    queryKey: ["users", username],
     queryFn: async () => {
-      const res = await axios.get(`${backendURL}/api/users/${id}`);
+      const res = await axios.get(`${backendURL}/api/users/${username}`);
       return userDTO.parse(res.data);
     },
-    enabled: !!id,
+    enabled: !!username,
   });
 };
