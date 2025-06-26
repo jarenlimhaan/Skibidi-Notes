@@ -7,7 +7,6 @@ app_config = get_app_configs()
 
 import uuid
 
-
 class TTS:
 
     def __init__(self):
@@ -27,7 +26,7 @@ class TTS:
             output_format="mp3_44100_128",
         )
 
-        save(audio, f"{file_name}.wav")
+        save(audio, f"static/temp/{file_name}.wav")
         return f"{file_name}.wav"
 
 

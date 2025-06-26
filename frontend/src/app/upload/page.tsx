@@ -141,6 +141,7 @@ export default function UploadPage() {
         `${backendURL}/api/generator/upload?filename=${encodeURIComponent(file.name)}`,
         {
           method: "POST",
+          credentials: "include",
           body: formData,
         }
       );

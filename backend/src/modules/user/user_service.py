@@ -4,6 +4,7 @@ from sqlalchemy import select
 
 # Internal Imports
 from .user_model import User
+from .user_schema import UserCreateSchema
 
 class UserService:
 
@@ -17,12 +18,16 @@ class UserService:
         result = await db.execute(stmt)
         return result.scalar_one_or_none()
 
-    async def create(self, username: str, email: str, password: str, db: AsyncSession):
-        new_user = User(username=username, email=email, password=password)
+    async def create(self, createUserDTO: UserCreateSchema, db: AsyncSession):
+        new_user = User(
+            username=createUserDTO.username,
+            email=createUserDTO.email,
+            password=createUserDTO.password  
+        )
         db.add(new_user)
         await db.commit()
         await db.refresh(new_user)
-        return {"status": "Success"}
+        return {"status": "Success", "user_id": new_user.id}
 
 
 def get_user_service():

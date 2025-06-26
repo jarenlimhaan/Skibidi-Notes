@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .auth_service import AuthService
 from src.modules.user.user_service import UserService
 from .auth_schema import RegisterUserSchema, LoginUserSchema
-from .guards.guard import get_current_user_from_cookie
+from src.deps import get_current_user_from_cookie
 
 from src.deps import get_db
 from src.deps import get_user_service
@@ -31,8 +31,9 @@ async def register(
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
 
-    hashed = auth_service.hash_password(form_data.password)
-    await user_service.create(form_data.username, form_data.email, hashed, db)
+    form_data.password = auth_service.hash_password(form_data.password)
+    await user_service.create(form_data, db)
+
     return JSONResponse(content={"message": "Registration successful"})
 
 
@@ -49,7 +50,7 @@ async def login(
     ):
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
-    token = auth_service.create_access_token({"sub": user.username})
+    token = auth_service.create_access_token({"user_id": str(user.id)})
 
     # Set as secure HTTP-only cookie
     response = JSONResponse(content={"message": "Login successful"})

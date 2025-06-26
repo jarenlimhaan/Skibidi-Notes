@@ -1,5 +1,5 @@
 # External Imports
-from fastapi import Depends, APIRouter
+from fastapi import Depends, APIRouter, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # Internal Imports
