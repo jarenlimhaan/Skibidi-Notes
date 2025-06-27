@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -14,30 +13,27 @@ export default function Navbar() {
   const { isAuthenticated, logout } = useAuthStore();
 
   return (
-    <header
-      className="w-full border-b bg-background"
-      style={{ backgroundColor: "#A4B465" }}
-    >
+    <header className="w-full border-b bg-gradient-to-r from-purple-800 via-pink-500 to-cyan-400">
       <div className="container flex h-16 items-center px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl font-bold">Logo</span>
+          <span className="text-xl font-bold text-white">Logo</span>
         </Link>
         <nav className="ml-auto hidden gap-6 md:flex">
           <Link
             href="/"
-            className="text-sm font-medium transition-colors hover:text-primary"
+            className="text-sm font-medium text-white transition-colors hover:text-purple-200"
           >
             Home
           </Link>
           <Link
             href="/create"
-            className="text-sm font-medium transition-colors hover:text-primary"
+            className="text-sm font-medium text-white transition-colors hover:text-purple-200"
           >
             Create
           </Link>
           <Link
             href="/library"
-            className="text-sm font-medium transition-colors hover:text-primary"
+            className="text-sm font-medium text-white transition-colors hover:text-purple-200"
           >
             Library
           </Link>
@@ -65,29 +61,29 @@ export default function Navbar() {
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="md:hidden">
-                <Menu className="h-5 w-5" />
+                <Menu className="h-5 w-5 text-white" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right">
+            <SheetContent side="right" className="bg-gradient-to-r from-purple-800 via-pink-500 to-cyan-400">
               <div className="flex flex-col gap-6 pt-6">
                 <Link
                   href="/"
-                  className="text-sm font-medium transition-colors hover:text-primary"
+                  className="text-sm font-medium text-white transition-colors hover:text-purple-200"
                   onClick={() => setIsOpen(false)}
                 >
                   Home
                 </Link>
                 <Link
                   href="/create"
-                  className="text-sm font-medium transition-colors hover:text-primary"
+                  className="text-sm font-medium text-white transition-colors hover:text-purple-200"
                   onClick={() => setIsOpen(false)}
                 >
                   Create
                 </Link>
                 <Link
                   href="/library"
-                  className="text-sm font-medium transition-colors hover:text-primary"
+                  className="text-sm font-medium text-white transition-colors hover:text-purple-200"
                   onClick={() => setIsOpen(false)}
                 >
                   Library
