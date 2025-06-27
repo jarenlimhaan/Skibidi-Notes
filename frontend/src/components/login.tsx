@@ -44,10 +44,6 @@ export default function Login() {
 
   return (
     <div style={wrapperStyle}>
-      <div style={leftSideStyle}>
-        {/* Optional: you can put an image or content here */}
-      </div>
-
       <div style={formContainerStyle}>
         <h2 style={headingStyle}>LOGIN</h2>
         <form onSubmit={handleSubmit} style={formStyle}>
@@ -76,8 +72,18 @@ export default function Login() {
         </form>
         <div style={{ marginTop: '30px', textAlign: 'center', fontSize: '1.3rem' }}>
           {message && <p style={{color: '#CD5C5C'}}>{message}</p>}
-          <p style={{color: '#626F47', fontFamily: 'JetBrainMono'}}>Don't have an account? Sign up <a href="../register"><u>here</u></a></p>
+          <p style={{color: '#626F47', fontFamily: 'JetBrainMono'}}>
+            Don't have an account? Sign up <a href="../register"><u>here</u></a>
+          </p>
         </div>
+      </div>
+
+      <div style={rightSideStyle}>
+        <img
+          src="/chimpanzinibananini.png"
+          alt="Right Side Image"
+          style={imageStyle}
+        />
       </div>
     </div>
   );
@@ -99,42 +105,50 @@ const formContainerStyle: React.CSSProperties = {
   backgroundColor: '#F5ECD5',
 };
 
-const leftSideStyle: React.CSSProperties = {
+const rightSideStyle: React.CSSProperties = {
   flex: 1,
-  backgroundColor: '#e0e0e0', 
-}
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: '#e0e0e0', // fallback color
+};
+
+const imageStyle: React.CSSProperties = {
+  width: '80%',
+  height: '80%',
+  objectFit: 'contain',
+};
 
 const formStyle: React.CSSProperties = {
   width: '100%',
   maxWidth: '400px',
 };
- 
+
 const headingStyle: React.CSSProperties = {
-    fontFamily: "'Baloo 2', cursive",
-    fontSize: '2.5rem',
-    marginBottom: '2rem',
-    color: '#626F47'
-  };
-  
+  fontFamily: "'Baloo 2', cursive",
+  fontSize: '2.5rem',
+  marginBottom: '2rem',
+  color: '#626F47',
+};
+
 const inputStyle: React.CSSProperties = {
-    fontFamily: "'JetBrains Mono', monospace",
-    display: 'block',
-    width: '100%',
-    padding: '0.5rem',
-    marginBottom: '1rem',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-    backgroundColor: '#d4d3d3'
-  };  
+  fontFamily: "'JetBrains Mono', monospace",
+  display: 'block',
+  width: '100%',
+  padding: '0.5rem',
+  marginBottom: '1rem',
+  borderRadius: '4px',
+  border: '1px solid #ccc',
+  backgroundColor: '#d4d3d3',
+};
 
 const buttonStyle: React.CSSProperties = {
-fontFamily: "'JetBrains Mono', monospace",
-padding: '0.5rem 1rem',
-marginTop: '0.5rem',
-backgroundColor: '#a4b465',
-color: '#fff',
-border: 'none',
-borderRadius: '10px',
-cursor: 'pointer',
+  fontFamily: "'JetBrains Mono', monospace",
+  padding: '0.5rem 1rem',
+  marginTop: '0.5rem',
+  backgroundColor: '#a4b465',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '10px',
+  cursor: 'pointer',
 };
-  

@@ -12,8 +12,8 @@ interface FormData {
 }
 
 export default function Register() {
-  const router = useRouter()
-  const { mutate: registerUser, } = useRegisterUser();
+  const router = useRouter();
+  const { mutate: registerUser } = useRegisterUser();
   const [formData, setFormData] = useState<FormData>({
     username: "",
     email: "",
@@ -45,17 +45,16 @@ export default function Register() {
     registerUser(
       { username, email, password },
       {
-        onSuccess: (data) => {
+        onSuccess: () => {
           setFormData({
             username: "",
             email: "",
             password: "",
             confirmPassword: "",
           });
-          router.push("/login")
+          router.push("/login");
         },
         onError: (error: any) => {
-          // Handle API error (could be validation or server-side)
           setMessage(error.response?.data?.detail || "Registration failed.");
         },
       }
@@ -64,6 +63,14 @@ export default function Register() {
 
   return (
     <div style={wrapperStyle}>
+      <div style={leftSideStyle}>
+        <img
+          src="/tungtungtungtung.png"
+          alt="Left Side Image"
+          style={imageStyle}
+        />
+      </div>
+
       <div style={formContainerStyle}>
         <h2 style={headingStyle}>CREATE AN ACCOUNT</h2>
         <form onSubmit={handleSubmit} style={formStyle}>
@@ -109,9 +116,8 @@ export default function Register() {
             Sign Up
           </button>
         </form>
-        <div
-          style={{ marginTop: "30px", textAlign: "center", fontSize: "1.3rem" }}
-        >
+
+        <div style={{ marginTop: "30px", textAlign: "center", fontSize: "1.3rem" }}>
           {message && <p style={{ color: "#CD5C5C" }}>{message}</p>}
           <p style={{ color: "#F5ECD5", fontFamily: "JetBrainMono" }}>
             Already have an account? Login{" "}
@@ -120,9 +126,6 @@ export default function Register() {
             </a>
           </p>
         </div>
-      </div>
-      <div style={rightSideStyle}>
-        {/* Optional: you can put an image or content here */}
       </div>
     </div>
   );
@@ -134,6 +137,20 @@ const wrapperStyle: React.CSSProperties = {
   width: "100vw",
 };
 
+const leftSideStyle: React.CSSProperties = {
+  flex: 1,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  backgroundColor: "#e0e0e0", // fallback color
+};
+
+const imageStyle: React.CSSProperties = {
+  width: "100%",
+  height: "100vh",
+  objectFit: "cover",
+};
+
 const formContainerStyle: React.CSSProperties = {
   flex: 1,
   display: "flex",
@@ -142,11 +159,6 @@ const formContainerStyle: React.CSSProperties = {
   alignItems: "center",
   padding: "2rem",
   backgroundColor: "#626f47",
-};
-
-const rightSideStyle: React.CSSProperties = {
-  flex: 1,
-  backgroundColor: "#e0e0e0",
 };
 
 const formStyle: React.CSSProperties = {
