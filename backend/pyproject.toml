@@ -30,7 +30,12 @@ dependencies = [
     "passlib[bcrypt] (>=1.7.4,<2.0.0)",
     "black (>=25.1.0,<26.0.0)",
     "elevenlabs (>=2.5.0,<3.0.0)",
-    "bcrypt (<4.1.0)"
+    "bcrypt (<4.1.0)",
+    "moviepy (==1.0.3)",
+    "termcolor (>=3.1.0,<4.0.0)",
+    "assemblyai (>=0.41.5,<0.42.0)",
+    "pillow (==9.5.0)",
+    "srt-equalizer (==0.1.8)"
 ]
 
 [tool.poetry]
@@ -39,4 +44,7 @@ package-mode = false
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+python = "^3.10"
 

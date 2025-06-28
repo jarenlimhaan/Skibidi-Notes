@@ -1,12 +1,64 @@
 # External Imports
 from sqlalchemy.ext.asyncio import AsyncSession
 import uuid
+from uuid import uuid4
+
+from moviepy.editor import *
+from moviepy import *
 
 # Internal Imports
 from .generator_schema import CreateUploadSchema, CreateGenerationSchema
 from .generator_model import Uploads, Generations
 
+from .integrations.elevenlabs.base import TTS
+from .integrations.langchain.base import Summarizer
+from .integrations.movieclip.base import Clip
+from .integrations.subtitles.base import Subtitles
+
+from .utils.util import clean_dir
+
 class GenerationService:
+
+    async def generate(self, pdf_path:str, summarizer: Summarizer, tts: TTS, clip: Clip, subtitles: Subtitles):
+        clean_dir("static/temp/")
+        clean_dir("static/subtitles/")
+
+        
+        ## Constants 
+        video_paths = ["static/videos/subway.mp4"]
+        n_threads = 2
+        subtitles_position = "center,center"
+        text_color = "#FFFF00"
+
+        ## generate script from pdf 
+        # script = summarizer.process_pdf(pdf_path)["summary"]
+        # 
+        script ='Did you know that if you had 10 billion $1 coins and spent one every second of every day, it would take 317 years to go broke? Imagine having that kind of financial freedom. Would you be happy? I certainly believed so until I paused and considered my current circumstance: " Am I not happy already?” This simple yet thought-provoking question opened the floodgates to deeper reflections: What is happiness? Can it be defined? And does money buy happiness?'
+
+        sentences = script.split(". ")
+        sentences = list(filter(lambda x: x != "", sentences))
+        paths = []
+        for sentence in sentences:
+            # if not GENERATING:
+            #     return jsonify({"status": "error", "message": "Video generation was cancelled."})
+            current_tts_path = f"static/temp/{uuid4()}.mp3"
+            tts.tts_to_file(sentence, filename=current_tts_path)
+            audio_clip = AudioFileClip(current_tts_path)
+            paths.append(audio_clip)
+
+        final_audio = concatenate_audioclips(paths)
+        tts_path = f"static/temp/{uuid4()}.mp3"
+        final_audio.write_audiofile(tts_path)
+
+        voice_prefix = "en"
+        subtitles_path = subtitles.generate_subtitles(audio_path=tts_path, sentences=sentences, audio_clips=paths, voice=voice_prefix)
+
+        temp_audio = AudioFileClip(tts_path)
+        combined_video_path = clip.combine_videos(video_paths, temp_audio.duration, n_threads or 2)
+        final_video_path = clip.generate_video(combined_video_path, tts_path, subtitles_path, n_threads or 2, subtitles_position, text_color or "#FFFF00")
+
+        video_clip = VideoFileClip(final_video_path)
+        return final_video_path
 
     async def add_upload(self, createUploadDTO: CreateUploadSchema,  db: AsyncSession):
         new_upload = Uploads(

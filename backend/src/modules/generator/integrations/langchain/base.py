@@ -1,3 +1,4 @@
+# External Imports 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai.chat_models import ChatOpenAI
@@ -8,10 +9,11 @@ from typing import List
 import os
 import json
 import time
+
+# Internal Imports
 from config.env import get_app_configs
 
 app_config = get_app_configs()
-
 
 class Summarizer:
     def __init__(self):

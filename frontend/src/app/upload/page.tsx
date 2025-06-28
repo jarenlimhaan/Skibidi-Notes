@@ -35,12 +35,14 @@ interface FileSummary {
   keyPoints: string[];
   wordCount: number;
   status: "generating" | "completed" | "error";
+  url: string;
   error?: string;
 }
 
 interface Result {
   summary: string;
   keypoints: string[];
+  url: string;
 }
 
 const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -78,6 +80,7 @@ export default function UploadPage() {
       keyPoints: [],
       wordCount: 0,
       status: "generating",
+      url: ""
     };
 
     setSummaries((prev) => [...prev, newSummary]);
@@ -93,6 +96,7 @@ export default function UploadPage() {
                 status: "completed",
                 summary: result.summary,
                 keyPoints: result.keypoints,
+                url: result.url,
                 wordCount: 100,
               }
             : s
@@ -366,7 +370,7 @@ export default function UploadPage() {
 
                       {file.status === "error" && file.error && (
                         <Alert className="mt-2">
-                          <AlertCircle className="h-4 w-4" />
+                          <AlertCircle className="h-4 w-final_video_path4" />
                           <AlertDescription>{file.error}</AlertDescription>
                         </Alert>
                       )}
@@ -449,7 +453,7 @@ export default function UploadPage() {
                         {summary.keyPoints.length > 0 && (
                           <div>
                             <h4 className="font-medium mb-2">Key Points</h4>
-                            <ul className="space-y-2">
+                            {/* <ul className="space-y-2">
                               {summary.keyPoints.map((point, index) => (
                                 <li
                                   key={index}
@@ -461,7 +465,8 @@ export default function UploadPage() {
                                   </span>
                                 </li>
                               ))}
-                            </ul>
+                            </ul> */}
+                            <video src={`backend/${summary.url}`} controls />
                           </div>
                         )}
 
