@@ -31,7 +31,7 @@ async def upload_file(
     subtitles: Subtitles = Depends(get_subtitles),
     clip: Clip = Depends(get_clip),
     generation_service: GenerationService = Depends(get_generation_service),
-    current_user=Depends(get_current_user_from_cookie),
+    # current_user=Depends(get_current_user_from_cookie),
     db: AsyncSession = Depends(get_db)
 ):
     filename = request.query_params.get("filename") or file.filename
@@ -42,22 +42,17 @@ async def upload_file(
         with open(save_path, "wb") as buffer:
             buffer.write(content)
 
-        # with open(save_path, "r+") as f:
-        #     res = summarizer.process_pdf(save_path)
-        #     print(res)
-
         # result = await generation_service.save_upload_and_generation(
         #     user_id=current_user["user_id"],
         #     save_path=save_path,
         #     db=db
         # )
 
-        path = await generation_service.generate(pdf_path=save_path, summarizer=summarizer, tts=tts, clip=clip, subtitles=subtitles)
+        path, res = await generation_service.generate(pdf_path=save_path, summarizer=summarizer, tts=tts, clip=clip, subtitles=subtitles)
     
-
         return JSONResponse(content={"url": path, "summary": {
-            "summary": "test",
-            "keypoints": ["test1", "test2", "test3"],
+            "summary": res['summary'],
+            "keypoints": res['keypoints'],
             "url": path
         }})
     except Exception as e:

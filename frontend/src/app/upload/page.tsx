@@ -466,7 +466,7 @@ export default function UploadPage() {
                                 </li>
                               ))}
                             </ul> */}
-                            <video src={`backend/${summary.url}`} controls />
+                            <video src={`http://0.0.0.0:8000/${summary.url}`} controls />
                           </div>
                         )}
 

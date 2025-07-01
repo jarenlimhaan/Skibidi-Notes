@@ -31,9 +31,10 @@ class GenerationService:
         text_color = "#FFFF00"
 
         ## generate script from pdf 
-        # script = summarizer.process_pdf(pdf_path)["summary"]
+        res = summarizer.process_pdf(pdf_path)
+        script = res["summary"]
         # 
-        script ='Did you know that if you had 10 billion $1 coins and spent one every second of every day, it would take 317 years to go broke? Imagine having that kind of financial freedom. Would you be happy? I certainly believed so until I paused and considered my current circumstance: " Am I not happy already?” This simple yet thought-provoking question opened the floodgates to deeper reflections: What is happiness? Can it be defined? And does money buy happiness?'
+        # script ='Did you know that if you had 10 billion $1 coins and spent one every second of every day, it would take 317 years to go broke? Imagine having that kind of financial freedom. Would you be happy? I certainly believed so until I paused and considered my current circumstance: " Am I not happy already?” This simple yet thought-provoking question opened the floodgates to deeper reflections: What is happiness? Can it be defined? And does money buy happiness?'
 
         sentences = script.split(". ")
         sentences = list(filter(lambda x: x != "", sentences))
@@ -58,7 +59,7 @@ class GenerationService:
         final_video_path = clip.generate_video(combined_video_path, tts_path, subtitles_path, n_threads or 2, subtitles_position, text_color or "#FFFF00")
 
         video_clip = VideoFileClip(final_video_path)
-        return final_video_path
+        return final_video_path, res
 
     async def add_upload(self, createUploadDTO: CreateUploadSchema,  db: AsyncSession):
         new_upload = Uploads(

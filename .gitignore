@@ -49,3 +49,7 @@ out/
 *.rej
 *.patch
 .env
+
+backend/static/uploads
+backend/static/temp
+backend/static/subtitles

@@ -1,5 +1,6 @@
 # External Imports
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 # Internal Imports
@@ -23,6 +24,8 @@ app.include_router(root_router)
 app.include_router(user_router, prefix="/api/users", tags=["Users"])
 app.include_router(generator_router, prefix="/api/generator", tags=["Generator"])
 app.include_router(auth_router, prefix="/api/auth", tags=["Auth"])
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 if __name__ == "__main__":
     import uvicorn
