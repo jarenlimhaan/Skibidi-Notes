@@ -10,6 +10,10 @@ from dotenv import load_dotenv
 from datetime import timedelta
 from moviepy.video.tools.subtitles import SubtitlesClip
 from moviepy.editor import *
+from moviepy.config import change_settings
+from config.env import get_app_configs
+
+change_settings({"IMAGEMAGICK_BINARY": get_app_configs().IMAGEMAGICK_BINARY})
 
 # Internal Imports
 from config.env import get_app_configs

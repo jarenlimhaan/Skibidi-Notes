@@ -6,6 +6,12 @@ from moviepy import *
 from termcolor import colored
 from moviepy.video.tools.subtitles import SubtitlesClip
 from moviepy.editor import *
+from moviepy.config import change_settings
+from config.env import get_app_configs
+
+change_settings({"IMAGEMAGICK_BINARY": get_app_configs().IMAGEMAGICK_BINARY})
+
+
 
 class Clip:
     def combine_videos(self, video_paths: List[str], max_duration: int, threads: int) -> str:
@@ -26,6 +32,7 @@ class Clip:
         return combined_video_path
 
     def generate_video(self, combined_video_path: str, tts_path: str, subtitles_path: str, threads: int, subtitles_position: str, text_color: str) -> str:
+        print(colored(f"subtitles_path: {subtitles_path}", "yellow"))
         generator = lambda txt: TextClip(
             txt,
             font="static/fonts/bold_font.ttf",

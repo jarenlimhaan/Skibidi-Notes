@@ -13,6 +13,7 @@ class App_Config(BaseSettings):
     UPLOAD_DIR: str
     ELEVEN_LAB_API_KEY: str
     ASSEMBLY_AI_API_KEY: str
+    IMAGEMAGICK_BINARY: str
     # Config for loading environment variables
     model_config = SettingsConfigDict(env_file="../.env", env_file_encoding="utf-8")
 

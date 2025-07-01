@@ -5,6 +5,11 @@ from uuid import uuid4
 
 from moviepy.editor import *
 from moviepy import *
+from moviepy.config import change_settings
+from config.env import get_app_configs
+
+change_settings({"IMAGEMAGICK_BINARY": get_app_configs().IMAGEMAGICK_BINARY})
+
 
 # Internal Imports
 from .generator_schema import CreateUploadSchema, CreateGenerationSchema
@@ -40,8 +45,6 @@ class GenerationService:
         sentences = list(filter(lambda x: x != "", sentences))
         paths = []
         for sentence in sentences:
-            # if not GENERATING:
-            #     return jsonify({"status": "error", "message": "Video generation was cancelled."})
             current_tts_path = f"static/temp/{uuid4()}.mp3"
             tts.tts_to_file(sentence, filename=current_tts_path)
             audio_clip = AudioFileClip(current_tts_path)
