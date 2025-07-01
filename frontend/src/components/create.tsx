@@ -18,15 +18,15 @@ export default function BrainRotCustomizer() {
   const [isDragOver, setIsDragOver] = useState(false)
 
   const backgroundVideos = [
-    { id: "minecraft", name: "Minecraft", image: "/placeholder.svg?height=120&width=160" },
-    { id: "subway", name: "Subway Surfers", image: "/placeholder.svg?height=120&width=160" },
-    { id: "temple", name: "Temple Run", image: "/placeholder.svg?height=120&width=160" },
-    { id: "gta", name: "GTA", image: "/placeholder.svg?height=120&width=160" },
+    { id: "minecraft", name: "Minecraft", image: "/minecraft_gameplay.png?height=120&width=160" },
+    { id: "subway", name: "Subway Surfers", image: "/subway_gameplay.png?height=120&width=160" },
+    { id: "temple", name: "Temple Run", image: "/temple_gameplay.png?height=120&width=160" },
+    { id: "gta", name: "GTA", image: "/gta_gameplay.png?height=120&width=160" },
   ]
 
   const voiceOptions = [
     { id: "siri1", name: "Apple Siri", accent: "American", gender: "Male", personality: "Friendly" },
-    { id: "siri2", name: "Apple Siri", accent: "British", gender: "Female", personality: "Professional" },
+    { id: "siri2", name: "Donald Trump", accent: "British", gender: "Female", personality: "Professional" },
     { id: "siri3", name: "Google Assistant", accent: "American", gender: "Female", personality: "Casual" },
   ]
 
