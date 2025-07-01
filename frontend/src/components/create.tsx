@@ -5,7 +5,7 @@ import { useState } from "react"
 import Navbar from "@/components/navbar";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Upload, Settings, Play, Search, FileText, X } from "lucide-react"
 
@@ -268,6 +268,84 @@ export default function BrainRotCustomizer() {
                 ))}
               </div>
             </Card>
+          </TabsContent>
+
+          {/* Process Tab */}
+          <TabsContent value="process" className="space-y-6">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-purple-700 mb-2">Confirm Your Brain Rot</h2>
+              <p className="text-purple-600 text-sm">
+                Review your selections and create your very own SkibidiNotes Brain Rot Content.
+              </p>
+            </div>
+
+            {/* Configuration Cards */}
+          <div className="grid grid-cols-2 gap-6 mb-8">
+            <Card className="bg-white">
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-gray-900 mb-1 text-sm">Document</h3>
+                    <p className="text-sm text-gray-900 font-semibold">04-Classes-and-Objects-Part-I.pdf</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white">
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    {/* <Video className="w-6 h-6 text-blue-600" /> */}
+                  </div>
+                  <div>
+                    <h3 className="text-gray-900 mb-1 text-sm">Background</h3>
+                    <p className="text-sm text-gray-900 font-semibold">Minecraft</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white">
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    {/* <Mic className="w-6 h-6 text-blue-600" /> */}
+                  </div>
+                  <div>
+                    <h3 className="text-gray-900 mb-1 text-sm">Voice Type</h3>
+                    <p className="text-sm text-gray-900 font-semibold">Apple Siri</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white">
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    {/* <HelpCircle className="w-6 h-6 text-blue-600" /> */}
+                  </div>
+                  <div>
+                    <h3 className="text-gray-900 mb-1 text-sm">Quiz Length</h3>
+                    <p className="text-sm text-gray-900 font-semibold">15 Questions</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex justify-between">
+            <Button variant="outline" className="bg-white">
+              Return
+            </Button>
+            <Button className="bg-blue-500 hover:bg-blue-600 text-white">Flush</Button>
+          </div>
+
           </TabsContent>
         </Tabs>
       </div>
