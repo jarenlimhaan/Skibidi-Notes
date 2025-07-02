@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useRef, useCallback } from "react"
 import Navbar from "@/components/navbar";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,13 +9,22 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Upload, Settings, Play, Search, FileText, X } from "lucide-react"
 
+interface UploadedFile {
+  file: File
+  name: string
+  size: string
+  type: string
+}
+
 export default function BrainRotCustomizer() {
   const [activeTab, setActiveTab] = useState("upload")
   const [selectedBackground, setSelectedBackground] = useState<string>("")
   const [selectedVoice, setSelectedVoice] = useState<string>("")
   const [searchTerm, setSearchTerm] = useState("")
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
   const [isDragOver, setIsDragOver] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const backgroundVideos = [
     { id: "minecraft", name: "Minecraft", image: "/minecraft_gameplay.png?height=120&width=160" },
@@ -37,33 +46,91 @@ export default function BrainRotCustomizer() {
       voice.gender.toLowerCase().includes(searchTerm.toLowerCase()),
   )
 
-  const handleFileUpload = (files: FileList | null) => {
-    if (files) {
-      const newFiles = Array.from(files).filter(
-        (file) =>
-          file.type === "application/pdf" ||
-          file.type === "application/vnd.ms-powerpoint" ||
-          file.type === "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
-          file.type.startsWith("image/jpeg"),
-      )
-      setUploadedFiles((prev) => [...prev, ...newFiles])
-    }
+  const formatFileSize = (bytes: number): string => {
+    if (bytes === 0) return "0 Bytes"
+    const k = 1024
+    const sizes = ["Bytes", "KB", "MB", "GB"]
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
   }
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const isValidFileType = (file: File): boolean => {
+    const validTypes = [
+      "application/pdf",
+      "application/vnd.ms-powerpoint",
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      "image/jpeg",
+      "image/jpg",
+    ]
+    return validTypes.includes(file.type)
+  }
+
+  const handleFiles = useCallback(async (files: FileList) => {
+    setIsUploading(true)
+    const validFiles: UploadedFile[] = []
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      if (isValidFileType(file)) {
+        validFiles.push({
+          file,
+          name: file.name,
+          size: formatFileSize(file.size),
+          type: file.type,
+        })
+      }
+    }
+
+    // Simulate upload delay to make it seem like processing is happening - can remove/increase timing 
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
+    // Valid files added to UploadFiles state 
+    setUploadedFiles((prev) => [...prev, ...validFiles])
+    // Reset uploading state 
+    setIsUploading(false)
+  }, [])
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
     setIsDragOver(true)
-  }
+  }, [])
 
-  const handleDragLeave = (e: React.DragEvent) => {
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault()
     setIsDragOver(false)
+  }, [])
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault()
+      setIsDragOver(false)
+      const files = e.dataTransfer.files
+      if (files.length > 0) {
+        handleFiles(files)
+      }
+    },
+    [handleFiles],
+  )
+
+  const handleFileInput = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files
+      if (files && files.length > 0) {
+        handleFiles(files)
+      }
+    },
+    [handleFiles],
+  )
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click()
   }
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragOver(false)
-    handleFileUpload(e.dataTransfer.files)
+  const handleCancel = () => {
+    setUploadedFiles([])
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
   }
 
   const removeFile = (index: number) => {
@@ -120,70 +187,83 @@ export default function BrainRotCustomizer() {
             </div>
 
             <Card className="bg-white p-6 border-2 border-purple-300">
-              <div
-                className={`bg-white border-2 border-dashed border-purple-300 rounded-lg p-12 text-center transition-colors ${
-                  isDragOver ? "bg-purple-100" : ""
-                }`}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-              >
-                <FileText className="w-16 h-16 text-purple-400 mx-auto mb-4" />
-                <p className="text-purple-700 text-lg mb-6">Drag and drop to dump</p>
-
-                <div className="flex justify-between items-center">
-                  <Button
-                    variant="secondary"
-                    onClick={() => setUploadedFiles([])}
-                    className="bg-pink-300 hover:bg-pink-400 text-white"
-                  >
-                    Cancel
-                  </Button>
-
-                  <div>
-                    <input
-                      type="file"
-                      multiple
-                      accept=".pdf,.pptx,.ppt,.jpg,.jpeg"
-                      onChange={(e) => handleFileUpload(e.target.files)}
-                      className="hidden"
-                      id="file-upload"
-                    />
-                    <label htmlFor="file-upload">
-                      <Button className="bg-purple-500 hover:bg-purple-600 text-white">Upload</Button>
-                    </label>
+              {/* File Upload Area */}
+              <label htmlFor="file-upload">
+                <div
+                  className={`border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
+                    isDragOver ? "border-purple-500 bg-purple-50" : "border-gray-300 bg-gray-50"
+                  }`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                >
+                  <div className="flex flex-col items-center">
+                    <div className="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                      <FileText className="w-8 h-8 text-purple-600" />
+                    </div>
+                    <p className="text-lg text-gray-600 mb-4">{isUploading ? "Uploading..." : "Drag and drop or click anywhere to dump"}</p>
+                    <Button
+                      onClick={handleUploadClick}
+                      disabled={isUploading}
+                      className="bg-purple-600 hover:bg-purple-700 text-white"
+                    >
+                      {isUploading ? "Uploading..." : "Upload Files"}
+                    </Button>
                   </div>
                 </div>
-              </div>
-            </Card>
+              </label>
 
-            {/* Uploaded Files Display */}
-            {uploadedFiles.length > 0 && (
-              <Card className="bg-white p-6 border-2 border-purple-300">
-                <h3 className="text-lg font-semibold mb-4 text-purple-700">Uploaded Files ({uploadedFiles.length})</h3>
-                <div className="space-y-2">
-                  {uploadedFiles.map((file, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-purple-50 rounded">
-                      <div className="flex items-center gap-3">
-                        <FileText className="w-5 h-5 text-purple-400" />
-                        <div>
-                          <p className="font-medium text-sm text-purple-800">{file.name}</p>
-                          <p className="text-xs text-purple-600">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+              {/* Uploaded Files List */}
+              {uploadedFiles.length > 0 && (
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold mb-4">Uploaded Files:</h3>
+                  <div className="space-y-2">
+                    {uploadedFiles.map((file, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-white border rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <FileText className="w-5 h-5 text-purple-600" />
+                          <div>
+                            <p className="font-medium text-gray-900">{file.name}</p>
+                            <p className="text-sm text-gray-500">{file.size}</p>
+                          </div>
                         </div>
+                        <Button variant="outline" size="sm" onClick={() => removeFile(index)}>
+                          Remove
+                        </Button>
                       </div>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => removeFile(index)}
-                        className="text-pink-500 hover:text-pink-700"
-                      >
-                        <X className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </Card>
-            )}
+              )}
+            
+              {/* Action Buttons */}
+              <div className="flex justify-between mt-8">
+                <Button
+                  variant="outline"
+                  onClick={handleCancel}
+                  className="bg-pink-200 hover:bg-pink-300 text-pink-800 border-pink-300"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  disabled={uploadedFiles.length === 0}
+                  className="bg-purple-600 hover:bg-purple-700 text-white disabled:bg-gray-400"
+                >
+                  Submit Files ({uploadedFiles.length})
+                </Button>
+              </div>
+
+              {/* Hidden File Input Which Functions Click To Open The File Explorer */}
+              <input
+                id="file-upload"
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept=".pdf,.pptx,.ppt,.jpg,.jpeg"
+                onChange={handleFileInput}
+                className="hidden"
+              />
+            </Card>
           </TabsContent>
 
           {/* Customise Tab */}
