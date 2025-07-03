@@ -47,7 +47,7 @@ class Clip:
             VideoFileClip(combined_video_path),
             subtitles.set_pos((horizontal, vertical))
         ]).set_audio(AudioFileClip(tts_path))
-        output_path = f"static/outpit/{uuid.uuid4()}.mp4"
+        output_path = f"static/output/{uuid.uuid4()}.mp4"
         result.write_videofile(output_path, threads=threads or 2)
         return output_path
 

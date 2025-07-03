@@ -13,13 +13,13 @@ router = APIRouter()
 app_config = get_app_configs()
 
 
-@router.get("/{username}", response_model=UserSchema)
+@router.get("/{user_email}", response_model=UserSchema)
 async def get_user(
-    user_id: str,
+    user_email: str,
     db: AsyncSession = Depends(get_db),
     service: UserService = Depends(get_user_service),
 ):
-    user = await service.get(user_id, db)
+    user = await service.get_by_email(user_email, db)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user

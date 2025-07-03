@@ -1,9 +1,10 @@
+# External Exports
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 from uuid import UUID
 from datetime import datetime
 
 
-# What you return to the client
 class UserSchema(BaseModel):
     id: UUID
     username: str
@@ -13,9 +14,16 @@ class UserSchema(BaseModel):
         orm_mode = True
         from_attributes = True
 
-
-# What the client sends to create a user
 class UserCreateSchema(BaseModel):
     username: str
     email: EmailStr
     password: str
+
+class UserUpdateSchema(BaseModel):
+    username: Optional[str] = None
+    email: Optional[EmailStr] = None
+    password: Optional[str] = None 
+    class Config:
+        orm_mode = True
+        from_attributes = True
+

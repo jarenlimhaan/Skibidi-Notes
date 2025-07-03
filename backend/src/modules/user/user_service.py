@@ -8,8 +8,8 @@ from .user_schema import UserCreateSchema
 
 class UserService:
 
-    async def get(self, username: str, db: AsyncSession):
-        stmt = select(User).where(User.username == username)
+    async def get_by_id(self, user_id: int, db: AsyncSession):
+        stmt = select(User).where(User.id == user_id)
         result = await db.execute(stmt)
         return result.scalar_one_or_none()
 
@@ -28,6 +28,38 @@ class UserService:
         await db.commit()
         await db.refresh(new_user)
         return {"status": "Success", "user_id": new_user.id}
+    
+    async def update(self, user_id: int, update_data: dict, db: AsyncSession):
+        stmt = select(User).where(User.id == user_id)
+        result = await db.execute(stmt)
+        user = result.scalar_one_or_none()
+
+        if not user:
+            return None
+
+        for key, value in update_data.items():
+            setattr(user, key, value)
+
+        await db.commit()
+        await db.refresh(user)
+        return user
+
+    async def delete(self, user_id: int, db: AsyncSession):
+        stmt = select(User).where(User.id == user_id)
+        result = await db.execute(stmt)
+        user = result.scalar_one_or_none()
+
+        if not user:
+            return {"status": "Not Found"}
+
+        await db.delete(user)
+        await db.commit()
+        return {"status": "Deleted"}
+
+    async def list_all(self, db: AsyncSession, limit: int = 50, offset: int = 0):
+        stmt = select(User).offset(offset).limit(limit)
+        result = await db.execute(stmt)
+        return result.scalars().all()
 
 
 def get_user_service():
