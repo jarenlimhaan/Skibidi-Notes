@@ -1,5 +1,4 @@
 # External Imports 
-import os
 import uuid
 from typing import List
 from moviepy import *
@@ -7,11 +6,11 @@ from termcolor import colored
 from moviepy.video.tools.subtitles import SubtitlesClip
 from moviepy.editor import *
 from moviepy.config import change_settings
+
+# Internal Imports
 from config.env import get_app_configs
 
 change_settings({"IMAGEMAGICK_BINARY": get_app_configs().IMAGEMAGICK_BINARY})
-
-
 
 class Clip:
     def combine_videos(self, video_paths: List[str], max_duration: int, threads: int) -> str:
@@ -48,8 +47,9 @@ class Clip:
             VideoFileClip(combined_video_path),
             subtitles.set_pos((horizontal, vertical))
         ]).set_audio(AudioFileClip(tts_path))
-        result.write_videofile("static/output/output.mp4", threads=threads or 2)
-        return "static/output/output.mp4"
+        output_path = f"static/outpit/{uuid.uuid4()}.mp4"
+        result.write_videofile(output_path, threads=threads or 2)
+        return output_path
 
 def get_clip():
     return Clip()

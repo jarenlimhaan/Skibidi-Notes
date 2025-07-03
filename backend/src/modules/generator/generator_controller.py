@@ -37,24 +37,24 @@ async def upload_file(
     filename = request.query_params.get("filename") or file.filename
     file_id = uuid.uuid4().hex
     save_path = os.path.join(upload_directory_path, f"{file_id}_{filename}")
-    # try:
-    content = await file.read()
-    with open(save_path, "wb") as buffer:
-        buffer.write(content)
+    try:
+        content = await file.read()
+        with open(save_path, "wb") as buffer:
+            buffer.write(content)
 
-    # result = await generation_service.save_upload_and_generation(
-    #     user_id=current_user["user_id"],
-    #     save_path=save_path,
-    #     db=db
-    # )
+        # result = await generation_service.save_upload_and_generation(
+        #     user_id=current_user["user_id"],
+        #     save_path=save_path,
+        #     db=db
+        # )
 
-    path, res = await generation_service.generate(pdf_path=save_path, summarizer=summarizer, tts=tts, clip=clip, subtitles=subtitles)
+        path, res = await generation_service.generate(pdf_path=save_path, summarizer=summarizer, tts=tts, clip=clip, subtitles=subtitles)
 
-    return JSONResponse(content={"url": path, "summary": {
-        "summary": res['summary'],
-        "keypoints": res['keypoints'],
-        "url": path
-    }})
-    # except Exception as e:
-    #     print(e)
-    #     return JSONResponse(status_code=500, content={"error": str(e)})
+        return JSONResponse(content={"url": path, "summary": {
+            "summary": res['summary'],
+            "keypoints": res['keypoints'],
+            "url": path
+        }})
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=500, content={"error": str(e)})
