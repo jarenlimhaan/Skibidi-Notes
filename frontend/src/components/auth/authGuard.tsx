@@ -15,7 +15,7 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
         router.push("/login");
       }
       if (isAuthenticated === true) {
-        router.push("/dashboard");
+        router.push("/library");
       }
     }, [isAuthenticated, router]);
 

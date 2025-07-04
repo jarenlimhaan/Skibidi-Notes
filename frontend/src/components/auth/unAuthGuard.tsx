@@ -11,7 +11,7 @@ const withoutAuth = (WrappedComponent: React.ComponentType) => {
 
     useEffect(() => {
       if (isAuthenticated === true) {
-        router.push('/dashboard');
+        router.push('/library');
       }
     }, [isAuthenticated, router]);
 
