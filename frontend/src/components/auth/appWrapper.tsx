@@ -16,14 +16,7 @@ export default function AppWrapper({
     checkAuth(); // Sets `isAuthenticated` in your store
   }, [checkAuth]);
 
-  useEffect(() => {
-    // Example: redirect logic after auth check
-    if (pathname === "/") {
-      if (isAuthenticated === false) {
-        router.replace("/login");
-      }
-    }
-  }, [isAuthenticated, pathname, router]);
+  
 
   return <>{children}</>;
 }
