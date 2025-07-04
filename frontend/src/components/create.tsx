@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Upload, Settings, Play, Search, FileText, X } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Minus, Plus } from "lucide-react"
 
 interface UploadedFile {
   file: File
@@ -25,6 +27,9 @@ export default function BrainRotCustomizer() {
   const [isDragOver, setIsDragOver] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [questionCount, setQuestionCount] = useState(15)
+  const [customInput, setCustomInput] = useState("")
+  const [isCustomMode, setIsCustomMode] = useState(false)
 
   const backgroundVideos = [
     { id: "minecraft", name: "Minecraft", image: "/minecraft_gameplay.png?height=120&width=160" },
@@ -135,6 +140,62 @@ export default function BrainRotCustomizer() {
 
   const removeFile = (index: number) => {
     setUploadedFiles((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  const presetOptions = [
+    { count: 5, label: "Quick", description: "Perfect for a short review", difficulty: "Easy" },
+    { count: 10, label: "Standard", description: "Good balance of coverage", difficulty: "Medium" },
+    { count: 15, label: "Comprehensive", description: "Thorough understanding check", difficulty: "Hard" }
+  ]
+
+  const handlePresetSelect = (count: number) => {
+    setQuestionCount(count)
+    setIsCustomMode(false)
+    setCustomInput("")
+  }
+
+  const handleCustomInput = (value: string) => {
+    const num = Number.parseInt(value)
+    if (!isNaN(num) && num > 0 && num <= 15) {
+      setQuestionCount(num)
+      setCustomInput(value)
+    } else if (value === "") {
+      setCustomInput("")
+    }
+  }
+
+  const incrementCount = () => {
+    if (questionCount < 15) {
+      const newCount = questionCount + 1
+      setQuestionCount(newCount)
+      if (isCustomMode) setCustomInput(newCount.toString())
+    }
+  }
+
+  const decrementCount = () => {
+    if (questionCount > 1) {
+      const newCount = questionCount - 1
+      setQuestionCount(newCount)
+      if (isCustomMode) setCustomInput(newCount.toString())
+    }
+  }
+
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
+      case "Easy":
+        return "bg-green-100 text-green-800"
+      case "Medium":
+        return "bg-yellow-100 text-yellow-800"
+      case "Hard":
+        return "bg-red-100 text-red-800"
+      default:
+        return "bg-gray-100 text-gray-800"
+    }
+  }
+
+  const getEstimatedTime = (count: number) => {
+    const minutes = Math.ceil(count * 1.5) // Assuming 1.5 minutes per question
+    return `~${minutes} min`
   }
 
   return (
@@ -347,6 +408,109 @@ export default function BrainRotCustomizer() {
                   </Card>
                 ))}
               </div>
+            </Card>
+
+            <Card className="bg-white p-6 border-2 border-purple-300">
+                <h3 className="text-purple-700 text-lg font-medium mb-4">Select your quiz length</h3>
+
+                <CardContent className="p-8">
+                {/* Current Selection Display */}
+                <div className="bg-purple-50 rounded-lg p-6 mb-6 text-center">
+                  <div className="text-4xl font-bold text-purple-800 mb-2">{questionCount}</div>
+                  <div className="text-purple-600 mb-2">Questions Selected</div>
+                  <div className="text-sm text-purple-500">Estimated time: {getEstimatedTime(questionCount)}</div>
+                </div>
+
+                {/* Quick Adjust Controls */}
+                <div className="flex items-center justify-center gap-4 mb-8">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={decrementCount}
+                    disabled={questionCount <= 1}
+                    className="h-10 w-10 p-0 bg-transparent"
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
+
+                  <div className="flex items-center gap-2">
+                    <Input
+                      type="number"
+                      min="1"
+                      max="15"
+                      value={isCustomMode ? customInput : questionCount}
+                      onChange={(e) => {
+                        setIsCustomMode(true)
+                        handleCustomInput(e.target.value)
+                      }}
+                      className="w-20 text-center"
+                      placeholder="15"
+                    />
+                    <span className="text-gray-600">questions</span>
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={incrementCount}
+                    disabled={questionCount >= 15}
+                    className="h-10 w-10 p-0"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                {/* Preset Options */}
+                <div className="space-y-3">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Or choose a preset:</h3>
+
+                  {presetOptions.map((option) => (
+                    <div
+                      key={option.count}
+                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all hover:border-purple-300 ${
+                        questionCount === option.count && !isCustomMode
+                          ? "border-purple-500 bg-purple-50"
+                          : "border-gray-200 bg-white hover:bg-gray-50"
+                      }`}
+                      onClick={() => handlePresetSelect(option.count)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="text-2xl font-bold text-purple-600">{option.count}</div>
+                          <div>
+                            <div className="font-semibold text-gray-800">{option.label}</div>
+                            <div className="text-sm text-gray-600">{option.description}</div>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Badge className={getDifficultyColor(option.difficulty)}>{option.difficulty}</Badge>
+                          <Badge variant="outline" className="text-purple-600">
+                            {getEstimatedTime(option.count)}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Custom Range Info */}
+                <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                  <div className="text-sm text-blue-800">
+                    <strong>💡 Tip:</strong> You can set anywhere from 1 to 15 questions.
+                    For best results, we recommend 15 questions to truly test your understanding.
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex justify-between mt-8">
+                  <Button variant="outline" className="bg-pink-200 hover:bg-pink-300 text-pink-800 border-pink-300">
+                    Back
+                  </Button>
+                  <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                    Continue with {questionCount} Questions
+                  </Button>
+                </div>
+              </CardContent>
             </Card>
           </TabsContent>
 
