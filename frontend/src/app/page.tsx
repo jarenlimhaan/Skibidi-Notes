@@ -9,6 +9,10 @@ import Navbar from "@/components/navbar";
 
 export default function Home() {
 
+  const handleFeedClick = () => {
+    console.log("Feeding brain rot...")
+  }
+
   return (
     <div className="flex min-h-screen flex-col" style={{ backgroundColor: "#F5ECD5"}}>
       <Navbar />
@@ -32,20 +36,14 @@ export default function Home() {
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
                     Born to Be An Academic Weapon
                   </h1>
-                  {/* <p className="text-gray-500 md:text-xl dark:text-gray-400">
-                    Discover, create, and share amazing content with our
-                    platform. Join our community today.
-                </p> */}
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row justify-center">
-                  <Button size="lg">
-                    Feed The Brain Rot Now
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                  {/* <Button variant="outline" size="lg">
-                    Learn More
-                  </Button> */}
-               
+                  <Link href="/create">
+                    <Button size="lg" onClick={handleFeedClick}>
+                      Feed The Brain Rot Now
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button> 
+                  </Link>
               </div>
             </div>
           </div>
