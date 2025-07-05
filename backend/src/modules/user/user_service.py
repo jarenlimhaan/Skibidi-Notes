@@ -41,8 +41,6 @@ class UserService:
         # Convert Pydantic model to dict and exclude unset fields
         update_dict = update_data.dict(exclude_unset=True)
 
-        print(update_dict)
-
         # Check if user is changing password 
         user_password = user.password
         if not auth_service.verify_password(update_dict["oldPassword"], user_password):

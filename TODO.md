@@ -3,13 +3,8 @@
 ## 🧩 Backend (FastAPI)
 
 ### 📌 Structure & Refactor
-- [ ] Consider writing **custom pipes** (via `Depends`) for:
-  - [ ] Request field transformation (e.g., trimming strings, default sanitization)
-  - [ ] Header/token validation logic
-  - [ ] Query parameter validation (e.g., limits, filters)
-  - [ ] Role-based access or permission checks
+- [ ] redis/celery for processing of video generation
 - [ ] Setup logger
-- [ ] Add black sort 
 ---
 
 ## 🎨 Frontend 

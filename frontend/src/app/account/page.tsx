@@ -217,6 +217,7 @@ export default function AccountPage() {
                         type={showCurrentPassword ? "text" : "password"}
                         name="oldPassword"
                         onChange={handlePasswordChange}
+                        value={passwordForm.oldPassword}
                         placeholder="Enter current password"
                         className="h-14 pl-12 pr-12 bg-transparent border-2 border-purple-400/50 text-white placeholder:text-purple-200/70 text-lg rounded-lg focus:border-pink-400 focus:ring-pink-400/20"
                       />
@@ -252,6 +253,7 @@ export default function AccountPage() {
                         type={showNewPassword ? "text" : "password"}
                         name="newPassword"
                         onChange={handlePasswordChange}
+                        value={passwordForm.newPassword}
                         placeholder="Enter new password"
                         className="h-14 pl-12 pr-12 bg-transparent border-2 border-purple-400/50 text-white placeholder:text-purple-200/70 text-lg rounded-lg focus:border-pink-400 focus:ring-pink-400/20"
                       />
