@@ -55,20 +55,24 @@ class Summarizer:
         """Summarize a batch of text"""
         prompt = PromptTemplate.from_template(
             """
-            You are a helpful assistant that creates concise summaries.
-            Summarize the following text in 2-3 sentences and extract 3-4 key points.
-            
-            Return your response in this exact JSON format:
+            You are an expert assistant in summarizing short-form video scripts (e.g., TikTok or YouTube Shorts).
+
+            Your task is to:
+            1. Provide a 2-3 sentence summary that captures the main idea and tone of the script (funny, inspiring, educational, etc.).
+            2. Extract 3-4 punchy key points — these could be hooks, facts, tips, jokes, or moments designed to grab attention.
+
+            Focus on brevity, clarity, and impact.
+
+            Respond strictly in the following JSON format:
             {{
-              "summary": "Your 2-3 sentence summary here",
-              "keypoints": ["Key point 1", "Key point 2", "Key point 3"]
+            "summary": "Put the actual script text here (formatted as if someone is speaking).",
+            "keypoints": ["Hook or main idea", "Interesting moment", "Takeaway", "Call-to-action (if any)"]
             }}
-            
-            Text to summarize:
+
+            Use this as the source material:
             {text}
             """
         )
-
         try:
             chain = LLMChain(llm=self.llm, prompt=prompt)
             response = chain.run(text=batch_text)
@@ -213,7 +217,7 @@ class Summarizer:
         prompt = PromptTemplate.from_template(
             """
             You are a helpful assistant that creates educational quizzes.
-            Based on the following summary, create 5 multiple-choice questions.
+            Based on the following summary, create 10 multiple-choice questions.
             Each question should have 4 options (A, B, C, D) with one correct answer.
             
             Format your response as:

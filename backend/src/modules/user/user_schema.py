@@ -22,8 +22,5 @@ class UserCreateSchema(BaseModel):
 class UserUpdateSchema(BaseModel):
     username: Optional[str] = None
     email: Optional[EmailStr] = None
-    password: Optional[str] = None 
-    class Config:
-        orm_mode = True
-        from_attributes = True
-
+    oldPassword: Optional[str] = None 
+    newPassword: Optional[str] = None

@@ -50,7 +50,7 @@ async def login(
     ):
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
-    token = auth_service.create_access_token({"user_id": str(user.id)})
+    token = auth_service.create_access_token({"user_id": str(user.id), "email": str(user.email), "username": str(user.username)})
 
     # Set as secure HTTP-only cookie
     response = JSONResponse(content={"message": "Login successful"})

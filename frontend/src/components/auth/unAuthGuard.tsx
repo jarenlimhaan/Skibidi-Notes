@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/app/store/authStore';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/app/store/authStore";
 
 const withoutAuth = (WrappedComponent: React.ComponentType) => {
   const Wrapper = (props: any) => {
@@ -11,7 +11,7 @@ const withoutAuth = (WrappedComponent: React.ComponentType) => {
 
     useEffect(() => {
       if (isAuthenticated === true) {
-        router.push('/library');
+        router.push("/account");
       }
     }, [isAuthenticated, router]);
 

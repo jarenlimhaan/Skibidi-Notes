@@ -32,10 +32,16 @@ export default function Navbar() {
             Create
           </Link>
           <Link
-            href="/library"
+            href="/account"
             className="text-sm font-medium text-white transition-colors hover:text-purple-200"
           >
             Library
+          </Link>
+          <Link
+            href="/account"
+            className="text-sm font-medium text-white transition-colors hover:text-purple-200"
+          >
+            My Account
           </Link>
         </nav>
         <div className="ml-auto md:ml-4 flex items-center gap-4">
@@ -65,7 +71,10 @@ export default function Navbar() {
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="bg-gradient-to-r from-purple-800 via-pink-500 to-cyan-400">
+            <SheetContent
+              side="right"
+              className="bg-gradient-to-r from-purple-800 via-pink-500 to-cyan-400"
+            >
               <div className="flex flex-col gap-6 pt-6">
                 <Link
                   href="/"
@@ -82,7 +91,7 @@ export default function Navbar() {
                   Create
                 </Link>
                 <Link
-                  href="/library"
+                  href="/account"
                   className="text-sm font-medium text-white transition-colors hover:text-purple-200"
                   onClick={() => setIsOpen(false)}
                 >

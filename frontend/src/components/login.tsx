@@ -1,61 +1,62 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import { useAuthStore } from "@/app/store/authStore"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import Link from "next/link"
+import type React from "react";
+import { useState } from "react";
+import { useAuthStore } from "@/app/store/authStore";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
 
 interface FormData {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 
 export default function Login() {
-  const login = useAuthStore((state) => state.login)
+  const login = useAuthStore((state) => state.login);
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
-  })
+  });
 
-  const [message, setMessage] = useState<string>("")
+  const [message, setMessage] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const { email, password } = formData
+    const { email, password } = formData;
     if (!email || !password) {
-      setMessage("Please fill in all fields.")
-      return
+      setMessage("Please fill in all fields.");
+      return;
     }
 
-    const success = await login(email, password)
+    const success = await login(email, password);
     if (success) {
-      setMessage("Login successful!")
-      window.location.href = "/dashboard"
+      setMessage("Login successful!");
+      window.location.href = "/account";
     } else {
-      setMessage("Login failed. Please check your credentials.")
+      setMessage("Login failed. Please check your credentials.");
     }
 
-    setFormData({ email: "", password: "" })
-  }
+    setFormData({ email: "", password: "" });
+  };
 
   return (
-    <div className="flex h-screen w-screen font-mono bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900"
-    style={{fontFamily: 'JetBrainMono'}}>
+    <div
+      className="flex h-screen w-screen font-mono bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900"
+      style={{ fontFamily: "JetBrainMono" }}
+    >
       {/* Left Side - Login Form */}
       <div className="flex-1 flex flex-col justify-center items-center p-8 bg-gradient-to-br from-pink-500/20 via-purple-500/20 to-yellow-400/20 backdrop-blur-sm">
         <div className="w-full max-w-md">
           <Card className="bg-black/40 backdrop-blur-md border-2 border-pink-400/50 shadow-2xl shadow-pink-500/25">
             <CardHeader className="text-center pb-2">
-              <CardTitle className="text-4xl font-bold bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent drop-shadow-lg"
-              >
+              <CardTitle className="text-4xl font-bold bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent drop-shadow-lg">
                 LOGIN
               </CardTitle>
             </CardHeader>
@@ -94,7 +95,9 @@ export default function Login() {
 
               <div className="text-center space-y-4 pt-4">
                 {message && (
-                  <p className="text-yellow-300 font-semibold text-lg drop-shadow-lg animate-pulse">{message}</p>
+                  <p className="text-yellow-300 font-semibold text-lg drop-shadow-lg animate-pulse">
+                    {message}
+                  </p>
                 )}
                 <p className="text-pink-200 text-lg">
                   Don't have an account?{" "}
@@ -147,5 +150,5 @@ export default function Login() {
         </div>
       </div>
     </div>
-  )
+  );
 }

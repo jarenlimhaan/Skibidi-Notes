@@ -4,7 +4,8 @@ from sqlalchemy import select
 
 # Internal Imports
 from .user_model import User
-from .user_schema import UserCreateSchema
+from .user_schema import UserCreateSchema, UserUpdateSchema
+from src.modules.auth.auth_service import AuthService
 
 class UserService:
 
@@ -29,7 +30,7 @@ class UserService:
         await db.refresh(new_user)
         return {"status": "Success", "user_id": new_user.id}
     
-    async def update(self, user_id: int, update_data: dict, db: AsyncSession):
+    async def update(self, user_id: int, update_data: UserUpdateSchema, db: AsyncSession, auth_service: AuthService):
         stmt = select(User).where(User.id == user_id)
         result = await db.execute(stmt)
         user = result.scalar_one_or_none()
@@ -37,7 +38,21 @@ class UserService:
         if not user:
             return None
 
-        for key, value in update_data.items():
+        # Convert Pydantic model to dict and exclude unset fields
+        update_dict = update_data.dict(exclude_unset=True)
+
+        print(update_dict)
+
+        # Check if user is changing password 
+        user_password = user.password
+        if not auth_service.verify_password(update_dict["oldPassword"], user_password):
+            return None
+
+        update_dict["password"] = auth_service.hash_password(update_dict["newPassword"])
+        del update_dict["oldPassword"]
+        del update_dict["newPassword"]
+
+        for key, value in update_dict.items():
             setattr(user, key, value)
 
         await db.commit()

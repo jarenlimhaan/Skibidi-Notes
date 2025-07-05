@@ -1,24 +1,35 @@
 "use client";
-import { userDTO } from "@/lib/schemas/userSchema";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { UserUpdateInput } from "@/lib/schemas/userSchema";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-export const useUsers = () =>
-  useQuery({
-    queryKey: ["users"],
-    queryFn: () =>
-      axios.get(`http://localhost:8000/api/users`).then((res) => res.data),
-  });
+export const useUpdateUser = (userId: string) => {
+  return useMutation({
+    mutationFn: (data: UserUpdateInput) =>
+      axios.put(`${backendURL}/api/users/${userId}`, data).then((res) => res.data),
 
-export const useUserByUsername = (username: string) => {
-  return useQuery({
-    queryKey: ["users", username],
-    queryFn: async () => {
-      const res = await axios.get(`${backendURL}/api/users/${username}`);
-      return userDTO.parse(res.data);
+    onSuccess: () => {
+      Swal.fire({
+        title: "Updated Successfully",
+        icon: "success",
+        confirmButtonText: "Cool",
+      });
     },
-    enabled: !!username,
+
+    onError: (error: any) => {
+      const message =
+        error?.response?.data?.message || "Something went wrong";
+
+      Swal.fire({
+        title: "Update Failed",
+        text: message,
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
+    },
   });
 };
+
