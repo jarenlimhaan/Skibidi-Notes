@@ -1,5 +1,5 @@
 # External Imports
-from fastapi import APIRouter, UploadFile, File, HTTPException, Request, Depends
+from fastapi import APIRouter, UploadFile, File, HTTPException, Request, Depends, Form
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 import os
@@ -26,6 +26,9 @@ os.makedirs(upload_directory_path, exist_ok=True)
 async def upload_file(
     request: Request,
     file: UploadFile = File(...),
+    background: str = Form(...),
+    voice: str = Form(...),
+    quizCount: str = Form(...),
     summarizer: Summarizer = Depends(get_summarizer_service),
     tts: TTS = Depends(get_TTS),
     subtitles: Subtitles = Depends(get_subtitles),
@@ -48,7 +51,7 @@ async def upload_file(
         #     db=db
         # )
 
-        path, res = await generation_service.generate(pdf_path=save_path, summarizer=summarizer, tts=tts, clip=clip, subtitles=subtitles)
+        path, res = await generation_service.generate(pdf_path=save_path, summarizer=summarizer, tts=tts, clip=clip, subtitles=subtitles, background=background, voice_id=voice, quizcount=quizCount)
 
         return JSONResponse(content={"url": path, "summary": {
             "summary": res['summary'],

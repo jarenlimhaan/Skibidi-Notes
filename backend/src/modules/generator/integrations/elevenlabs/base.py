@@ -13,12 +13,10 @@ class TTS:
         self.client = ElevenLabs(api_key=app_config.ELEVEN_LAB_API_KEY)
 
     # TODO: pass voice id as argument once frontend is finalized
-    def tts_to_file(self, script:str, filename: str) -> str:
+    def tts_to_file(self, script:str, voice_id: str, filename: str) -> str:
         """
         Return path of audio file (TTS)
         """
-        voice_id="e02TCHG9lAYD9pABEDcr"
-
         audio = self.client.text_to_speech.convert(
             text=script,
             voice_id=voice_id,

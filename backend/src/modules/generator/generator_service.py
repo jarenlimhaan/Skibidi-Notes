@@ -24,29 +24,30 @@ from .utils.util import clean_dir
 
 class GenerationService:
 
-    async def generate(self, pdf_path:str, summarizer: Summarizer, tts: TTS, clip: Clip, subtitles: Subtitles):
+    async def generate(self, pdf_path:str, summarizer: Summarizer, tts: TTS, clip: Clip, subtitles: Subtitles, background: str, voice_id: str, quizcount: str):
         clean_dir("static/temp/")
         clean_dir("static/subtitles/")
 
         
         ## Constants 
-        video_paths = ["static/videos/subway.mp4"]
-        n_threads = 2
+        
+        video_paths = ["static/videos/" + background]
+        voice_id = voice_id  
+        n_threads = 8
         subtitles_position = "center,center"
         text_color = "#FFFF00"
 
         ## generate script from pdf 
-        res = summarizer.process_pdf(pdf_path)
+        res = summarizer.process_pdf(pdf_path, quizcount)
         script = res["summary"]
         # 
-        # script ='Did you know that if you had 10 billion $1 coins and spent one every second of every day, it would take 317 years to go broke? Imagine having that kind of financial freedom. Would you be happy? I certainly believed so until I paused and considered my current circumstance: " Am I not happy already?” This simple yet thought-provoking question opened the floodgates to deeper reflections: What is happiness? Can it be defined? And does money buy happiness?'
 
         sentences = script.split(". ")
         sentences = list(filter(lambda x: x != "", sentences))
         paths = []
         for sentence in sentences:
             current_tts_path = f"static/temp/{uuid4()}.mp3"
-            tts.tts_to_file(sentence, filename=current_tts_path)
+            tts.tts_to_file(sentence, voice_id, filename=current_tts_path)
             audio_clip = AudioFileClip(current_tts_path)
             paths.append(audio_clip)
 

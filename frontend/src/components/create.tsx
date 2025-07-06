@@ -21,7 +21,9 @@ interface UploadedFile {
 export default function BrainRotCustomizer() {
   const [activeTab, setActiveTab] = useState("upload")
   const [selectedBackground, setSelectedBackground] = useState<string>("")
+  const [selectedBackgroundName, setSelectedBackgroundName] = useState<string>("")
   const [selectedVoice, setSelectedVoice] = useState<string>("")
+  const [selectedVoiceName, setSelectedVoiceName] = useState<string>("")
   const [searchTerm, setSearchTerm] = useState("")
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
   const [isDragOver, setIsDragOver] = useState(false)
@@ -31,17 +33,19 @@ export default function BrainRotCustomizer() {
   const [customInput, setCustomInput] = useState("")
   const [isCustomMode, setIsCustomMode] = useState(false)
 
+  // need to upload the rest
   const backgroundVideos = [
     { id: "minecraft", name: "Minecraft", image: "/minecraft_gameplay.png?height=120&width=160" },
-    { id: "subway", name: "Subway Surfers", image: "/subway_gameplay.png?height=120&width=160" },
+    { id: "subway.mp4", name: "Subway Surfers", image: "/subway_gameplay.png?height=120&width=160" },
     { id: "temple", name: "Temple Run", image: "/temple_gameplay.png?height=120&width=160" },
     { id: "gta", name: "GTA", image: "/gta_gameplay.png?height=120&width=160" },
   ]
 
+  
   const voiceOptions = [
-    { id: "siri1", name: "Apple Siri", accent: "American", gender: "Male", personality: "Friendly" },
-    { id: "siri2", name: "Donald Trump", accent: "British", gender: "Female", personality: "Professional" },
-    { id: "siri3", name: "Google Assistant", accent: "American", gender: "Female", personality: "Casual" },
+    { id: "e02TCHG9lAYD9pABEDcr", name: "Kai Cenat", accent: "American", gender: "Male", personality: "Streamer" },
+    { id: "Ra3cjI6YRmJZOaBdFjTP", name: "IshowSpeed", accent: "American", gender: "Male", personality: "Streamer" },
+    { id: "EXAVITQu4vr4xnSDxMaL", name: "Sarah", accent: "American", gender: "Female", personality: "Casual" },
   ]
 
   const filteredVoices = voiceOptions.filter(
@@ -74,7 +78,18 @@ export default function BrainRotCustomizer() {
     setIsUploading(true)
     const validFiles: UploadedFile[] = []
 
-    for (let i = 0; i < files.length; i++) {
+    // Only allow up to 2 files in total (including already uploaded)
+    const maxFiles = 2
+    const alreadyUploaded = uploadedFiles.length
+    const filesToAdd = Math.max(0, maxFiles - alreadyUploaded)
+
+    if (alreadyUploaded >= maxFiles) {
+      alert("You can only upload up to 2 files.")
+      setIsUploading(false)
+      return
+    }
+
+    for (let i = 0; i < files.length && validFiles.length < filesToAdd; i++) {
       const file = files[i]
       if (isValidFileType(file)) {
         validFiles.push({
@@ -86,14 +101,12 @@ export default function BrainRotCustomizer() {
       }
     }
 
-    // Simulate upload delay to make it seem like processing is happening - can remove/increase timing 
+    // Simulate upload delay
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    // Valid files added to UploadFiles state 
     setUploadedFiles((prev) => [...prev, ...validFiles])
-    // Reset uploading state 
     setIsUploading(false)
-  }, [])
+  }, [uploadedFiles])
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -309,6 +322,7 @@ export default function BrainRotCustomizer() {
                 <Button
                   disabled={uploadedFiles.length === 0}
                   className="bg-purple-600 hover:bg-purple-700 text-white disabled:bg-gray-400"
+                  onClick={() => setActiveTab("customise")}
                 >
                   Submit Files ({uploadedFiles.length})
                 </Button>
@@ -348,7 +362,10 @@ export default function BrainRotCustomizer() {
                       className={`cursor-pointer transition-all rounded ${
                         selectedBackground === video.id ? "ring-2 ring-pink-500" : ""
                       }`}
-                      onClick={() => setSelectedBackground(video.id)}
+                      onClick={() => {
+                        setSelectedBackground(video.id)
+                        setSelectedBackgroundName(video.name)
+                      }}
                     >
                       <div className="relative">
                         <img
@@ -390,7 +407,11 @@ export default function BrainRotCustomizer() {
                     className={`bg-purple-50 p-4 cursor-pointer transition-all hover:bg-purple-100 ${
                       selectedVoice === voice.id ? "ring-2 ring-pink-500" : ""
                     }`}
-                    onClick={() => setSelectedVoice(voice.id)}
+                    onClick={() => {
+                      setSelectedVoice(voice.id)
+                      setSelectedVoiceName(voice.name)
+
+                    }}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -503,10 +524,17 @@ export default function BrainRotCustomizer() {
 
                 {/* Action Buttons */}
                 <div className="flex justify-between mt-8">
-                  <Button variant="outline" className="bg-pink-200 hover:bg-pink-300 text-pink-800 border-pink-300">
+                  <Button 
+                    variant="outline" 
+                    className="bg-pink-200 hover:bg-pink-300 text-pink-800 border-pink-300"
+                    onClick={() => setActiveTab("upload")}
+                  >
                     Back
                   </Button>
-                  <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                  <Button 
+                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                    onClick={() => setActiveTab("process")} 
+                  >
                     Continue with {questionCount} Questions
                   </Button>
                 </div>
@@ -533,7 +561,19 @@ export default function BrainRotCustomizer() {
                   </div>
                   <div>
                     <h3 className="text-gray-900 mb-1 text-sm">Document</h3>
-                    <p className="text-sm text-gray-900 font-semibold">04-Classes-and-Objects-Part-I.pdf</p>
+                      {
+                        uploadedFiles.length > 0 ? (
+                          <ul className="list-disc list-inside text-sm text-gray-900 font-semibold">
+                            {uploadedFiles.map((file, idx) => (
+                              <li key={idx}>
+                                {file.name.split(".")[0]}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          "No file selected"
+                        )
+                      }
                   </div>
                 </div>
               </CardContent>
@@ -547,7 +587,15 @@ export default function BrainRotCustomizer() {
                   </div>
                   <div>
                     <h3 className="text-gray-900 mb-1 text-sm">Background</h3>
-                    <p className="text-sm text-gray-900 font-semibold">Minecraft</p>
+                    <p className="text-sm text-gray-900 font-semibold">
+                      {
+                        selectedBackgroundName !== "" ? (
+                          <span>{selectedBackgroundName}</span> 
+                        ) : (
+                          "No background selected"
+                        )
+                      }
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -561,7 +609,16 @@ export default function BrainRotCustomizer() {
                   </div>
                   <div>
                     <h3 className="text-gray-900 mb-1 text-sm">Voice Type</h3>
-                    <p className="text-sm text-gray-900 font-semibold">Apple Siri</p>
+                    <p className="text-sm text-gray-900 font-semibold">
+                      {
+                        selectedVoiceName !== "" ? (
+                          <span>{selectedVoiceName}</span> 
+                        ) : (
+                          "No voice selected"
+                        )
+                      }
+
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -575,7 +632,7 @@ export default function BrainRotCustomizer() {
                   </div>
                   <div>
                     <h3 className="text-gray-900 mb-1 text-sm">Quiz Length</h3>
-                    <p className="text-sm text-gray-900 font-semibold">15 Questions</p>
+                    <p className="text-sm text-gray-900 font-semibold">{questionCount}</p>
                   </div>
                 </div>
               </CardContent>
@@ -584,10 +641,52 @@ export default function BrainRotCustomizer() {
 
           {/* Action Buttons */}
           <div className="flex justify-between">
-            <Button variant="outline" className="bg-white">
-              Return
+            <Button 
+              variant="outline" 
+              className="bg-white"
+              onClick={() => setActiveTab("customise")}
+            >
+              Back
             </Button>
-            <Button className="bg-blue-500 hover:bg-blue-600 text-white">Flush</Button>
+            <Button
+              variant="outline" 
+              className="bg-blue-500 hover:bg-blue-600 text-white"
+              disabled={
+                uploadedFiles.length === 0 ||
+                !selectedBackground ||
+                !selectedVoice ||
+                !questionCount
+              }
+              onClick={async () => {
+                const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+                for (const fileObj of uploadedFiles) {
+                  const formData = new FormData();
+                  formData.append("file", fileObj.file);
+                  formData.append("background", selectedBackground);
+                  formData.append("voice", selectedVoice); // Use the backend's expected field name
+                  formData.append("quizCount", questionCount.toString());
+
+                  const uploadRes = await fetch(
+                    `${backendURL}/api/generator/upload?filename=${encodeURIComponent(fileObj.name)}`,
+                    {
+                      method: "POST",
+                      credentials: "include",
+                      body: formData,
+                    }
+                  );
+                  if (!uploadRes.ok) {
+                    alert(`Failed to upload ${fileObj.name}`);
+                    return;
+                  }
+                }
+
+                alert("Successfully sent to backend!");
+              }}
+            >
+              Flush
+            </Button>
+
           </div>
 
           </TabsContent>

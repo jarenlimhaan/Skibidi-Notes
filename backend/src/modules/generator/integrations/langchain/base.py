@@ -209,7 +209,7 @@ class Summarizer:
         # Combine all batch results
         return self.__combine_summaries(batch_results)
 
-    def __generate_quiz(self, summary: str) -> str:
+    def __generate_quiz(self, summary: str, quizcount: str) -> str:
         """Generate quiz questions based on summary"""
         if not summary or len(summary.strip()) < 50:
             return "Summary too short to generate meaningful quiz questions."
@@ -217,7 +217,7 @@ class Summarizer:
         prompt = PromptTemplate.from_template(
             """
             You are a helpful assistant that creates educational quizzes.
-            Based on the following summary, create 10 multiple-choice questions.
+            Based on the following summary, create {quizcount} multiple-choice questions.
             Each question should have 4 options (A, B, C, D) with one correct answer.
             
             Format your response as:
@@ -235,13 +235,13 @@ class Summarizer:
         )
 
         try:
-            response = self.llm.predict(prompt.format(summary=summary))
+            response = self.llm.predict(prompt.format(quizcount=quizcount, summary=summary))
             return response
         except Exception as e:
             print(f"Error generating quiz: {str(e)}")
             return f"Error generating quiz: {str(e)}"
 
-    def process_pdf(self, file_path: str) -> dict:
+    def process_pdf(self, file_path: str, quizcount: str) -> dict:
         """Main method to process PDF and return summary"""
         try:
             print(f"Starting to process PDF: {file_path}")
@@ -278,7 +278,7 @@ class Summarizer:
             # Optional: Generate quiz
             quiz = None
             if result.get("summary") and len(result["summary"]) > 100:
-                quiz = self.__generate_quiz(result["summary"])
+                quiz = self.__generate_quiz(result["summary"], quizcount)
 
             final_result = {
                 "summary": result.get("summary", ""),
