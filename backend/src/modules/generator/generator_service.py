@@ -41,16 +41,28 @@ class GenerationService:
         ## generate script from pdf 
         res = summarizer.process_pdf(pdf_path, quizcount)
         script = res["summary"]
-        # 
+        
 
         sentences = script.split(". ")
         sentences = list(filter(lambda x: x != "", sentences))
         paths = []
-        for sentence in sentences:
+        # for sentence in sentences:
+        #     current_tts_path = f"static/temp/{uuid4()}.mp3"
+        #     tts.tts_to_file(sentence, voice_id, filename=current_tts_path)
+        #     audio_clip = AudioFileClip(current_tts_path)
+        #     paths.append(audio_clip)
+
+        # final_audio = concatenate_audioclips(paths)
+        # tts_path = f"static/temp/{uuid4()}.mp3"
+        # final_audio.write_audiofile(tts_path)
+
+        def process_sentence(sentence):
             current_tts_path = f"static/temp/{uuid4()}.mp3"
             tts.tts_to_file(sentence, voice_id, filename=current_tts_path)
-            audio_clip = AudioFileClip(current_tts_path)
-            paths.append(audio_clip)
+            return AudioFileClip(current_tts_path)
+
+        with ThreadPoolExecutor(max_workers=3) as executor:
+            paths = list(executor.map(process_sentence, sentences))
 
         final_audio = concatenate_audioclips(paths)
         tts_path = f"static/temp/{uuid4()}.mp3"
