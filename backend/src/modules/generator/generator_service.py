@@ -19,6 +19,7 @@ from .integrations.elevenlabs.base import TTS
 from .integrations.langchain.base import Summarizer
 from .integrations.movieclip.base import Clip
 from .integrations.subtitles.base import Subtitles
+from concurrent.futures import ThreadPoolExecutor
 
 from .utils.util import clean_dir
 
