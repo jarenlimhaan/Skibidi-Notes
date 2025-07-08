@@ -7,17 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Upload,
-  Settings,
-  Play,
-  Search,
-  FileText,
-  X,
-  Mic,
-  HelpCircle,
-  Video,
-} from "lucide-react";
+import { Upload, Settings, Play, Search, FileText, Mic, HelpCircle, Video} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Minus, Plus } from "lucide-react";
 
@@ -715,7 +705,7 @@ export default function BrainRotCustomizer() {
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <Mic className="w-6 h-6 text-blue-600" />
+                        <Video className="w-6 h-6 text-blue-600" />
                       </div>
                       <div>
                         <h3 className="text-gray-900 mb-1 text-sm">
@@ -737,7 +727,7 @@ export default function BrainRotCustomizer() {
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                         <HelpCircle className="w-6 h-6 text-blue-600" />
+                         <Mic className="w-6 h-6 text-blue-600" />
                       </div>
                       <div>
                         <h3 className="text-gray-900 mb-1 text-sm">
@@ -785,7 +775,7 @@ export default function BrainRotCustomizer() {
                 </Button>
                 <Button
                   variant="outline"
-                  className="bg-blue-500 hover:bg-blue-600 text-white"
+                  className="bg-purple-600 hover:bg-purple-700 text-white"
                   disabled={
                     uploadedFiles.length === 0 ||
                     !selectedBackground ||
