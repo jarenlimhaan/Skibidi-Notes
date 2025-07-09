@@ -32,7 +32,7 @@ export default function Navbar() {
             Create
           </Link>
           <Link
-            href="/account"
+            href="/library"
             className="text-sm font-medium text-white transition-colors hover:text-purple-200"
           >
             Library
@@ -91,7 +91,7 @@ export default function Navbar() {
                   Create
                 </Link>
                 <Link
-                  href="/account"
+                  href="/library"
                   className="text-sm font-medium text-white transition-colors hover:text-purple-200"
                   onClick={() => setIsOpen(false)}
                 >
