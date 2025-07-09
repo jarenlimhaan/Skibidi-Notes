@@ -35,7 +35,10 @@ dependencies = [
     "termcolor (>=3.1.0,<4.0.0)",
     "assemblyai (>=0.41.5,<0.42.0)",
     "pillow (==9.5.0)",
-    "srt-equalizer (==0.1.8)"
+    "srt-equalizer (==0.1.8)",
+    "pgvector (>=0.3.0,<0.4.0)",
+    "langchain-postgres (>=0.0.15,<0.0.16)",
+    "psycopg[binary] (>=3.2.9,<4.0.0)"
 ]
 
 [tool.poetry]
@@ -47,4 +50,3 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-

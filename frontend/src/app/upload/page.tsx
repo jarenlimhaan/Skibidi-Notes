@@ -140,6 +140,9 @@ export default function UploadPage() {
 
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("background", "subway.mp4");
+      formData.append("voice", "e02TCHG9lAYD9pABEDcr"); // Use the backend's expected field name
+      formData.append("quizCount", "10");
 
       const response = await fetch(
         `${backendURL}/api/generator/upload?filename=${encodeURIComponent(file.name)}`,

@@ -25,24 +25,43 @@ export default function Navbar() {
           >
             Home
           </Link>
-          <Link
-            href="/create"
-            className="text-sm font-medium text-white transition-colors hover:text-purple-200"
-          >
-            Create
-          </Link>
-          <Link
-            href="/library"
-            className="text-sm font-medium text-white transition-colors hover:text-purple-200"
-          >
-            Library
-          </Link>
-          <Link
-            href="/account"
-            className="text-sm font-medium text-white transition-colors hover:text-purple-200"
-          >
-            My Account
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <Link
+                href="/create"
+                className="text-sm font-medium text-white transition-colors hover:text-purple-200"
+              >
+                Create
+              </Link>
+              <Link
+                href="/library"
+                className="text-sm font-medium text-white transition-colors hover:text-purple-200"
+              >
+                Library
+              </Link>
+              <Link
+                href="/chat"
+                className="text-sm font-medium text-white transition-colors hover:text-purple-200"
+              >
+                Chat
+              </Link>
+              <Link
+                href="/account"
+                className="text-sm font-medium text-white transition-colors hover:text-purple-200"
+              >
+                My Account
+              </Link>{" "}
+            </>
+          ) : (
+            <>
+              <Link
+                href="/gallery"
+                className="text-sm font-medium text-white transition-colors hover:text-purple-200"
+              >
+                Gallery
+              </Link>
+            </>
+          )}
         </nav>
         <div className="ml-auto md:ml-4 flex items-center gap-4">
           <div className="hidden md:flex gap-2">
@@ -83,22 +102,48 @@ export default function Navbar() {
                 >
                   Home
                 </Link>
-                <Link
-                  href="/create"
-                  className="text-sm font-medium text-white transition-colors hover:text-purple-200"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Create
-                </Link>
-                <Link
-                  href="/library"
-                  className="text-sm font-medium text-white transition-colors hover:text-purple-200"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Library
-                </Link>
+                {!isAuthenticated ? (
+                  <>
+                    <Link
+                      href="/create"
+                      className="text-sm font-medium text-white transition-colors hover:text-purple-200"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Create
+                    </Link>
+                    <Link
+                      href="/library"
+                      className="text-sm font-medium text-white transition-colors hover:text-purple-200"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Library
+                    </Link>
+                    <Link
+                      href="/chat"
+                      className="text-sm font-medium text-white transition-colors hover:text-purple-200"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Chat
+                    </Link>
+                    <Link
+                      href="/account"
+                      className="text-sm font-medium text-white transition-colors hover:text-purple-200"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      My Account
+                    </Link>
+                  </>
+                ) : (
+                  <Link
+                    href="/gallery"
+                    className="text-sm font-medium text-white transition-colors hover:text-purple-200"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Gallery
+                  </Link>
+                )}
                 <div className="flex flex-col gap-2">
-                  {!isAuthenticated ? (
+                  {isAuthenticated ? (
                     <>
                       <Link href="/login" onClick={() => setIsOpen(false)}>
                         <Button variant="outline" className="w-full">

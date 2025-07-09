@@ -13,7 +13,7 @@ from .integrations.movieclip.base import Clip, get_clip
 from .integrations.subtitles.base import Subtitles, get_subtitles
 
 from .generator_service import GenerationService
-from src.deps import get_current_user_from_cookie, get_generation_service, get_db
+from src.deps import get_current_user_from_cookie, get_generation_service, get_db, get_qa_service
 
 router = APIRouter()
 app_config = get_app_configs()
@@ -34,7 +34,8 @@ async def upload_file(
     subtitles: Subtitles = Depends(get_subtitles),
     clip: Clip = Depends(get_clip),
     generation_service: GenerationService = Depends(get_generation_service),
-    # current_user=Depends(get_current_user_from_cookie),
+    qa_service = Depends(get_qa_service),
+    current_user=Depends(get_current_user_from_cookie),
     db: AsyncSession = Depends(get_db)
 ):
     filename = request.query_params.get("filename") or file.filename
@@ -45,13 +46,16 @@ async def upload_file(
         with open(save_path, "wb") as buffer:
             buffer.write(content)
 
-        # result = await generation_service.save_upload_and_generation(
+        path, res = await generation_service.generate(pdf_path=save_path, summarizer=summarizer, tts=tts, clip=clip, subtitles=subtitles, background=background, voice_id=voice, quizcount=quizCount)
+
+        qa_service.add_pdf_to_vectorstore(file_path=save_path, user_id=current_user["user_id"]) 
+
+         # result = await generation_service.save_upload_and_generation(
         #     user_id=current_user["user_id"],
         #     save_path=save_path,
+        #     generation_path=path,
         #     db=db
         # )
-
-        path, res = await generation_service.generate(pdf_path=save_path, summarizer=summarizer, tts=tts, clip=clip, subtitles=subtitles, background=background, voice_id=voice, quizcount=quizCount)
 
         return JSONResponse(content={"url": path, "summary": {
             "summary": res['summary'],
