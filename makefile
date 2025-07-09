@@ -28,17 +28,6 @@ run-fe:
 	@cd frontend && npm run dev
 	@echo "Sucessfully ran NextJS Application🚀"
 
-# Start DB
-db-up:
-	@docker compose up -d
-	@echo "Database started!"
-
-# Stop DB
-db-down:
-	@docker compose down
-	@echo "Database stopped!"
-
-# Seed the DB 
 
 # Run both FE & BE
 run:
