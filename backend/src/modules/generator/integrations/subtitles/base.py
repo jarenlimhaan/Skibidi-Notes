@@ -21,6 +21,9 @@ change_settings({"IMAGEMAGICK_BINARY": get_app_configs().IMAGEMAGICK_BINARY})
 
 class Subtitles:
 
+    def __init__(self):
+        self.subtitles_dir = app_config.SUBTITLES_DIR
+
     def __generate_subtitles_assemblyai(self, audio_path: str, voice: str) -> str:
         language_mapping = {"br": "pt", "id": "en", "jp": "ja", "kr": "ko"}
         lang_code = language_mapping.get(voice, voice)
@@ -33,7 +36,7 @@ class Subtitles:
     def generate_subtitles(self, audio_path: str, sentences: List[str], audio_clips: List[AudioFileClip], voice: str) -> str:
         def equalize_subtitles(srt_path: str, max_chars: int = 10) -> None:
             srt_equalizer.equalize_srt_file(srt_path, srt_path, max_chars)
-        subtitles_path = f"static/subtitles/{uuid.uuid4()}.srt"
+        subtitles_path = self.subtitles_dir+ f"{uuid.uuid4()}.srt"
         print(colored("[+] Creating subtitles using AssemblyAI", "blue"))
         subtitles = self.__generate_subtitles_assemblyai(audio_path, voice)
         with open(subtitles_path, "w") as file:

@@ -13,9 +13,14 @@ from config.env import get_app_configs
 change_settings({"IMAGEMAGICK_BINARY": get_app_configs().IMAGEMAGICK_BINARY})
 
 class Clip:
+
+    def __init__(self):
+        self.temp_dir = get_app_configs().TEMP_DIR
+        self.output_dir = get_app_configs().OUTPUT_DIR
+
     def combine_videos(self, video_paths: List[str], max_duration: int, threads: int) -> str:
         video_id = uuid.uuid4()
-        combined_video_path = f"static/temp/{video_id}.mp4"
+        combined_video_path =  self.temp_dir + f"{video_id}.mp4"
         base_clip = VideoFileClip(video_paths[0]).without_audio()
         clips = []
         total_duration = 0
@@ -47,7 +52,7 @@ class Clip:
             VideoFileClip(combined_video_path),
             subtitles.set_pos((horizontal, vertical))
         ]).set_audio(AudioFileClip(tts_path))
-        output_path = f"static/output/{uuid.uuid4()}.mp4"
+        output_path = self.output_dir + f"{uuid.uuid4()}.mp4"
         result.write_videofile(output_path, threads=threads or 2)
         return output_path
 

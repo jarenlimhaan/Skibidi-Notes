@@ -2,14 +2,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 import uuid
 from uuid import uuid4
-
+from concurrent.futures import ThreadPoolExecutor
 from moviepy.editor import *
 from moviepy import *
 from moviepy.config import change_settings
-from config.env import get_app_configs
-
-change_settings({"IMAGEMAGICK_BINARY": get_app_configs().IMAGEMAGICK_BINARY})
-
 
 # Internal Imports
 from .generator_schema import CreateUploadSchema, CreateGenerationSchema
@@ -19,20 +15,27 @@ from .integrations.elevenlabs.base import TTS
 from .integrations.langchain.base import Summarizer
 from .integrations.movieclip.base import Clip
 from .integrations.subtitles.base import Subtitles
-from concurrent.futures import ThreadPoolExecutor
-
 from .utils.util import clean_dir
+
+from config.env import get_app_configs
+
+change_settings({"IMAGEMAGICK_BINARY": get_app_configs().IMAGEMAGICK_BINARY})
 
 class GenerationService:
 
+    def __init__(self):
+        self.temp_dir = get_app_configs().TEMP_DIR
+        self.subtitles_dir = get_app_configs().SUBTITLES_DIR
+        self.videos_dir = get_app_configs().VIDEOS_DIR
+
     async def generate(self, pdf_path:str, summarizer: Summarizer, tts: TTS, clip: Clip, subtitles: Subtitles, background: str, voice_id: str, quizcount: str):
-        clean_dir("static/temp/")
-        clean_dir("static/subtitles/")
+    
+        clean_dir(self.temp_dir)
+        clean_dir(self.subtitles_dir)
 
         
         ## Constants 
-        
-        video_paths = ["static/videos/" + background]
+        video_paths = [self.videos_dir + background]
         voice_id = voice_id  
         n_threads = 8
         subtitles_position = "center,center"
@@ -46,18 +49,9 @@ class GenerationService:
         sentences = script.split(". ")
         sentences = list(filter(lambda x: x != "", sentences))
         paths = []
-        # for sentence in sentences:
-        #     current_tts_path = f"static/temp/{uuid4()}.mp3"
-        #     tts.tts_to_file(sentence, voice_id, filename=current_tts_path)
-        #     audio_clip = AudioFileClip(current_tts_path)
-        #     paths.append(audio_clip)
-
-        # final_audio = concatenate_audioclips(paths)
-        # tts_path = f"static/temp/{uuid4()}.mp3"
-        # final_audio.write_audiofile(tts_path)
-
+        
         def process_sentence(sentence):
-            current_tts_path = f"static/temp/{uuid4()}.mp3"
+            current_tts_path = self.temp_dir + f"{uuid4()}.mp3"
             tts.tts_to_file(sentence, voice_id, filename=current_tts_path)
             return AudioFileClip(current_tts_path)
 
@@ -65,7 +59,7 @@ class GenerationService:
             paths = list(executor.map(process_sentence, sentences))
 
         final_audio = concatenate_audioclips(paths)
-        tts_path = f"static/temp/{uuid4()}.mp3"
+        tts_path = self.temp_dir + f"{uuid4()}.mp3"
         final_audio.write_audiofile(tts_path)
 
         voice_prefix = "en"
@@ -76,6 +70,7 @@ class GenerationService:
         final_video_path = clip.generate_video(combined_video_path, tts_path, subtitles_path, n_threads or 2, subtitles_position, text_color or "#FFFF00")
 
         video_clip = VideoFileClip(final_video_path)
+
         return final_video_path, res
 
     async def add_upload(self, createUploadDTO: CreateUploadSchema,  db: AsyncSession):
@@ -101,8 +96,7 @@ class GenerationService:
         await db.refresh(new_generation_upload)
         return {"status": "Success", "upload_id": new_generation_upload.id}
     
-    # TODO: Add the generation path as well for now still using the upload path
-    async def save_upload_and_generation(self, user_id: uuid.UUID, save_path: str, db: AsyncSession):
+    async def save_upload_and_generation(self, user_id: uuid.UUID, save_path: str, generation_path: str, db: AsyncSession):
         try:
             # Save upload
             upload_schema = {"user_id":user_id, "file_path": save_path}
@@ -112,7 +106,7 @@ class GenerationService:
             # Save generation
             generation_schema = {
                 "user_id":user_id,
-                "file_path": "test " + save_path,
+                "file_path": generation_path,
                 "uploaded_file_path": upload_id
             }
             generation_response = await self.add_generation(generation_schema, db)
