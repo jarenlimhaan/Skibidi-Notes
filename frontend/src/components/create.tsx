@@ -30,9 +30,11 @@ export default function BrainRotCustomizer() {
   const [isDragOver, setIsDragOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [questionCount, setQuestionCount] = useState(15);
+  const [questionCount, setQuestionCount] = useState(1);
   const [customInput, setCustomInput] = useState("");
   const [isCustomMode, setIsCustomMode] = useState(false);
+
+  const isFormComplete = selectedBackground && selectedVoice && questionCount > 0
 
   // need to upload the rest
   const backgroundVideos = [
@@ -257,7 +259,7 @@ export default function BrainRotCustomizer() {
   };
 
   const getEstimatedTime = (count: number) => {
-    const minutes = Math.ceil(count * 1.5); // Assuming 1.5 minutes per question
+    const minutes = Math.ceil(count * 0.5); // Assuming 0.5 minutes per question
     return `~${minutes} min`;
   };
 
@@ -265,44 +267,60 @@ export default function BrainRotCustomizer() {
     <>
       <Navbar />
 
-      <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 p-6 font-mono">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-purple-700 mb-6">
-              Brain Rot Creator
-            </h1>
-            <p className="text-purple-600 text-sm">
-              Create engaging content by uploading your documents and
-              customizing the output.
-            </p>
-          </div>
+        <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 p-6 font-mono">
+          <div className="max-w-4xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-purple-700 mb-6">
+                Brain Rot Creator
+              </h1>
+              <p className="text-purple-600 text-sm">
+                Create engaging content by uploading your documents and
+                customizing the output.
+              </p>
+            </div>
 
-          {/* Tabs */}
-          <Tabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="w-full"
-          >
-            <TabsList className="grid w-full grid-cols-3 mb-6 bg-white rounded-lg p-1 shadow-sm max-w-md mx-auto h-auto">
-              <TabsTrigger
-                value="upload"
-                className="flex items-center gap-2 px-4 py-3 text-sm font-medium data-[state=active]:bg-pink-500 data-[state=active]:text-white data-[state=inactive]:text-purple-400 hover:text-purple-600 rounded-md transition-all"
-              >
-                <Upload className="w-4 h-4" />
-                Upload
-              </TabsTrigger>
-              <TabsTrigger
-                value="customise"
-                className="flex items-center gap-2 px-4 py-3 text-sm font-medium data-[state=active]:bg-pink-500 data-[state=active]:text-white data-[state=inactive]:text-purple-400 hover:text-purple-600 rounded-md transition-all"
-              >
-                <Settings className="w-4 h-4" />
-                Customise
-              </TabsTrigger>
-              <TabsTrigger
-                value="process"
-                className="flex items-center gap-2 px-4 py-3 text-sm font-medium data-[state=active]:bg-pink-500 data-[state=active]:text-white data-[state=inactive]:text-purple-400 hover:text-purple-600 rounded-md transition-all"
-              >
+            {/* Tabs */}
+            <Tabs
+              value={activeTab}
+              onValueChange={setActiveTab}
+              className="w-full"
+            >
+              {/* <TabsList className="grid w-full grid-cols-3 mb-6 bg-white rounded-lg p-1 shadow-sm max-w-md mx-auto h-auto"> */}
+              <TabsList className="grid w-full grid-cols-3 mb-6 bg-white rounded-xl p-1.5 border border-purple-300 max-w-md mx-auto h-auto">
+                <TabsTrigger
+                  value="upload"
+                  // className="flex items-center gap-2 px-4 py-3 text-sm font-medium data-[state=active]:bg-pink-500 data-[state=active]:text-white data-[state=inactive]:text-purple-400 hover:text-purple-600 rounded-md transition-all"
+                className={`flex items-center justify-center gap-2 px-4 py-3.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
+                  activeTab === "upload"
+                    ? "bg-purple-600 text-white"
+                    : "bg-white text-black hover:bg-purple-100"
+                }`}
+                >
+                  <Upload className="w-4 h-4" />
+                  Upload
+                </TabsTrigger>
+                <TabsTrigger
+                  value="customise"
+                  // className="flex items-center gap-2 px-4 py-3 text-sm font-medium data-[state=active]:bg-pink-500 data-[state=active]:text-white data-[state=inactive]:text-purple-400 hover:text-purple-600 rounded-md transition-all"
+                  className={`flex items-center justify-center gap-2 px-4 py-3.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
+                    activeTab === "customise"
+                      ? "bg-purple-600 text-white"
+                      : "bg-white text-black hover:bg-purple-100"
+                  }`}
+                >
+                  <Settings className="w-4 h-4" />
+                  Customise
+                </TabsTrigger>
+                <TabsTrigger
+                  value="process"
+                  // className="flex items-center gap-2 px-4 py-3 text-sm font-medium data-[state=active]:bg-pink-500 data-[state=active]:text-white data-[state=inactive]:text-purple-400 hover:text-purple-600 rounded-md transition-all"
+                className={`flex items-center justify-center gap-2 px-4 py-3.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
+                  activeTab === "process"
+                    ? "bg-purple-600 text-white"
+                    : "bg-white text-black hover:bg-purple-100"
+                }`}
+                >
                 <Play className="w-4 h-4" />
                 Process
               </TabsTrigger>
@@ -438,34 +456,30 @@ export default function BrainRotCustomizer() {
                   Select your background video
                 </h3>
 
-                <div className="p-4 rounded">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {backgroundVideos.map((video) => (
-                      <div
-                        key={video.id}
-                        className={`cursor-pointer transition-all rounded ${
-                          selectedBackground === video.id
-                            ? "ring-2 ring-pink-500"
-                            : ""
-                        }`}
-                        onClick={() => {
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {backgroundVideos.map((video) => (
+                    <div
+                      key={video.id}
+                      onClick={() => {
                           setSelectedBackground(video.id);
                           setSelectedBackgroundName(video.name);
                         }}
+                      className={`cursor-pointer rounded-2xl overflow-hidden transition-all duration-200 hover:shadow-lg ${
+                        selectedBackground === video.id
+                          ? "ring-3 ring-purple-500 shadow-lg"
+                          : "ring-2 ring-transparent hover:ring-purple-200"
+                      }`}
+                    >
+                      <img src={video.image || "/placeholder.svg"} alt={video.name} className="w-full h-32 object-cover" />
+                      <div
+                        className={`p-3 text-center font-medium text-white ${
+                          selectedBackground === video.id ? "bg-purple-600" : "bg-purple-400"
+                        }`}
                       >
-                        <div className="relative">
-                          <img
-                            src={video.image || "/placeholder.svg"}
-                            alt={video.name}
-                            className="w-full h-24 object-cover rounded"
-                          />
-                          <div className="absolute bottom-0 left-0 right-0 bg-purple-700 bg-opacity-50 text-white text-xs p-1 rounded-b">
-                            {video.name}
-                          </div>
-                        </div>
+                        {video.name}
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
               </Card>
 
@@ -493,7 +507,8 @@ export default function BrainRotCustomizer() {
                     <Card
                       key={voice.id}
                       className={`bg-purple-50 p-4 cursor-pointer transition-all hover:bg-purple-100 ${
-                        selectedVoice === voice.id ? "ring-2 ring-pink-500" : ""
+                        selectedVoice === voice.id ? "border-purple-500 bg-purple-100" 
+                                          : "border-gray-200 bg-white hover:bg-gray-50"
                       }`}
                       onClick={() => {
                         setSelectedVoice(voice.id);
@@ -599,7 +614,7 @@ export default function BrainRotCustomizer() {
                         key={option.count}
                         className={`p-4 rounded-lg border-2 cursor-pointer transition-all hover:border-purple-300 ${
                           questionCount === option.count && !isCustomMode
-                            ? "border-purple-500 bg-purple-50"
+                            ? "border-purple-500 bg-purple-100"
                             : "border-gray-200 bg-white hover:bg-gray-50"
                         }`}
                         onClick={() => handlePresetSelect(option.count)}
@@ -644,25 +659,37 @@ export default function BrainRotCustomizer() {
                       truly test your understanding.
                     </div>
                   </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex justify-between mt-8">
-                    <Button
-                      variant="outline"
-                      className="bg-pink-200 hover:bg-pink-300 text-pink-800 border-pink-300"
-                      onClick={() => setActiveTab("upload")}
-                    >
-                      Back
-                    </Button>
-                    <Button
-                      className="bg-purple-600 hover:bg-purple-700 text-white"
-                      onClick={() => setActiveTab("process")}
-                    >
-                      Continue with {questionCount} Questions
-                    </Button>
-                  </div>
                 </CardContent>
               </Card>
+
+              {/* Action Buttons */}
+              <div className="flex justify-between mt-8">
+                <Button
+                    variant="outline"
+                    className="bg-pink-200 hover:bg-pink-300 text-pink-800 border-pink-300"
+                    onClick={() => setActiveTab("upload")}
+                  >
+                    Return
+                  </Button>
+
+                <Button
+                  disabled={!isFormComplete}
+                  className={`font-medium transition-all duration-200 ${
+                    isFormComplete
+                      ? "bg-purple-600 hover:bg-purple-700 text-white shadow-lg hover:shadow-xl"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
+                >
+                  Continue
+                </Button>
+              </div>
+
+              {/* Validation Message */}
+              {!isFormComplete && (
+                <div className="text-center text-red-500 text-sm">
+                  Please select a background video, voice type and number of questions to continue
+                </div>
+              )}
             </TabsContent>
 
             {/* Process Tab */}
@@ -768,7 +795,7 @@ export default function BrainRotCustomizer() {
               <div className="flex justify-between">
                 <Button
                   variant="outline"
-                  className="bg-white"
+                  className="bg-pink-200 hover:bg-pink-300 text-pink-800 border-pink-300"
                   onClick={() => setActiveTab("customise")}
                 >
                   Return
