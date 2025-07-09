@@ -134,7 +134,7 @@ export default function ChatBot() {
       <div className="border-b bg-white px-4 py-3">
         <div className="flex items-center space-x-2">
           <Bot className="h-6 w-6 text-blue-600" />
-          <h1 className="text-xl font-semibold text-gray-900">AI Assistant</h1>
+          <h1 className="text-xl font-semibold text-gray-900">Ohio Rizzler</h1>
         </div>
       </div>
 
@@ -161,7 +161,7 @@ export default function ChatBot() {
               {message.role === "assistant" && (
                 <Avatar className="h-8 w-8 bg-blue-600">
                   <AvatarFallback>
-                    <Bot className="h-4 w-4 text-white" />
+                    <Bot className="h-4 w-4 text-black" />
                   </AvatarFallback>
                 </Avatar>
               )}
@@ -183,7 +183,7 @@ export default function ChatBot() {
               {message.role === "user" && (
                 <Avatar className="h-8 w-8 bg-gray-600">
                   <AvatarFallback>
-                    <User className="h-4 w-4 text-white" />
+                    <User className="h-4 w-4 text-black" />
                   </AvatarFallback>
                 </Avatar>
               )}

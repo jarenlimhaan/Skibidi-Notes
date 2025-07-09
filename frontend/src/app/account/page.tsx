@@ -69,10 +69,10 @@ export default function AccountPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-blue-800">
+    <div className="min-h-screen bg-gradient-to-r from-purple-800 via-pink-500 to-cyan-400">
       <Navbar />
       {/* Header */}
-      <header className="border-b border-purple-400/20 bg-purple-900/30 backdrop-blur-sm">
+      <header className="backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">

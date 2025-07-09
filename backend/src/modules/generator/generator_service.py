@@ -1,8 +1,10 @@
 # External Imports
-from sqlalchemy.ext.asyncio import AsyncSession
 import uuid
+import os
 from uuid import uuid4
 from concurrent.futures import ThreadPoolExecutor
+
+from sqlalchemy.ext.asyncio import AsyncSession
 from moviepy.editor import *
 from moviepy import *
 from moviepy.config import change_settings
@@ -29,6 +31,9 @@ class GenerationService:
         self.videos_dir = get_app_configs().VIDEOS_DIR
 
     async def generate(self, pdf_path:str, summarizer: Summarizer, tts: TTS, clip: Clip, subtitles: Subtitles, background: str, voice_id: str, quizcount: str):
+
+        os.makedirs(self.temp_dir, exist_ok=True)
+        os.makedirs(self.subtitles_dir, exist_ok=True)
     
         clean_dir(self.temp_dir)
         clean_dir(self.subtitles_dir)

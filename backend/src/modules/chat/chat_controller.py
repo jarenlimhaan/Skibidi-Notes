@@ -1,6 +1,5 @@
 # External Imports
 from fastapi import APIRouter, Depends, Form
-from sqlalchemy.ext.asyncio import AsyncSession
 
 # Internal Imports
 from config.env import get_app_configs
@@ -15,19 +14,17 @@ async def ask_question(
     question: str = Form(...),
     chat_service: DocumentQAService = Depends(get_qa_service),
     current_user=Depends(get_current_user_from_cookie),
-    db: AsyncSession = Depends(get_db)
 ):
-    """
-    Endpoint to ask a question about a document.
-    """
-    res = chat_service.ask_question(
-        user_id=current_user["user_id"],
-        question=question,
-    )
-    
-    # print(f"Question: {question}")
-    # print(f"Result: {result}")
-
-    print(type(res["result"]))
-
-    return res["result"]
+    try:  
+        res = chat_service.ask_question(
+            user_id=current_user["user_id"],
+            question=question,
+        )
+        
+        return res["result"]
+    except Exception as e:
+        print(f"Error in ask_question: {e}")
+        return {
+            "status": "Error",
+            "message": str(e)
+        }

@@ -46,11 +46,14 @@ async def upload_file(
         with open(save_path, "wb") as buffer:
             buffer.write(content)
 
+        # Create Video Generation
         path, res = await generation_service.generate(pdf_path=save_path, summarizer=summarizer, tts=tts, clip=clip, subtitles=subtitles, background=background, voice_id=voice, quizcount=quizCount)
 
+        # Add to Vector Store
         qa_service.add_pdf_to_vectorstore(file_path=save_path, user_id=current_user["user_id"]) 
 
-         # result = await generation_service.save_upload_and_generation(
+        # Save the generation to the database    
+        # result = await generation_service.save_upload_and_generation(
         #     user_id=current_user["user_id"],
         #     save_path=save_path,
         #     generation_path=path,
