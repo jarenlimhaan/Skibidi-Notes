@@ -18,14 +18,14 @@ export default function Component() {
   const [deletedVideos, setDeletedVideos] = useState<number[]>([]);
 
   const videos = [
-    { id: 1, title: "Cell Respiration", subject: "Biology", duration: "2:33", date: "May 12, 2025", thumbnail: "/placeholder.svg?height=200&width=350" },
-    { id: 2, title: "Human Reproduction", subject: "Biology", duration: "2:33", date: "May 12, 2025", thumbnail: "/placeholder.svg?height=200&width=350" },
-    { id: 3, title: "Newton's First Law", subject: "Physics", duration: "2:33", date: "May 12, 2025", thumbnail: "/placeholder.svg?height=200&width=350" },
-    { id: 4, title: "Photosynthesis Process", subject: "Biology", duration: "3:45", date: "May 10, 2025", thumbnail: "/placeholder.svg?height=200&width=350" },
-    { id: 5, title: "Quantum Mechanics", subject: "Physics", duration: "4:12", date: "May 8, 2025", thumbnail: "/placeholder.svg?height=200&width=350" },
-    { id: 6, title: "Organic Chemistry Basics", subject: "Chemistry", duration: "3:28", date: "May 6, 2025", thumbnail: "/placeholder.svg?height=200&width=350" },
-    { id: 7, title: "Calculus Integration", subject: "Mathematics", duration: "5:15", date: "May 4, 2025", thumbnail: "/placeholder.svg?height=200&width=350" },
-    { id: 8, title: "DNA Replication", subject: "Biology", duration: "2:58", date: "May 2, 2025", thumbnail: "/placeholder.svg?height=200&width=350" },
+    { id: 1, title: "Cell Respiration", subject: "Biology", duration: "2:33", date: "May 12, 2025", thumbnail: "/subway_gameplay.png?height=200&width=350" },
+    { id: 2, title: "Human Reproduction", subject: "Biology", duration: "2:33", date: "May 12, 2025", thumbnail: "/temple_gameplay.png?height=200&width=350" },
+    { id: 3, title: "Newton's First Law", subject: "Physics", duration: "2:33", date: "May 12, 2025", thumbnail: "/gta_gameplay.png?height=200&width=350" },
+    { id: 4, title: "Photosynthesis Process", subject: "Biology", duration: "3:45", date: "May 10, 2025", thumbnail: "/minecraft_gameplay.png?height=200&width=350" },
+    { id: 5, title: "Quantum Mechanics", subject: "Physics", duration: "4:12", date: "May 8, 2025", thumbnail: "/subway_gameplay.png?height=200&width=350" },
+    { id: 6, title: "Organic Chemistry Basics", subject: "Chemistry", duration: "3:28", date: "May 6, 2025", thumbnail: "/minecraft_gameplay.png?height=200&width=350" },
+    { id: 7, title: "Calculus Integration", subject: "Mathematics", duration: "5:15", date: "May 4, 2025", thumbnail: "/subway_gameplay.png?height=200&width=350" },
+    { id: 8, title: "DNA Replication", subject: "Biology", duration: "2:58", date: "May 2, 2025", thumbnail: "/temple_gameplay.png?height=200&width=350" },
   ];
 
   const subjects = ["ALL", "Biology", "Physics", "Chemistry", "Mathematics"];
@@ -45,7 +45,7 @@ export default function Component() {
       <div className="min-h-screen bg-gradient-to-br from-purple-200 via-blue-200 to-pink-200 p-8">
         <div className="relative z-10 max-w-7xl mx-auto">
           {/* Heading */}
-          <h1 className="text-5xl font-bold mb-8 text-center bg-gradient-to-r from-cyan-800 via-pink-800 to-purple-800 bg-clip-text text-transparent">
+          <h1 className="text-5xl font-bold mb-8 text-center bg-gradient-to-r from-cyan-600 via-pink-800 to-purple-800 bg-clip-text text-transparent">
             Skibidi Notes Video Library
           </h1>
 
