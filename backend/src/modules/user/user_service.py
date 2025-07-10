@@ -9,6 +9,7 @@ from src.modules.auth.auth_service import AuthService
 
 class UserService:
 
+    # Standard CRUD operations for User
     async def get_by_id(self, user_id: int, db: AsyncSession):
         stmt = select(User).where(User.id == user_id)
         result = await db.execute(stmt)
@@ -73,7 +74,6 @@ class UserService:
         stmt = select(User).offset(offset).limit(limit)
         result = await db.execute(stmt)
         return result.scalars().all()
-
 
 def get_user_service():
     return UserService()

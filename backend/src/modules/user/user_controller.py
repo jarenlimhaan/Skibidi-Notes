@@ -13,7 +13,12 @@ from .user_schema import UserSchema, UserUpdateSchema
 router = APIRouter()
 app_config = get_app_configs()
 
-
+'''
+Get user endpoint
+- This endpoint retrieves a user by their email.
+- It returns a UserSchema object if the user is found.
+- If the user is not found, it raises a 404 HTTPException.
+'''
 @router.get("/{user_email}", response_model=UserSchema)
 async def get_user(
     user_email: str,
@@ -25,6 +30,11 @@ async def get_user(
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
+'''
+Update user endpoint
+- This endpoint allows updating user information.
+- It requires the user ID and a UserUpdateSchema object containing the fields to be updated.
+'''
 @router.put("/{user_id}")
 async def update_user(
     user_id: str,
@@ -37,5 +47,3 @@ async def update_user(
     if not user:
         raise HTTPException(status_code=500, detail="Something went wrong...")
     return user
-
-

@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from moviepy.editor import *
 from moviepy import *
 from moviepy.config import change_settings
+from sqlalchemy import select
 
 # Internal Imports
 from .generator_schema import CreateUploadSchema, CreateGenerationSchema
@@ -124,6 +125,28 @@ class GenerationService:
         except Exception as e:
             return {"status": "Error", "message": str(e)}
 
+    async def get_user_generations_from_upload_id(self, upload_id: uuid.UUID, db: AsyncSession):
+        stmt = select(Generations).where(Generations.uploaded_file_path == upload_id)
+        result = await db.execute(stmt)
+        return result.scalars().all()
     
+    async def get_user_uploads(self, user_id: uuid.UUID, db: AsyncSession):
+        stmt = select(Uploads).where(Uploads.user_id == user_id)
+        result = await db.execute(stmt)
+        return result.scalars().all()
+    
+    async def get_user_uploads_with_generations(self, user_id: uuid.UUID, db: AsyncSession):
+        uploads = await self.get_user_uploads(user_id, db)
+        results = []
+
+        for upload in uploads:
+            generations = await self.get_user_generations_from_upload_id(upload.id, db)
+            results.append([upload.id, generations])
+
+        return results
+
+
+
+
 def get_generation_service():
     return GenerationService()
