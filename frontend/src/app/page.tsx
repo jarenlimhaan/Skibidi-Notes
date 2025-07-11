@@ -48,28 +48,28 @@ const steps = [
 
 const testimonials = [
   {
-    name: "Sarah Johnson",
-    role: "College Student",
+    name: "Ada Chia",
+    role: "University Student",
     content:
-      "This platform transformed how I study! The AI summaries are incredibly accurate and the quiz format makes learning so much more engaging.",
+      "I watch alot of TikTok and YouTube reels. Skibidi Notes makes studying feel like watching a TikTok video which keeps me entertained while learning. 10/10 would recommend!",
     rating: 5,
-    avatar: "/placeholder.svg?height=60&width=60&text=SJ",
+    avatar: "/ada_pic.png?height=60&width=60&text=SJ",
   },
   {
-    name: "Mike Chen",
-    role: "High School Teacher",
+    name: "Yan Shuen",
+    role: "High School Student",
     content:
-      "My students love the gaming backgrounds! It's amazing how much more focused they are when learning feels like playing.",
+      "I am a dumbass so this is a good app for me to improve my grades from F to A",
     rating: 5,
-    avatar: "/placeholder.svg?height=60&width=60&text=MC",
+    avatar: "/yanshuen_pic.png?height=60&width=60&text=MC",
   },
   {
-    name: "Emma Davis",
-    role: "Graduate Student",
+    name: "Jaren Lim Haan",
+    role: "University Student",
     content:
-      "The customizable quiz lengths are perfect for my busy schedule. I can do quick 5-minute reviews or deep 20-minute sessions.",
+      "I love brain rotting coochiemeowmeow",
     rating: 5,
-    avatar: "/placeholder.svg?height=60&width=60&text=ED",
+    avatar: "/jaren_pic.png?height=60&width=60&text=ED",
   },
 ]
 
@@ -322,7 +322,7 @@ export default function Component() {
                 <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center">
                   <Brain className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-2xl font-bold">QuizCraft</span>
+                <span className="text-2xl font-bold">SkibidiNotes</span>
               </div>
               <p className="text-gray-400">Making learning fun and interactive with AI-powered quizzes.</p>
             </div>
@@ -388,7 +388,7 @@ export default function Component() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 QuizCraft. All rights reserved.</p>
+            <p>&copy; 2025 Skibidi Notes. All rights reserved.</p>
           </div>
         </div>
       </footer>
