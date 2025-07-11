@@ -130,13 +130,13 @@ class GenerationService:
         result = await db.execute(stmt)
         return result.scalars().all()
     
-    async def get_user_uploads(self, user_id: uuid.UUID, db: AsyncSession):
+    async def get_all_uploads(self, user_id: uuid.UUID, db: AsyncSession):
         stmt = select(Uploads).where(Uploads.user_id == user_id)
         result = await db.execute(stmt)
         return result.scalars().all()
     
     async def get_user_uploads_with_generations(self, user_id: uuid.UUID, db: AsyncSession):
-        uploads = await self.get_user_uploads(user_id, db)
+        uploads = await self.get_all_uploads(user_id, db)
         results = []
 
         for upload in uploads:
@@ -144,8 +144,53 @@ class GenerationService:
             results.append([upload.id, generations])
 
         return results
+    
+    async def get_user_upload_by_id(self, upload_id: uuid.UUID, db: AsyncSession):
+        stmt = select(Uploads).where(Uploads.id == upload_id)
+        result = await db.execute(stmt)
+        return result.scalar_one_or_none()
+    
+    async def delete_user_upload(self, upload_id: uuid.UUID, db: AsyncSession):
+        try:
+            stmt = select(Uploads).where(Uploads.id == upload_id)
+            result = await db.execute(stmt)
+            upload = result.scalar_one_or_none()
 
+            if not upload:
+                return {"status": "Error", "message": "Upload not found"}
 
+            await db.delete(upload)
+            await db.commit()
+            return {"status": "Success", "message": "Upload deleted successfully"}
+        except Exception as e:
+            return {"status": "Error", "message": str(e)}
+        
+    async def delete_user_generation(self, generation_id: uuid.UUID, db: AsyncSession):
+        try:
+            stmt = select(Generations).where(Generations.id == generation_id)
+            result = await db.execute(stmt)
+            generation = result.scalar_one_or_none()
+
+            if not generation:
+                return {"status": "Error", "message": "Generation not found"}
+
+            await db.delete(generation)
+            await db.commit()
+            return {"status": "Success", "message": "Generation deleted successfully"}
+        except Exception as e:
+            return {"status": "Error", "message": str(e)}
+
+    async def delete_upload_with_generations(self, upload_id: uuid.UUID, db: AsyncSession):
+        try:
+            # Delete generations associated with the upload
+            generations = await self.get_user_generations_from_upload_id(upload_id, db)
+            for generation in generations:
+                await self.delete_user_generation(generation.id, db)
+
+            # Delete the upload itself
+            return await self.delete_user_upload(upload_id, db)
+        except Exception as e:
+            return {"status": "Error", "message": str(e)}
 
 
 def get_generation_service():
