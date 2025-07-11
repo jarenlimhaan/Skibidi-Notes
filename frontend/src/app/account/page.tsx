@@ -69,21 +69,21 @@ export default function AccountPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-purple-800 via-pink-500 to-cyan-400">
-      <Navbar />
-      {/* Header */}
-      <header className="backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Settings className="h-8 w-8 text-white" />
-              <h1 className="text-3xl font-bold text-white tracking-wider">
-                ACCOUNT SETTINGS
-              </h1>
-            </div>
-          </div>
-        </div>
-      </header>
+    <>
+    <Navbar />
+    <div className="min-h-screen bg-gradient-to-br from-purple-200 via-blue-200 to-pink-200 p-8">
+
+    {/* Header */}
+  <header className="backdrop-blur-sm rounded-md mt-4">
+    <div className="max-w-6xl mx-auto px-6 py-4">
+      <div className="flex items-center justify-start space-x-3">
+        <Settings className="h-8 w-8 text-white" />
+        <h1 className="text-3xl font-bold text-white tracking-wider">
+          Skibidi Toilet Control Pannel
+        </h1>
+      </div>
+    </div>
+  </header>
 
       <div className="max-w-6xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -136,10 +136,10 @@ export default function AccountPage() {
               <CardHeader>
                 <CardTitle className="text-2xl text-white flex items-center gap-3 font-bold">
                   <User className="h-6 w-6 text-cyan-400" />
-                  PERSONAL INFORMATION
+                  Your Alien Identity
                 </CardTitle>
                 <CardDescription className="text-purple-200 text-lg">
-                  Update your profile details and brainrot identity
+                  Update Personal Flush Facts & Brainrot Vibes
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -182,9 +182,9 @@ export default function AccountPage() {
 
                   <br></br>
 
-                  <Button className="w-full h-14 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-600 hover:via-purple-600 hover:to-cyan-600 text-white font-bold text-lg rounded-lg shadow-lg transform hover:scale-[1.02] transition-all duration-200">
+                  <Button className="w-full h-14 bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 hover:from-pink-600 hover:via-purple-600 hover:to-cyan-600 text-white font-bold text-lg rounded-lg shadow-lg transform hover:scale-[1.02] transition-all duration-200">
                     <Save className="h-5 w-5 mr-2" type="submit" />
-                    SAVE CHANGES
+                    Flush To Save
                   </Button>
                 </form>
               </CardContent>
@@ -195,10 +195,10 @@ export default function AccountPage() {
               <CardHeader>
                 <CardTitle className="text-2xl text-white flex items-center gap-3 font-bold">
                   <Lock className="h-6 w-6 text-pink-400" />
-                  SECURITY & PASSWORD
+                  Poop Protection & Passcode
                 </CardTitle>
                 <CardDescription className="text-purple-200 text-lg">
-                  Keep your brainrot empire secure and protected
+                  Shield Your Skibidi Brainrot Empire From Poop Pirates
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleSubmitPassword}>
@@ -276,7 +276,7 @@ export default function AccountPage() {
                   <div className="flex gap-4">
                     <Button className="flex-1 h-14 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-600 hover:via-purple-600 hover:to-cyan-600 text-white font-bold text-lg rounded-lg shadow-lg transform hover:scale-[1.02] transition-all duration-200">
                       <Lock className="h-5 w-5 mr-2" type="submit" />
-                      UPDATE PASSWORD
+                      Change Flushcode
                     </Button>
                   </div>
                 </CardContent>
@@ -293,5 +293,6 @@ export default function AccountPage() {
         <div className="absolute top-1/2 right-1/3 w-24 h-24 bg-cyan-500/10 rounded-full blur-xl"></div>
       </div>
     </div>
+    </>
   );
 }
