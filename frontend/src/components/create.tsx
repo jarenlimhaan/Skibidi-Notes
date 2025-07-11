@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Upload, Settings, Play, Search, FileText, Mic, HelpCircle, Video} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Minus, Plus } from "lucide-react";
+import { useRouter } from "next/navigation"
 
 interface UploadedFile {
   file: File;

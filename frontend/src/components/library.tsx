@@ -157,6 +157,7 @@ export default function Component() {
                       <Button
                         variant="outline"
                         className="flex-1 bg-gradient-to-r from-pink-500/20 to-purple-500/20 border-pink-400/50 text-pink-300 hover:bg-gradient-to-r hover:from-pink-500/40 hover:to-purple-500/40 hover:text-white font-semibold py-2 px-3 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/50 text-xs"
+                        onClick={() => (window.location.href = "/quiz")}
                       >
                         <FileText className="w-3 h-3 mr-1" />
                         Quiz
