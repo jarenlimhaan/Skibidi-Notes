@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import Navbar from "@/components/navbar2";
+import Navbar from "@/components/navbar";
 
 export default function Home() {
 

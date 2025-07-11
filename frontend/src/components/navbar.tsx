@@ -25,8 +25,7 @@ export default function Navbar() {
           >
             Home
           </Link>
-          {isAuthenticated ? (
-            <>
+          
               <Link
                 href="/create"
                 className="text-sm font-medium text-white transition-colors hover:text-purple-200"
@@ -51,17 +50,6 @@ export default function Navbar() {
               >
                 My Account
               </Link>{" "}
-            </>
-          ) : (
-            <>
-              <Link
-                href="/gallery"
-                className="text-sm font-medium text-white transition-colors hover:text-purple-200"
-              >
-                Gallery
-              </Link>
-            </>
-          )}
         </nav>
         <div className="ml-auto md:ml-4 flex items-center gap-4">
           <div className="hidden md:flex gap-2">
