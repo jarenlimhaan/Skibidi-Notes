@@ -1,7 +1,7 @@
 "use client";
 
+import withAuth from '@/components/auth/authGuard';
 import Quiz from '@/components/quiz'; 
-import withoutAuth from '@/components/auth/unAuthGuard';
 
 function QuizPage() {
   return (
@@ -11,4 +11,4 @@ function QuizPage() {
   );
 }
 
-export default withoutAuth(QuizPage);
+export default withAuth(QuizPage);

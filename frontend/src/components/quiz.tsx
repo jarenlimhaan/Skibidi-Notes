@@ -223,9 +223,9 @@ export default function Quiz() {
         
         <div className="min-h-screen bg-gradient-to-br from-purple-200 via-pink-100 to-purple-300">
         {/* Background Video Placeholder */}
-        <div className="fixed inset-0 z-0">
+        <div className=" inset-0 z-0">
             <div className="w-full h-full bg-gradient-to-br from-purple-400/20 to-pink-400/20 flex items-center justify-center">
-            <div className="text-purple-300 text-6xl font-bold opacity-10">MINECRAFT</div>
+           
             </div>
         </div>
 
