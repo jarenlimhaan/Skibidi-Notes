@@ -56,8 +56,7 @@ async def upload_file(
             "file_path": save_path,
         }, db=db)
 
-        res = summarizer.process_pdf(save_path, quizCount)
-        path = save_path
+
 
         # Create Video Generation
         # path, res = await generation_service.generate(pdf_path=save_path, summarizer=summarizer, tts=tts, clip=clip, subtitles=subtitles, background=background, voice_id=voice, quizcount=quizCount)
