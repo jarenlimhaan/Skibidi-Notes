@@ -216,22 +216,34 @@ class Summarizer:
 
         prompt = PromptTemplate.from_template(
             """
-            You are a helpful assistant that creates educational quizzes.
-            Based on the following summary, create {quizcount} multiple-choice questions.
-            Each question should have 4 options (A, B, C, D) with one correct answer.
-            
-            Format your response as:
-            
-            1. Question text?
-            A) Option 1
-            B) Option 2  
-            C) Option 3
-            D) Option 4
-            Correct Answer: X
-            
-            Summary:
-            {summary}
-            """
+        You are a helpful assistant that creates educational quizzes.
+
+        Based on the following summary, generate {quizcount} multiple-choice questions in **JSON array format**. 
+
+        Each object in the array should include the following keys:
+        - `id`: an integer ID starting from 1
+        - `question`: the text of the question
+        - `options`: a list of four answer choices
+        - `correctAnswer`: the index (0-based) of the correct answer in the options list
+        - `explanation`: a brief explanation of the correct answer
+        - `difficulty`: one of "Easy", "Medium", or "Hard" (based on your judgment)
+
+        ### Output format:
+        [
+        {{
+            "id": 1,
+            "question": "What is the capital of France?",
+            "options": ["London", "Berlin", "Paris", "Madrid"],
+            "correctAnswer": 2,
+            "explanation": "Paris is the capital and most populous city of France, known for landmarks like the Eiffel Tower.",
+            "difficulty": "Easy"
+        }},
+        ...
+        ]
+
+        ### Summary:
+        {summary}
+        """
         )
 
         try:
@@ -276,19 +288,15 @@ class Summarizer:
             result = self.__summarize(chunks)
 
             # Optional: Generate quiz
-            quiz = None
-            if result.get("summary") and len(result["summary"]) > 100:
-                quiz = self.__generate_quiz(result["summary"], quizcount)
+            quiz = self.__generate_quiz(result["summary"], quizcount)
 
             final_result = {
                 "summary": result.get("summary", ""),
                 "keypoints": result.get("keypoints", []),
                 "total_pages": len(raw_docs),
                 "total_chunks": len(chunks),
+                "quiz": quiz
             }
-
-            if quiz:
-                final_result["quiz"] = quiz
 
             print("PDF processing completed successfully!")
             return final_result

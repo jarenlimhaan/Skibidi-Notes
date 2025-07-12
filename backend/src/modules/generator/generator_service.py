@@ -32,6 +32,11 @@ class GenerationService:
         self.videos_dir = get_app_configs().VIDEOS_DIR
 
     async def generate(self, pdf_path:str, summarizer: Summarizer, tts: TTS, clip: Clip, subtitles: Subtitles, background: str, voice_id: str, quizcount: str):
+        '''
+        Main entrypoint for video generation & file upload.
+        This method handles the file upload and video generation process.
+        Generate a video from a PDF file using summarization, TTS, and video clips.
+        '''
 
         os.makedirs(self.temp_dir, exist_ok=True)
         os.makedirs(self.subtitles_dir, exist_ok=True)
@@ -80,6 +85,10 @@ class GenerationService:
         return final_video_path, res
 
     async def add_upload(self, createUploadDTO: CreateUploadSchema,  db: AsyncSession):
+        '''
+        Add an upload to the database.
+        This method saves the upload information to the database.
+        '''
         new_upload = Uploads(
             user_id = createUploadDTO["user_id"],
             file_path = createUploadDTO["file_path"]
@@ -88,54 +97,48 @@ class GenerationService:
         db.add(new_upload)
         await db.commit()
         await db.refresh(new_upload)
-        return {"status": "Success", "upload_id": new_upload.id}
+        return new_upload.id
 
     async def add_generation(self, createGenerationDTO: CreateGenerationSchema, db: AsyncSession):
+        '''
+        Add a generated video to the database.
+        This method saves the generation information to the database.
+        '''
         new_generation_upload = Generations(
             user_id = createGenerationDTO["user_id"],
             file_path = createGenerationDTO["file_path"],
-            uploaded_file_path = createGenerationDTO["uploaded_file_path"]
+            upload_id = createGenerationDTO["upload_id"],
+            background_type = createGenerationDTO["background_type"]
         )
 
         db.add(new_generation_upload)
         await db.commit()
         await db.refresh(new_generation_upload)
         return {"status": "Success", "upload_id": new_generation_upload.id}
-    
-    async def save_upload_and_generation(self, user_id: uuid.UUID, save_path: str, generation_path: str, db: AsyncSession):
-        try:
-            # Save upload
-            upload_schema = {"user_id":user_id, "file_path": save_path}
-            upload_response = await self.add_upload(upload_schema, db)
-            upload_id = upload_response["upload_id"]
-
-            # Save generation
-            generation_schema = {
-                "user_id":user_id,
-                "file_path": generation_path,
-                "uploaded_file_path": upload_id
-            }
-            generation_response = await self.add_generation(generation_schema, db)
-
-            return {
-                "status": "Success",
-                "upload_id": upload_id,
-                "generation_id": generation_response["upload_id"]
-            }
-        except Exception as e:
-            return {"status": "Error", "message": str(e)}
 
     async def get_user_generations_from_upload_id(self, upload_id: uuid.UUID, db: AsyncSession):
-        stmt = select(Generations).where(Generations.uploaded_file_path == upload_id)
+        '''
+        Get all generations associated with a specific upload ID.
+        This method retrieves all generations linked to a given upload ID.
+        '''
+        stmt = select(Generations).where(Generations.upload_id == upload_id)
         result = await db.execute(stmt)
         return result.scalars().all()
     
     async def get_all_uploads(self, user_id: uuid.UUID, db: AsyncSession):
+        '''
+        Get all uploads for a specific user.
+        This method retrieves all uploads associated with a user ID.
+        '''
         stmt = select(Uploads).where(Uploads.user_id == user_id)
         result = await db.execute(stmt)
         return result.scalars().all()
     
     async def get_user_uploads_with_generations(self, user_id: uuid.UUID, db: AsyncSession):
+        '''
+        Get all uploads along with their associated generations for a specific user.
+        This method retrieves all uploads and their linked generations for a user.
+        '''
         uploads = await self.get_all_uploads(user_id, db)
         results = []
 
@@ -146,6 +149,10 @@ class GenerationService:
         return results
     
     async def get_user_upload_by_id(self, upload_id: uuid.UUID, db: AsyncSession):
+        '''
+        Get a specific user upload by its ID.
+        This method retrieves an upload based on its unique identifier.
+        '''
         stmt = select(Uploads).where(Uploads.id == upload_id)
         result = await db.execute(stmt)
         return result.scalar_one_or_none()

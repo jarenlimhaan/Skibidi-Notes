@@ -13,7 +13,9 @@ from .integrations.movieclip.base import Clip, get_clip
 from .integrations.subtitles.base import Subtitles, get_subtitles
 
 from .generator_service import GenerationService
-from src.deps import get_current_user_from_cookie, get_generation_service, get_db, get_qa_service
+from src.modules.quiz.quiz_service import QuizService
+from src.modules.chat.chat_service import DocumentQAService
+from src.deps import get_current_user_from_cookie, get_generation_service, get_db, get_qa_service, get_quiz_service
 
 router = APIRouter()
 app_config = get_app_configs()
@@ -36,7 +38,8 @@ async def upload_file(
     subtitles: Subtitles = Depends(get_subtitles),
     clip: Clip = Depends(get_clip),
     generation_service: GenerationService = Depends(get_generation_service),
-    qa_service = Depends(get_qa_service),
+    qa_service: DocumentQAService = Depends(get_qa_service),
+    quiz_service: QuizService = Depends(get_quiz_service),
     current_user=Depends(get_current_user_from_cookie),
     db: AsyncSession = Depends(get_db)
 ):
@@ -48,19 +51,40 @@ async def upload_file(
         with open(save_path, "wb") as buffer:
             buffer.write(content)
 
+        upload_id = await generation_service.add_upload(createUploadDTO={
+            "user_id": current_user["user_id"],
+            "file_path": save_path,
+        }, db=db)
+
+        res = summarizer.process_pdf(save_path, quizCount)
+        path = save_path
+
         # Create Video Generation
-        path, res = await generation_service.generate(pdf_path=save_path, summarizer=summarizer, tts=tts, clip=clip, subtitles=subtitles, background=background, voice_id=voice, quizcount=quizCount)
+        # path, res = await generation_service.generate(pdf_path=save_path, summarizer=summarizer, tts=tts, clip=clip, subtitles=subtitles, background=background, voice_id=voice, quizcount=quizCount)
 
         # Add to Vector Store
-        qa_service.add_pdf_to_vectorstore(file_path=save_path, user_id=current_user["user_id"]) 
+        # qa_service.add_pdf_to_vectorstore(file_path=save_path, user_id=current_user["user_id"]) 
 
+        # Add Quiz to the database
+        await quiz_service.add_quiz(
+            createQuizDTO={
+                "upload_id": upload_id,
+                "content": res['quiz']
+            },
+            db=db
+        )
+
+        # TODO: remove path from line 60 and use the path in line 63
         # Save the generation to the database    
-        # result = await generation_service.save_upload_and_generation(
-        #     user_id=current_user["user_id"],
-        #     save_path=save_path,
-        #     generation_path=path,
-        #     db=db
-        # )
+        await generation_service.add_generation(
+            createGenerationDTO={
+                "user_id": current_user["user_id"],
+                "file_path": path,
+                "upload_id": upload_id,
+                "background_type": background
+            },
+            db=db
+        )
 
         return JSONResponse(content={"url": path, "summary": {
             "summary": res['summary'],

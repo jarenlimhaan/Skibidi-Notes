@@ -9,6 +9,7 @@ from src.modules.user.user_controller import router as user_router
 from src.modules.auth.auth_controller import router as auth_router
 from src.modules.generator.generator_controller import router as generator_router
 from src.modules.chat.chat_controller import router as chat_router
+from src.modules.quiz.quiz_controller import router as quiz_router
 
 
 app = FastAPI()
@@ -26,6 +27,7 @@ app.include_router(user_router, prefix="/api/users", tags=["Users"])
 app.include_router(generator_router, prefix="/api/generator", tags=["Generator"])
 app.include_router(auth_router, prefix="/api/auth", tags=["Auth"])
 app.include_router(chat_router, prefix="/api/chat", tags=["Chat"])
+app.include_router(quiz_router, prefix="/api/quiz", tags=["Quiz"])
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 

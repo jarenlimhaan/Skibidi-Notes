@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import { Clock, Trophy, ArrowLeft, ArrowRight, Flag, Volume2, Pause, Play } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Navbar from "@/components/navbar";
+import { useQuiz } from "@/app/providers/queries/quiz";
+import Spinner from "./spinner";
 
 interface Question {
   id: number
@@ -24,55 +26,15 @@ interface QuizState {
   score: number
 }
 
-const sampleQuestions: Question[] = [
-  {
-    id: 1,
-    question: "What is the capital of France?",
-    options: ["London", "Berlin", "Paris", "Madrid"],
-    correctAnswer: 2,
-    explanation: "Paris is the capital and most populous city of France, known for landmarks like the Eiffel Tower.",
-    difficulty: "Easy",
-  },
-  {
-    id: 2,
-    question: "Which planet is known as the Red Planet?",
-    options: ["Venus", "Mars", "Jupiter", "Saturn"],
-    correctAnswer: 1,
-    explanation:
-      "Mars is called the Red Planet due to iron oxide (rust) on its surface giving it a reddish appearance.",
-    difficulty: "Medium",
-  },
-  {
-    id: 3,
-    question: "What is the largest mammal in the world?",
-    options: ["African Elephant", "Blue Whale", "Giraffe", "Polar Bear"],
-    correctAnswer: 1,
-    explanation:
-      "The Blue Whale is the largest animal ever known to have lived on Earth, reaching lengths up to 100 feet.",
-    difficulty: "Medium",
-  },
-  {
-    id: 4,
-    question: "In which year did World War II end?",
-    options: ["1944", "1945", "1946", "1947"],
-    correctAnswer: 1,
-    explanation: "World War II ended in 1945 with the surrender of Japan following the atomic bombings.",
-    difficulty: "Hard",
-  },
-  {
-    id: 5,
-    question: "What is the chemical symbol for gold?",
-    options: ["Go", "Gd", "Au", "Ag"],
-    correctAnswer: 2,
-    explanation: "Au comes from the Latin word 'aurum' meaning gold. Ag (from 'argentum') is silver.",
-    difficulty: "Medium",
-  },
-]
+export default function Quiz({ id }: { id: string }) {
 
-export default function Quiz() {
+  const { data, isLoading, isError, error }  = useQuiz(id);
+
+  const sampleQuestions = data?.content || [];
+  
   const [quizState, setQuizState] = useState<QuizState>({
     currentQuestion: 0,
-    answers: new Array(sampleQuestions.length).fill(null),
+    answers: [],
     timeRemaining: 900, // 15 minutes
     isPlaying: true,
     showExplanation: false,
@@ -94,6 +56,9 @@ export default function Quiz() {
       handleQuizComplete()
     }
   }, [quizState.timeRemaining, quizState.isPlaying, quizState.quizCompleted])
+
+  if (isLoading) return <Spinner />;
+  if (isError && error instanceof Error) return <p>Error: {error.message}</p>;
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
@@ -200,15 +165,17 @@ export default function Quiz() {
                 </div>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-2xl">
+                <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-2xl"
+                onClick={() => window.location.reload()}
+                >
                     Try Again
                 </Button>
-                <Button
+                {/* <Button
                     variant="outline"
                     className="border-purple-300 text-purple-600 px-8 py-3 rounded-2xl bg-transparent"
                 >
                     Review Answers
-                </Button>
+                </Button> */}
                 </div>
             </div>
             </div>
