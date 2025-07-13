@@ -10,7 +10,6 @@ import uuid
 # Internal Imports
 from config.env import get_app_configs
 from .generator_service import GenerationService
-from .generator_schema import StatusCheckRequest
 from src.modules.chat.chat_service import DocumentQAService
 from src.deps import get_current_user_from_cookie, get_generation_service, get_db, get_qa_service
 

@@ -216,34 +216,34 @@ class Summarizer:
 
         prompt = PromptTemplate.from_template(
             """
-        You are a helpful assistant that creates educational quizzes.
+            You are a helpful assistant that creates educational quizzes.
 
-        Based on the following summary, generate {quizcount} multiple-choice questions in **JSON array format**. 
+            Based on the following summary, generate {quizcount} multiple-choice questions in **JSON array format** and Do NOT wrap the output in triple backticks (```) or use a ```json code block. 
 
-        Each object in the array should include the following keys:
-        - `id`: an integer ID starting from 1
-        - `question`: the text of the question
-        - `options`: a list of four answer choices
-        - `correctAnswer`: the index (0-based) of the correct answer in the options list
-        - `explanation`: a brief explanation of the correct answer
-        - `difficulty`: one of "Easy", "Medium", or "Hard" (based on your judgment)
+            Each object in the array should include the following keys:
+            - `id`: an integer ID starting from 1
+            - `question`: the text of the question
+            - `options`: a list of four answer choices
+            - `correctAnswer`: the index (0-based) of the correct answer in the options list
+            - `explanation`: a brief explanation of the correct answer
+            - `difficulty`: one of "Easy", "Medium", or "Hard" (based on your judgment)
 
-        ### Output format:
-        [
-        {{
-            "id": 1,
-            "question": "What is the capital of France?",
-            "options": ["London", "Berlin", "Paris", "Madrid"],
-            "correctAnswer": 2,
-            "explanation": "Paris is the capital and most populous city of France, known for landmarks like the Eiffel Tower.",
-            "difficulty": "Easy"
-        }},
-        ...
-        ]
+            ### Output format:
+            [
+            {{
+                "id": 1,
+                "question": "What is the capital of France?",
+                "options": ["London", "Berlin", "Paris", "Madrid"],
+                "correctAnswer": 2,
+                "explanation": "Paris is the capital and most populous city of France, known for landmarks like the Eiffel Tower.",
+                "difficulty": "Easy"
+            }},
+            ...
+            ]
 
-        ### Summary:
-        {summary}
-        """
+            ### Summary:
+            {summary}
+            """
         )
 
         try:

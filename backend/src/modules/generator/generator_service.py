@@ -13,6 +13,7 @@ from sqlalchemy import select
 # Internal Imports
 from .generator_schema import CreateUploadSchema, CreateGenerationSchema
 from .generator_model import Uploads, Generations
+from src.modules.quiz.quiz_model import Quiz
 
 from .integrations.elevenlabs.base import TTS
 from .integrations.langchain.base import Summarizer
@@ -126,6 +127,15 @@ class GenerationService:
         result = await db.execute(stmt)
         return result.scalars().all()
     
+    async def get_user_quiz_from_upload_id(self, upload_id: uuid.UUID, db: AsyncSession):
+        '''
+        Get the quiz associated with a specific upload ID.
+        This method retrieves the quiz linked to a given upload ID.
+        '''
+        stmt = select(Quiz).where(Quiz.upload_id == upload_id)
+        result = await db.execute(stmt)
+        return result.scalars().first()
+    
     async def get_all_uploads(self, user_id: uuid.UUID, db: AsyncSession):
         '''
         Get all uploads for a specific user.
@@ -138,14 +148,15 @@ class GenerationService:
     async def get_user_uploads_with_generations(self, user_id: uuid.UUID, db: AsyncSession):
         '''
         Get all uploads along with their associated generations for a specific user.
-        This method retrieves all uploads and their linked generations for a user.
+        This method retrieves all uploads and their linked generations for a user as well as the quiz generated for their uploaded document.
         '''
         uploads = await self.get_all_uploads(user_id, db)
         results = []
 
         for upload in uploads:
             generations = await self.get_user_generations_from_upload_id(upload.id, db)
-            results.append([upload.id, generations])
+            quiz = await self.get_user_quiz_from_upload_id(upload.id, db)
+            results.append([upload.id, generations, quiz])
 
         return results
     

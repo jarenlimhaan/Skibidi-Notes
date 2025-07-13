@@ -33,6 +33,7 @@ interface UploadWithGenerations {
   file_path: string;
   date: string;
   background_type: string;
+  quizID: string;
 }
 
 export default function Library() {
@@ -64,6 +65,7 @@ export default function Library() {
           file_name: item[1][0].file_name,
           file_path: item[1][0].file_path,
           date: new Date(item[1][0].created_at).toLocaleDateString(), // Converts ISO to date stamp
+          quizID: item[2] ? item[2].id : null, // Assuming quiz ID is in the third element
         }));
         console.log("Fetched videos:", data);
         console.log("Fetched videos:", formatted);
@@ -197,9 +199,10 @@ export default function Library() {
                         <Button
                           variant="outline"
                           className="flex-1 bg-gradient-to-r from-pink-500/20 to-purple-500/20 border-pink-400/50 text-pink-300 hover:bg-gradient-to-r hover:from-pink-500/40 hover:to-purple-500/40 hover:text-white font-semibold py-2 px-3 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/50 text-xs"
-                          onClick={() => (window.location.href = "/quiz")}
+                          onClick={() => (window.location.href = "/quiz/" + video.quizID)}
                         >
-                          <FileText className="w-3 h-3 mr-1" />
+                          <FileText className="w-3 h-3 mr-1" 
+                           />
                           Quiz
                         </Button>
                         <Button
