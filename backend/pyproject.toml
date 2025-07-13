@@ -39,7 +39,8 @@ dependencies = [
     "pgvector (>=0.3.0,<0.4.0)",
     "langchain-postgres (>=0.0.15,<0.0.16)",
     "psycopg[binary] (>=3.2.9,<4.0.0)",
-    "celery (>=5.5.3,<6.0.0)"
+    "celery (>=5.5.3,<6.0.0)",
+    "redis[asyncio] (>=6.2.0,<7.0.0)",
 ]
 
 [tool.poetry]

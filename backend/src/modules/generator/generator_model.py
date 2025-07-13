@@ -6,6 +6,7 @@ from sqlalchemy.dialects.postgresql import UUID
 
 # Internal Imports
 from src.db.base import Base
+from src.modules.user.user_model import User
 
 
 class Uploads(Base):

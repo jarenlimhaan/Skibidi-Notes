@@ -2,21 +2,22 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException, Request, Depends, Form
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
+from celery.result import AsyncResult
+from fastapi.encoders import jsonable_encoder
 import os
 import uuid
 
 # Internal Imports
 from config.env import get_app_configs
-from .integrations.langchain.base import Summarizer, get_summarizer_service
-from .integrations.elevenlabs.base import TTS, get_TTS
-from .integrations.movieclip.base import Clip, get_clip
-from .integrations.subtitles.base import Subtitles, get_subtitles
-
 from .generator_service import GenerationService
-from src.modules.quiz.quiz_service import QuizService
+from .generator_schema import StatusCheckRequest
 from src.modules.chat.chat_service import DocumentQAService
-from src.deps import get_current_user_from_cookie, get_generation_service, get_db, get_qa_service, get_quiz_service
-from fastapi.encoders import jsonable_encoder
+from src.deps import get_current_user_from_cookie, get_generation_service, get_db, get_qa_service
+
+from .runner.tasks import run_generation_task
+from .runner.base import celery_app
+
+from src.core.queue.base import redis_client
 
 router = APIRouter()
 app_config = get_app_configs()
@@ -26,7 +27,6 @@ upload_directory_path = app_config.UPLOAD_DIR
 os.makedirs(upload_directory_path, exist_ok=True)
 
 # Main entrypoint for video generation & file upload
-# This endpoint handles the file upload and video generation process
 @router.post("/upload")
 async def upload_file(
     request: Request,
@@ -35,67 +35,80 @@ async def upload_file(
     voice: str = Form(...),
     quizCount: str = Form(...),
     noteName: str = Form(...),
-    summarizer: Summarizer = Depends(get_summarizer_service),
-    tts: TTS = Depends(get_TTS),
-    subtitles: Subtitles = Depends(get_subtitles),
-    clip: Clip = Depends(get_clip),
     generation_service: GenerationService = Depends(get_generation_service),
     qa_service: DocumentQAService = Depends(get_qa_service),
-    quiz_service: QuizService = Depends(get_quiz_service),
     current_user=Depends(get_current_user_from_cookie),
     db: AsyncSession = Depends(get_db)
 ):
     filename = request.query_params.get("filename") or file.filename
     file_id = uuid.uuid4().hex
     save_path = os.path.join(upload_directory_path, f"{file_id}_{filename}")
+    user_id = current_user["user_id"]
     try:
         content = await file.read()
         with open(save_path, "wb") as buffer:
             buffer.write(content)
 
+        # Save the upload path to the database
         upload_id = await generation_service.add_upload(createUploadDTO={
-            "user_id": current_user["user_id"],
+            "user_id": user_id,
             "file_path": save_path,
         }, db=db)
 
-
-
-        # Create Video Generation
-        path, res = await generation_service.generate(pdf_path=save_path, summarizer=summarizer, tts=tts, clip=clip, subtitles=subtitles, background=background, voice_id=voice, quizcount=quizCount)
-
         # Add to Vector Store
-        # qa_service.add_pdf_to_vectorstore(file_path=save_path, user_id=current_user["user_id"]) 
+        qa_service.add_pdf_to_vectorstore(file_path=save_path, user_id=user_id) 
 
-        # Add Quiz to the database
-        await quiz_service.add_quiz(
-            createQuizDTO={
-                "upload_id": upload_id,
-                "content": res['quiz']
-            },
-            db=db
+        # Run the generation task
+        task = run_generation_task.delay(
+            pdf_path=save_path,
+            upload_id=upload_id,
+            background=background.split(".")[0],
+            voice_id=voice,
+            quizcount=quizCount,
+            user_id=user_id,
+            note_name=noteName
         )
 
-        # TODO: remove path from line 60 and use the path in line 63
-        # Save the generation to the database    
-        await generation_service.add_generation(
-            createGenerationDTO={
-                "user_id": current_user["user_id"],
-                "file_path": path,
-                "upload_id": upload_id,
-                "background_type": background.split(".")[0], #extracting only the name of the background
-                "file_name": noteName,
-            },
-            db=db
+        # Store in redis
+        await redis_client.set(
+            f"user:{user_id}:upload:{upload_id}",
+            task.id,
+            ex=86400  # optional: expires after 1 day
         )
-        
-        return JSONResponse(content={"url": path, "summary": {
-            "summary": res['summary'],
-            "keypoints": res['keypoints'],
-            "url": path
-        }})
+
+        print(f"Upload ID: {upload_id}")
+
+        return JSONResponse(content={"task_id": task.id})
     except Exception as e:
         print(e)
         return JSONResponse(status_code=500, content={"error": str(e)})
+
+@router.get("/status/{upload_id}")
+async def get_generation_status(
+    upload_id: str,
+    current_user=Depends(get_current_user_from_cookie),
+):
+    user_id = current_user["user_id"]
+
+    # Retrieve task_id from Redis
+    task_id = await redis_client.get(f"user:{user_id}:upload:{upload_id}")
+    if task_id is None:
+        return JSONResponse(status_code=404, content={"error": "Task ID not found for this upload"})
+
+    task_result = AsyncResult(task_id, app=celery_app)
+
+    response = {
+        "task_id": task_id,
+        "status": task_result.status,
+        "result": task_result.result if task_result.successful() else None
+    }
+
+    # Clean up Redis if done
+    if task_result.status in ["SUCCESS", "FAILURE"]:
+        await redis_client.delete(f"user:{user_id}:upload:{upload_id}")
+        print(f"Task {task_id} removed from Redis")
+
+    return JSONResponse(content=response)
 
 # Fetch user uploaded file with their generated video
 @router.get("/upload/{upload_id}")
