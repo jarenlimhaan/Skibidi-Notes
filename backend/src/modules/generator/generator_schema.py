@@ -11,3 +11,4 @@ class CreateGenerationSchema(BaseModel):
     file_path:str
     upload_id: UUID
     background_type: str 
+    file_name: str

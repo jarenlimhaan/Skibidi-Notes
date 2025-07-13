@@ -16,6 +16,7 @@ from .generator_service import GenerationService
 from src.modules.quiz.quiz_service import QuizService
 from src.modules.chat.chat_service import DocumentQAService
 from src.deps import get_current_user_from_cookie, get_generation_service, get_db, get_qa_service, get_quiz_service
+from fastapi.encoders import jsonable_encoder
 
 router = APIRouter()
 app_config = get_app_configs()
@@ -33,6 +34,7 @@ async def upload_file(
     background: str = Form(...),
     voice: str = Form(...),
     quizCount: str = Form(...),
+    noteName: str = Form(...),
     summarizer: Summarizer = Depends(get_summarizer_service),
     tts: TTS = Depends(get_TTS),
     subtitles: Subtitles = Depends(get_subtitles),
@@ -59,7 +61,7 @@ async def upload_file(
 
 
         # Create Video Generation
-        # path, res = await generation_service.generate(pdf_path=save_path, summarizer=summarizer, tts=tts, clip=clip, subtitles=subtitles, background=background, voice_id=voice, quizcount=quizCount)
+        path, res = await generation_service.generate(pdf_path=save_path, summarizer=summarizer, tts=tts, clip=clip, subtitles=subtitles, background=background, voice_id=voice, quizcount=quizCount)
 
         # Add to Vector Store
         # qa_service.add_pdf_to_vectorstore(file_path=save_path, user_id=current_user["user_id"]) 
@@ -80,11 +82,12 @@ async def upload_file(
                 "user_id": current_user["user_id"],
                 "file_path": path,
                 "upload_id": upload_id,
-                "background_type": background
+                "background_type": background.split(".")[0], #extracting only the name of the background
+                "file_name": noteName,
             },
             db=db
         )
-
+        
         return JSONResponse(content={"url": path, "summary": {
             "summary": res['summary'],
             "keypoints": res['keypoints'],
@@ -121,8 +124,8 @@ async def fetch_all_uploads(current_user=Depends(get_current_user_from_cookie), 
     try:
         uploads = await generation_service.get_all_uploads(current_user["user_id"], db)
         if not uploads:
-            return JSONResponse(content={"message": "No uploads found"}, status_code=404)
-        return JSONResponse(content=uploads)
+            return JSONResponse(content=[], status_code=200)
+        return JSONResponse(content=jsonable_encoder(uploads))
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=str(e))
@@ -133,8 +136,8 @@ async def fetch_all_uploads_with_generations(current_user=Depends(get_current_us
     try:
         uploads = await generation_service.get_user_uploads_with_generations(current_user["user_id"], db)
         if not uploads:
-            return JSONResponse(content={"message": "No uploads found"}, status_code=404)
-        return JSONResponse(content=uploads)
+            return JSONResponse(content=[], status_code=200)
+        return JSONResponse(content=jsonable_encoder(uploads))
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=str(e))

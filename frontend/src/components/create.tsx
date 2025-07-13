@@ -21,9 +21,9 @@ interface UploadedFile {
 
 export default function BrainRotCustomizer() {
   const [activeTab, setActiveTab] = useState("upload");
+  const [noteName, setnoteName] = useState("");
   const [selectedBackground, setSelectedBackground] = useState<string>("");
-  const [selectedBackgroundName, setSelectedBackgroundName] =
-    useState<string>("");
+  const [selectedBackgroundName, setSelectedBackgroundName] = useState<string>("");
   const [selectedVoice, setSelectedVoice] = useState<string>("");
   const [selectedVoiceName, setSelectedVoiceName] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -54,7 +54,11 @@ export default function BrainRotCustomizer() {
       name: "Temple Run",
       image: "/temple_gameplay.png?height=120&width=160",
     },
-    { id: "gta", name: "GTA", image: "/gta_gameplay.png?height=120&width=160" },
+    { 
+      id: "gta", 
+      name: "GTA", 
+      image: "/gta_gameplay.png?height=120&width=160" 
+    },
   ];
 
   const voiceOptions = [
@@ -451,12 +455,35 @@ export default function BrainRotCustomizer() {
                 </p>
               </div>
 
+              {/* Note Name */}
+                <Card className="bg-white p-6 border-2 border-purple-300">
+                <h3 className="text-purple-700 text-lg font-medium mb-4">
+                  Name your Note
+                </h3>
+                <div className="flex flex-col gap-2">
+                  <Input
+                  type="text"
+                  placeholder="Enter Note Name"
+                  value={customInput}
+                  onChange={(e) => {
+                    setCustomInput(e.target.value);
+                    setnoteName(e.target.value);
+                  }}
+                  className="bg-purple-50 text-purple-800"
+                  maxLength={50}
+                  />
+                  <span className="text-sm text-gray-500">
+                  Give your note a memorable name (max 50 characters)
+                  </span>
+                </div>
+                </Card>
+
+
               {/* Background Video Selection */}
               <Card className="bg-white p-6 border-2 border-purple-300">
                 <h3 className="text-purple-700 text-lg font-medium mb-4">
                   Select your background video
                 </h3>
-
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {backgroundVideos.map((video) => (
                     <div
@@ -680,6 +707,7 @@ export default function BrainRotCustomizer() {
                       ? "bg-purple-600 hover:bg-purple-700 text-white shadow-lg hover:shadow-xl"
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
+                  onClick={() => setActiveTab("process")}
                 >
                   Continue
                 </Button>
@@ -697,7 +725,7 @@ export default function BrainRotCustomizer() {
             <TabsContent value="process" className="space-y-6">
               <div className="text-center mb-6">
                 <h2 className="text-2xl font-bold text-purple-700 mb-2">
-                  Confirm Your Brain Rot
+                  Confirm Your Brain Rot: {noteName || "Untitled Notes"}
                 </h2>
                 <p className="text-purple-600 text-sm">
                   Review your selections and create your very own SkibidiNotes
@@ -808,7 +836,8 @@ export default function BrainRotCustomizer() {
                     uploadedFiles.length === 0 ||
                     !selectedBackground ||
                     !selectedVoice ||
-                    !questionCount
+                    !questionCount ||
+                    noteName.trim() === ""
                   }
                   onClick={async () => {
                     const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -819,6 +848,7 @@ export default function BrainRotCustomizer() {
                       formData.append("background", selectedBackground);
                       formData.append("voice", selectedVoice); // Use the backend's expected field name
                       formData.append("quizCount", questionCount.toString());
+                      formData.append("noteName", noteName);
 
                       const uploadRes = await fetch(
                         `${backendURL}/api/generator/upload?filename=${encodeURIComponent(fileObj.name)}`,

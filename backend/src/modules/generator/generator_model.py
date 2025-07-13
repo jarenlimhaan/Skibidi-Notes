@@ -25,4 +25,5 @@ class Generations(Base):
     file_path = Column(Text, unique=True, nullable=False)
     background_type = Column(Text, nullable=False, default="video")
     created_at = Column(DateTime, default=datetime.utcnow)
+    file_name = Column(Text, nullable=False)
 
