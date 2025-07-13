@@ -40,7 +40,7 @@ export default function BrainRotCustomizer() {
   // need to upload the rest
   const backgroundVideos = [
     {
-      id: "minecraft",
+      id: "minecraft.mp4",
       name: "Minecraft",
       image: "/minecraft_gameplay.png?height=120&width=160",
     },
@@ -50,12 +50,12 @@ export default function BrainRotCustomizer() {
       image: "/subway_gameplay.png?height=120&width=160",
     },
     {
-      id: "temple",
+      id: "temple.mp4",
       name: "Temple Run",
       image: "/temple_gameplay.png?height=120&width=160",
     },
     { 
-      id: "gta", 
+      id: "gta.mp4", 
       name: "GTA", 
       image: "/gta_gameplay.png?height=120&width=160" 
     },
