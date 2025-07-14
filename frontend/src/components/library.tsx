@@ -19,14 +19,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Popup from "@/components/popup";
 
-
-interface Generation {
-  id: string;
-  file_path: string;
-  background_type: string;
-  created_at: string;
-}
 
 interface UploadWithGenerations {
   uploadId: string;
@@ -37,13 +31,13 @@ interface UploadWithGenerations {
   quizID: string;
 }
 
+
 export default function Library() {
   const [videos, setVideos] = useState<UploadWithGenerations[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedVideo, setSelectedVideo] = useState<Generation | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<UploadWithGenerations | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [deletedVideos, setDeletedVideos] = useState<string[]>([]);
 
@@ -89,9 +83,14 @@ export default function Library() {
       );
   }, [videos, searchTerm, deletedVideos]);
 
-  const handleWatch = (generation: Generation) => {
+  const handleWatch = (generation: UploadWithGenerations) => {
     setSelectedVideo(generation);
     setIsPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+    setSelectedVideo(null);
   };
 
   return (
@@ -193,6 +192,7 @@ export default function Library() {
                         <Button
                           className="flex-1 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border-cyan-400/50 text-cyan-300 hover:bg-gradient-to-r hover:from-cyan-500/40 hover:to-blue-500/40 hover:text-white font-semibold py-2 px-3 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/50 border text-xs"
                           variant="outline"
+                          onClick={() => handleWatch(video)}
                         >
                           <Play className="w-3 h-3 mr-1" />
                           Watch
@@ -254,26 +254,11 @@ export default function Library() {
               )}
             </div>
           {/* Video Popup */}
-          <Dialog open={isPopupOpen} onOpenChange={setIsPopupOpen}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>
-                  {selectedVideo ? "Video Preview" : ""}
-                </DialogTitle>
-              </DialogHeader>
-              {selectedVideo && (
-                <video
-                  src={selectedVideo.file_path}
-                  controls
-                  width="100%"
-                  className="rounded-lg"
-                  style={{ maxHeight: 400 }}
-                >
-                  Your browser does not support the video tag.
-                </video>
-              )}
-            </DialogContent>
-          </Dialog>
+          <Popup
+            open={isPopupOpen}
+            video={selectedVideo}
+            onClose={handleClosePopup}
+          />
         </div>
       </div>
     </>

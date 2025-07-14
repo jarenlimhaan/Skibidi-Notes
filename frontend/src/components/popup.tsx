@@ -1,32 +1,46 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { Button } from "@/components/ui/button"
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
-import { FileText, Eye, Download } from "lucide-react" // Removed Trash2
-import { useState, useRef } from "react"
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { FileText, Eye, Download } from "lucide-react";
 
 interface Document {
-  id: string
-  name: string
-  size: string
-  url: string
-  type: string
+  id: string;
+  name: string;
+  size: string;
+  url: string;
+  type: string;
 }
 
-export default function Popup() {
-  const [documents, setDocuments] = useState<Document[]>([
+interface PopupProps {
+  open: boolean;
+  video: {
+    uploadId: string;
+    file_name: string;
+    file_path: string;
+    date: string;
+    background_type: string;
+    quizID: string;
+  } | null;
+  onClose: () => void;
+}
+
+export default function Popup({
+  open,
+  video,
+  onClose,
+}: PopupProps) {
+  const [documents] = useState<Document[]>([
     {
       id: "1",
       name: "Project Proposal.pdf",
@@ -34,81 +48,74 @@ export default function Popup() {
       url: "/placeholder.svg?height=600&width=400",
       type: "application/pdf",
     },
-    {
-      id: "2",
-      name: "Financial Report Q4.pdf",
-      size: "1.8 MB",
-      url: "/placeholder.svg?height=600&width=400",
-      type: "application/pdf",
-    },
-    {
-      id: "3",
-      name: "User Manual.pdf",
-      size: "5.2 MB",
-      url: "/placeholder.svg?height=600&width=400",
-      type: "application/pdf",
-    },
-    {
-      id: "4",
-      name: "Contract Agreement.pdf",
-      size: "892 KB",
-      url: "/placeholder.svg?height=600&width=400",
-      type: "application/pdf",
-    },
-  ])
+    // Add more documents as needed
+  ]);
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
-  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null)
-  const [isOpen, setIsOpen] = useState(false)
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
-  const fileInputRef = useRef<HTMLInputElement>(null)
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files
-    if (files) {
-      Array.from(files).forEach((file) => {
-        if (file.type === "application/pdf") {
-          const newDocument: Document = {
-            id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-            name: file.name,
-            size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
-            url: URL.createObjectURL(file),
-            type: file.type,
-          }
-          setDocuments((prev) => [newDocument, ...prev])
-        }
-      })
-    }
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ""
-    }
-  }
-
-  // Removed handleDelete function as it's no longer needed
-
+  // PDF preview handler
   const handlePreview = (document: Document) => {
-    setSelectedDocument(document)
-    setIsPreviewOpen(true)
-  }
+    setSelectedDocument(document);
+    setIsPreviewOpen(true);
+  };
+
+  // PDF download handler
+  const handleDownload = (document: Document) => {
+    const link = window.document.createElement("a");
+    link.href = document.url;
+    link.download = document.name;
+    link.click();
+  };
+
+  // Generate the correct video poster based on background_type
+  const getPoster = () => {
+    switch (video?.background_type) {
+      case "subway":
+        return "/subway_gameplay.png?height=120&width=160";
+      case "temple":
+        return "/temple_gameplay.png?height=120&width=160";
+      case "minecraft":
+        return "/minecraft_gameplay.png?height=120&width=160";
+      case "gta":
+        return "/gta_gameplay.png?height=120&width=160";
+      default:
+        return "/placeholder_thumbnail.jpg";
+    }
+  };
+
+  // Generate the correct video source path, handling relative URLs from backend
+  const getVideoSrc = () => {
+  if (!video?.file_path) return "/placeholder.mp4";
+  if (video.file_path.startsWith("http")) return video.file_path;
+  // Always prepend backend URL for static files
+  return `${backendURL.replace(/\/$/, "")}/${video.file_path.replace(/^\/?/, "")}`;
+};
+
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      {/* This is the button that will trigger the popup */}
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
-          <Button size="lg" className="gap-2">
-            <FileText className="h-5 w-5" />
-            Open Document Browser
-          </Button>
-        </DialogTrigger>
+    <>
+      <Dialog open={open} onOpenChange={onClose}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <FileText className="h-5 w-5" />
-              My Documents
+              Video Preview
             </DialogTitle>
-            <DialogDescription>Manage and view your uploaded PDF documents</DialogDescription>
+            <DialogDescription>
+              {video?.file_name ? `Watch "${video.file_name}" below` : "Watch your generated video below"}
+            </DialogDescription>
             <div className="pt-2">
-              <Button variant="outline" className="gap-2 bg-transparent">
+              <Button
+                variant="outline"
+                className="gap-2 bg-transparent"
+                onClick={() => {
+                  if (video?.quizID) {
+                    window.location.href = `/quiz/${video.quizID}`;
+                  }
+                }}
+                disabled={!video?.quizID}
+              >
                 <FileText className="h-4 w-4" />
                 Quiz
               </Button>
@@ -122,33 +129,28 @@ export default function Popup() {
                 <div className="relative aspect-video bg-black rounded-lg overflow-hidden group">
                   <video
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    poster="/placeholder.svg?height=400&width=600"
+                    poster={getPoster()}
                     controls
                     preload="metadata"
                   >
-                    <source src="/placeholder.mp4" type="video/mp4" />
+                    <source src={getVideoSrc()} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
-
-                  {/* Smooth overlay gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-                  {/* Loading spinner overlay */}
                   <div className="absolute inset-0 flex items-center justify-center bg-black/10 opacity-0 transition-opacity duration-300">
                     <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   </div>
                 </div>
-
                 <div className="mt-4 text-center transform transition-all duration-300 hover:translate-y-[-2px]">
-                  <h3 className="font-medium text-gray-900 transition-colors duration-200">Document Preview Video</h3>
+                  <h3 className="font-medium text-gray-900 transition-colors duration-200">
+                    {video?.file_name || "Document Preview Video"}
+                  </h3>
                   <p className="text-sm text-muted-foreground transition-colors duration-200 group-hover:text-gray-600">
-                    Click play to watch the document overview
+                    {video?.date ? `Created: ${video.date}` : "Click play to watch the document overview"}
                   </p>
                 </div>
               </div>
-
               <Separator />
-
               {/* Documents List */}
               <ScrollArea className="h-[400px]">
                 <div className="space-y-2">
@@ -156,7 +158,7 @@ export default function Popup() {
                     <div className="text-center py-8 text-muted-foreground">
                       <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
                       <p>No documents uploaded yet</p>
-                      <p className="text-sm">Upload your first PDF to get started</p>
+                      <p className="text-sm">Ask your admin to add documents to your account</p>
                     </div>
                   ) : (
                     documents.map((document) => (
@@ -175,7 +177,6 @@ export default function Popup() {
                             </div>
                             <Badge variant="secondary">PDF</Badge>
                           </div>
-
                           <div className="flex items-center gap-2">
                             <Button
                               size="sm"
@@ -189,18 +190,12 @@ export default function Popup() {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => {
-                                const link = document.createElement("a")
-                                link.href = document.url
-                                link.download = document.name
-                                link.click()
-                              }}
+                              onClick={() => handleDownload(document)}
                               className="gap-1"
                             >
                               <Download className="h-3 w-3" />
                               Download
                             </Button>
-                            {/* Removed Delete Button */}
                           </div>
                         </div>
                       </div>
@@ -212,8 +207,7 @@ export default function Popup() {
           </ScrollArea>
         </DialogContent>
       </Dialog>
-
-      {/* PDF Preview Dialog */}
+      {/* PDF Preview Dialog - separate from main Dialog */}
       <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh]">
           <DialogHeader>
@@ -221,9 +215,10 @@ export default function Popup() {
               <FileText className="h-5 w-5" />
               {selectedDocument?.name}
             </DialogTitle>
-            <DialogDescription>PDF Preview - {selectedDocument?.size}</DialogDescription>
+            <DialogDescription>
+              PDF Preview - {selectedDocument?.size}
+            </DialogDescription>
           </DialogHeader>
-
           {selectedDocument && (
             <div className="flex-1 min-h-0">
               <iframe
@@ -235,6 +230,6 @@ export default function Popup() {
           )}
         </DialogContent>
       </Dialog>
-    </div>
-  )
+    </>
+  );
 }
