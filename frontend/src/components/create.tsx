@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Minus, Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 interface UploadedFile {
   file: File;
