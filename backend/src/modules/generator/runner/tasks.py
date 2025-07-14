@@ -12,7 +12,7 @@ from src.modules.generator.generator_service import get_generation_service
 from src.db.driver import SessionLocal
 
 @celery_app.task(bind=True)
-def run_generation_task(self, pdf_path, upload_id, background, voice_id, quizcount, user_id, note_name):
+def run_generation_task(self, pdf_path, upload_id, background, voice_id, quizcount, user_id):
     self.update_state(state="PROGRESS", meta={"status": "Generating..."})
 
     summarizer = get_summarizer_service()
@@ -56,7 +56,6 @@ def run_generation_task(self, pdf_path, upload_id, background, voice_id, quizcou
                     "file_path": path,
                     "upload_id": upload_id,
                     "background_type": background,
-                    "file_name": note_name,
                 },
                 db=db
             )

@@ -52,6 +52,7 @@ async def upload_file(
         upload_id = await generation_service.add_upload(createUploadDTO={
             "user_id": user_id,
             "file_path": save_path,
+            "project_name": noteName
         }, db=db)
 
         # Add to Vector Store
@@ -65,7 +66,6 @@ async def upload_file(
             voice_id=voice,
             quizcount=quizCount,
             user_id=user_id,
-            note_name=noteName
         )
 
         # Store in redis

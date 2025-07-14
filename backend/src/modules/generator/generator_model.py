@@ -15,6 +15,7 @@ class Uploads(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     file_path = Column(Text, unique=True, nullable=False)
+    project_name =  Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
 class Generations(Base):
@@ -26,5 +27,3 @@ class Generations(Base):
     file_path = Column(Text, unique=True, nullable=False)
     background_type = Column(Text, nullable=False, default="video")
     created_at = Column(DateTime, default=datetime.utcnow)
-    file_name = Column(Text, nullable=False)
-

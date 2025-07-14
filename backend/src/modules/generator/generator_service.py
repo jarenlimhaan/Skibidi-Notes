@@ -156,7 +156,7 @@ class GenerationService:
         for upload in uploads:
             generations = await self.get_user_generations_from_upload_id(upload.id, db)
             quiz = await self.get_user_quiz_from_upload_id(upload.id, db)
-            results.append([upload.id, generations, quiz])
+            results.append([[upload.id, upload.project_name], generations, quiz])
 
         return results
     

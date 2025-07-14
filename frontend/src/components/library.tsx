@@ -61,9 +61,9 @@ export default function Library() {
         const data = await res.json();
         
         const formatted = data.map((item: any) => ({
-          uploadId: item[0],
+          uploadId: item[0][0],
           background_type: item[1][0].background_type,
-          file_name: item[1][0].file_name,
+          file_name: item[0][1],
           file_path: item[1][0].file_path,
           date: new Date(item[1][0].created_at).toLocaleDateString(), // Converts ISO to date stamp
           quizID: item[2] ? item[2].id : null, // Assuming quiz ID is in the third element
