@@ -283,18 +283,18 @@ export default function BrainRotCustomizer() {
     <>
       <Navbar />
 
-      <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 p-6 font-mono">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-purple-700 mb-6">
-              Brain Rot Creator
-            </h1>
-            <p className="text-purple-600 text-sm">
-              Create engaging content by uploading your documents and
-              customizing the output.
-            </p>
-          </div>
+        <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 p-6 font-mono">
+          <div className="max-w-4xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h1 className="text-4xl font-bold text-purple-700 mb-6">
+                Brain Rot Creator
+              </h1>
+              <p className="text-purple-600 text-sm">
+                Create engaging content by uploading your documents and
+                customizing the output.
+              </p>
+            </div>
 
           {/* Tabs */}
           <Tabs
