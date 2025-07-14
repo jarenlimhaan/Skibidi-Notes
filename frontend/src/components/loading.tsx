@@ -16,8 +16,10 @@ export default function ToiletAnimation() {
         <div id="toilet-lid" className="toilet-lid"></div>
         <div id="water" className="water"></div>
         <div id="generating-text" className="generating-text">
-          <span>Rizzing</span>
+          <span>Generating</span>
           <span className="dots">
+            <span>.</span>
+            <span>.</span>
             <span>.</span>
             <span>.</span>
             <span>.</span>

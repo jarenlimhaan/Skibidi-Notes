@@ -7,10 +7,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Upload, Settings, Play, Search, FileText, Mic, HelpCircle, Video} from "lucide-react";
+import {
+  Upload,
+  Settings,
+  Play,
+  Search,
+  FileText,
+  Mic,
+  HelpCircle,
+  Video,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Minus, Plus } from "lucide-react";
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
 
 interface UploadedFile {
   file: File;
@@ -23,7 +32,8 @@ export default function BrainRotCustomizer() {
   const [activeTab, setActiveTab] = useState("upload");
   const [noteName, setnoteName] = useState("");
   const [selectedBackground, setSelectedBackground] = useState<string>("");
-  const [selectedBackgroundName, setSelectedBackgroundName] = useState<string>("");
+  const [selectedBackgroundName, setSelectedBackgroundName] =
+    useState<string>("");
   const [selectedVoice, setSelectedVoice] = useState<string>("");
   const [selectedVoiceName, setSelectedVoiceName] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,7 +45,8 @@ export default function BrainRotCustomizer() {
   const [customInput, setCustomInput] = useState("");
   const [isCustomMode, setIsCustomMode] = useState(false);
 
-  const isFormComplete = selectedBackground && selectedVoice && questionCount > 0
+  const isFormComplete =
+    selectedBackground && selectedVoice && questionCount > 0;
 
   // need to upload the rest
   const backgroundVideos = [
@@ -54,10 +65,10 @@ export default function BrainRotCustomizer() {
       name: "Temple Run",
       image: "/temple_gameplay.png?height=120&width=160",
     },
-    { 
-      id: "gta.mp4", 
-      name: "GTA", 
-      image: "/gta_gameplay.png?height=120&width=160" 
+    {
+      id: "gta.mp4",
+      name: "GTA",
+      image: "/gta_gameplay.png?height=120&width=160",
     },
   ];
 
@@ -272,60 +283,60 @@ export default function BrainRotCustomizer() {
     <>
       <Navbar />
 
-        <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 p-6 font-mono">
-          <div className="max-w-4xl mx-auto">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-purple-700 mb-6">
-                Brain Rot Creator
-              </h1>
-              <p className="text-purple-600 text-sm">
-                Create engaging content by uploading your documents and
-                customizing the output.
-              </p>
-            </div>
+      <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 p-6 font-mono">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-purple-700 mb-6">
+              Brain Rot Creator
+            </h1>
+            <p className="text-purple-600 text-sm">
+              Create engaging content by uploading your documents and
+              customizing the output.
+            </p>
+          </div>
 
-            {/* Tabs */}
-            <Tabs
-              value={activeTab}
-              onValueChange={setActiveTab}
-              className="w-full"
-            >
-              {/* <TabsList className="grid w-full grid-cols-3 mb-6 bg-white rounded-lg p-1 shadow-sm max-w-md mx-auto h-auto"> */}
-              <TabsList className="grid w-full grid-cols-3 mb-6 bg-white rounded-xl p-1.5 border border-purple-300 max-w-md mx-auto h-auto">
-                <TabsTrigger
-                  value="upload"
-                  // className="flex items-center gap-2 px-4 py-3 text-sm font-medium data-[state=active]:bg-pink-500 data-[state=active]:text-white data-[state=inactive]:text-purple-400 hover:text-purple-600 rounded-md transition-all"
+          {/* Tabs */}
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
+            {/* <TabsList className="grid w-full grid-cols-3 mb-6 bg-white rounded-lg p-1 shadow-sm max-w-md mx-auto h-auto"> */}
+            <TabsList className="grid w-full grid-cols-3 mb-6 bg-white rounded-xl p-1.5 border border-purple-300 max-w-md mx-auto h-auto">
+              <TabsTrigger
+                value="upload"
+                // className="flex items-center gap-2 px-4 py-3 text-sm font-medium data-[state=active]:bg-pink-500 data-[state=active]:text-white data-[state=inactive]:text-purple-400 hover:text-purple-600 rounded-md transition-all"
                 className={`flex items-center justify-center gap-2 px-4 py-3.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
                   activeTab === "upload"
                     ? "bg-purple-600 text-white"
                     : "bg-white text-black hover:bg-purple-100"
                 }`}
-                >
-                  <Upload className="w-4 h-4" />
-                  Upload
-                </TabsTrigger>
-                <TabsTrigger
-                  value="customise"
-                  // className="flex items-center gap-2 px-4 py-3 text-sm font-medium data-[state=active]:bg-pink-500 data-[state=active]:text-white data-[state=inactive]:text-purple-400 hover:text-purple-600 rounded-md transition-all"
-                  className={`flex items-center justify-center gap-2 px-4 py-3.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
-                    activeTab === "customise"
-                      ? "bg-purple-600 text-white"
-                      : "bg-white text-black hover:bg-purple-100"
-                  }`}
-                >
-                  <Settings className="w-4 h-4" />
-                  Customise
-                </TabsTrigger>
-                <TabsTrigger
-                  value="process"
-                  // className="flex items-center gap-2 px-4 py-3 text-sm font-medium data-[state=active]:bg-pink-500 data-[state=active]:text-white data-[state=inactive]:text-purple-400 hover:text-purple-600 rounded-md transition-all"
+              >
+                <Upload className="w-4 h-4" />
+                Upload
+              </TabsTrigger>
+              <TabsTrigger
+                value="customise"
+                // className="flex items-center gap-2 px-4 py-3 text-sm font-medium data-[state=active]:bg-pink-500 data-[state=active]:text-white data-[state=inactive]:text-purple-400 hover:text-purple-600 rounded-md transition-all"
+                className={`flex items-center justify-center gap-2 px-4 py-3.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
+                  activeTab === "customise"
+                    ? "bg-purple-600 text-white"
+                    : "bg-white text-black hover:bg-purple-100"
+                }`}
+              >
+                <Settings className="w-4 h-4" />
+                Customise
+              </TabsTrigger>
+              <TabsTrigger
+                value="process"
+                // className="flex items-center gap-2 px-4 py-3 text-sm font-medium data-[state=active]:bg-pink-500 data-[state=active]:text-white data-[state=inactive]:text-purple-400 hover:text-purple-600 rounded-md transition-all"
                 className={`flex items-center justify-center gap-2 px-4 py-3.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
                   activeTab === "process"
                     ? "bg-purple-600 text-white"
                     : "bg-white text-black hover:bg-purple-100"
                 }`}
-                >
+              >
                 <Play className="w-4 h-4" />
                 Process
               </TabsTrigger>
@@ -456,28 +467,27 @@ export default function BrainRotCustomizer() {
               </div>
 
               {/* Note Name */}
-                <Card className="bg-white p-6 border-2 border-purple-300">
+              <Card className="bg-white p-6 border-2 border-purple-300">
                 <h3 className="text-purple-700 text-lg font-medium mb-4">
                   Name your Note
                 </h3>
                 <div className="flex flex-col gap-2">
                   <Input
-                  type="text"
-                  placeholder="Enter Note Name"
-                  value={customInput}
-                  onChange={(e) => {
-                    setCustomInput(e.target.value);
-                    setnoteName(e.target.value);
-                  }}
-                  className="bg-purple-50 text-purple-800"
-                  maxLength={50}
+                    type="text"
+                    placeholder="Enter Note Name"
+                    value={customInput}
+                    onChange={(e) => {
+                      setCustomInput(e.target.value);
+                      setnoteName(e.target.value);
+                    }}
+                    className="bg-purple-50 text-purple-800"
+                    maxLength={50}
                   />
                   <span className="text-sm text-gray-500">
-                  Give your note a memorable name (max 50 characters)
+                    Give your note a memorable name (max 50 characters)
                   </span>
                 </div>
-                </Card>
-
+              </Card>
 
               {/* Background Video Selection */}
               <Card className="bg-white p-6 border-2 border-purple-300">
@@ -489,19 +499,25 @@ export default function BrainRotCustomizer() {
                     <div
                       key={video.id}
                       onClick={() => {
-                          setSelectedBackground(video.id);
-                          setSelectedBackgroundName(video.name);
-                        }}
+                        setSelectedBackground(video.id);
+                        setSelectedBackgroundName(video.name);
+                      }}
                       className={`cursor-pointer rounded-2xl overflow-hidden transition-all duration-200 hover:shadow-lg ${
                         selectedBackground === video.id
                           ? "ring-3 ring-purple-500 shadow-lg"
                           : "ring-2 ring-transparent hover:ring-purple-200"
                       }`}
                     >
-                      <img src={video.image || "/placeholder.svg"} alt={video.name} className="w-full h-32 object-cover" />
+                      <img
+                        src={video.image || "/placeholder.svg"}
+                        alt={video.name}
+                        className="w-full h-32 object-cover"
+                      />
                       <div
                         className={`p-3 text-center font-medium text-white ${
-                          selectedBackground === video.id ? "bg-purple-600" : "bg-purple-400"
+                          selectedBackground === video.id
+                            ? "bg-purple-600"
+                            : "bg-purple-400"
                         }`}
                       >
                         {video.name}
@@ -535,8 +551,9 @@ export default function BrainRotCustomizer() {
                     <Card
                       key={voice.id}
                       className={`bg-purple-50 p-4 cursor-pointer transition-all hover:bg-purple-100 ${
-                        selectedVoice === voice.id ? "border-purple-500 bg-purple-100" 
-                                          : "border-gray-200 bg-white hover:bg-gray-50"
+                        selectedVoice === voice.id
+                          ? "border-purple-500 bg-purple-100"
+                          : "border-gray-200 bg-white hover:bg-gray-50"
                       }`}
                       onClick={() => {
                         setSelectedVoice(voice.id);
@@ -693,12 +710,12 @@ export default function BrainRotCustomizer() {
               {/* Action Buttons */}
               <div className="flex justify-between mt-8">
                 <Button
-                    variant="outline"
-                    className="bg-pink-200 hover:bg-pink-300 text-pink-800 border-pink-300"
-                    onClick={() => setActiveTab("upload")}
-                  >
-                    Return
-                  </Button>
+                  variant="outline"
+                  className="bg-pink-200 hover:bg-pink-300 text-pink-800 border-pink-300"
+                  onClick={() => setActiveTab("upload")}
+                >
+                  Return
+                </Button>
 
                 <Button
                   disabled={!isFormComplete}
@@ -716,7 +733,8 @@ export default function BrainRotCustomizer() {
               {/* Validation Message */}
               {!isFormComplete && (
                 <div className="text-center text-red-500 text-sm">
-                  Please select a background video, voice type and number of questions to continue
+                  Please select a background video, voice type and number of
+                  questions to continue
                 </div>
               )}
             </TabsContent>
@@ -783,7 +801,7 @@ export default function BrainRotCustomizer() {
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                         <Mic className="w-6 h-6 text-blue-600" />
+                        <Mic className="w-6 h-6 text-blue-600" />
                       </div>
                       <div>
                         <h3 className="text-gray-900 mb-1 text-sm">
@@ -861,6 +879,11 @@ export default function BrainRotCustomizer() {
                       if (!uploadRes.ok) {
                         alert(`Failed to upload ${fileObj.name}`);
                         return;
+                      }
+                      if (uploadRes.status === 200) {
+                        const uploadData = await uploadRes.json();
+                        const id = uploadData.id;
+                        window.location.href = `/generating/${id}`;
                       }
                     }
 

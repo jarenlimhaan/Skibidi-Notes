@@ -77,7 +77,7 @@ async def upload_file(
 
         print(f"Upload ID: {upload_id}")
 
-        return JSONResponse(content={"task_id": task.id})
+        return JSONResponse(content={"id": upload_id})
     except Exception as e:
         print(e)
         return JSONResponse(status_code=500, content={"error": str(e)})
@@ -92,7 +92,7 @@ async def get_generation_status(
     # Retrieve task_id from Redis
     task_id = await redis_client.get(f"user:{user_id}:upload:{upload_id}")
     if task_id is None:
-        return JSONResponse(status_code=404, content={"error": "Task ID not found for this upload"})
+        return JSONResponse(status_code=404, content={"status": "Not Found"})
 
     task_result = AsyncResult(task_id, app=celery_app)
 
