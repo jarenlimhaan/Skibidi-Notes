@@ -14,6 +14,7 @@ class App_Config(BaseSettings):
     ELEVEN_LAB_API_KEY: str
     ASSEMBLY_AI_API_KEY: str
     IMAGEMAGICK_BINARY: str
+    REDIS_URL: str
 
     # Static file directories
     SUBTITLES_DIR: str

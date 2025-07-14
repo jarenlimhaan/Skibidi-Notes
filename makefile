@@ -28,6 +28,11 @@ run-fe:
 	@cd frontend && npm run dev
 	@echo "Sucessfully ran NextJS Application🚀"
 
+# Run Redis 
+run-redis:
+	@echo "Starting Redis Server..."
+	@cd backend && poetry run celery -A src.modules.generator.runner.base worker --loglevel=info
+	@echo "Sucessfully ran Redis Server🚀"
 
 # Run both FE & BE
 run:

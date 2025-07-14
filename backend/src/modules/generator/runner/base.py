@@ -1,10 +1,15 @@
-# celery_app.py
+# External Imports
 from celery import Celery
+
+# Internal Imports 
+from config.env import get_app_configs
+
+redis_url = get_app_configs().REDIS_URL
 
 celery_app = Celery(
     "video_generator",
-    broker="redis://localhost:6379/0",        # Redis as broker
-    backend="redis://localhost:6379/0",       # Redis as result backend
+    broker=redis_url + "/0",        # Redis as broker
+    backend=redis_url + "/0",       # Redis as result backend
 )
 
 celery_app.conf.task_track_started = True
