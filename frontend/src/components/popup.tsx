@@ -95,8 +95,8 @@ export default function Popup({
 
   return (
     <>
-      <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="max-w-6xl max-h-[80vh] overflow-hidden flex flex-col">
+      <Dialog open={open} onOpenChange={onClose} >
+        <DialogContent className="max-w-6xl max-h-[95vh] overflow-hidden scrollbar-none flex flex-col">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <FileText className="h-5 w-5" />
@@ -122,7 +122,7 @@ export default function Popup({
             </div>
           </DialogHeader>
 
-          <ScrollArea className="flex-1 overflow-y-auto">
+          <ScrollArea className="flex-1 ">
             <div className="space-y-4 p-1">
               {/* Video Preview Section */}
               <div className="relative p-4 border rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 transition-all duration-300 hover:shadow-md">
