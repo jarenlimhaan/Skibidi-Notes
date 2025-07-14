@@ -10,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import Swal from "sweetalert2";
 import { create } from "domain";
 import {
   Select,
@@ -209,9 +210,39 @@ export default function Library() {
                           variant="outline"
                           className="w-10 h-10 p-0 bg-gradient-to-r from-red-500/20 to-pink-500/20 border-red-400/50 text-red-300 hover:bg-gradient-to-r hover:from-red-500/40 hover:to-pink-500/40 hover:text-white rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-red-500/50"
                           onClick={() => {
-                            if (window.confirm(`Are you sure you want to delete "${video.file_name}"?`)) {
-                              setDeletedVideos((prev) => [...prev, video.uploadId]);
-                            }
+                            Swal.fire({
+                              title: "Do you want to delete this project?",
+                              showDenyButton: true,
+                              showCancelButton: true,
+                              confirmButtonText: "Yes",
+                              denyButtonText: `No`
+                            }).then((result) => {
+                              /* Read more about isConfirmed, isDenied below */
+                              if (result.isConfirmed) {
+                                Swal.fire("Deleted!", "", "success");
+                                setDeletedVideos((prev) => [...prev, video.uploadId]);
+                                // Delete the video from the backend
+                                fetch(`${backendURL}/api/generator/delete/upload/${video.uploadId}`, {
+                                  method: "DELETE",
+                                  credentials: "include",
+                                })
+                                  .then((res) => {
+                                    if (!res.ok) {
+                                      throw new Error("Failed to delete video");
+                                    }
+                                    return res.json();
+                                  })
+                                  .then(() => {
+                                    Swal.fire("Success!", "Video deleted successfully", "success");
+                                  })
+                                  .catch((err) => {
+                                    console.error("Error deleting video:", err);
+                                    Swal.fire("Error deleting video", err.message, "error");
+                                  });
+                              } else if (result.isDenied) {
+                                Swal.fire("Changes are not saved", "", "info");
+                              }
+                            });
                           }}
                         >
                           <Trash2 className="w-4 h-4" />
