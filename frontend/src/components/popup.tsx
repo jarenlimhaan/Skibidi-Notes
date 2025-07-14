@@ -96,7 +96,7 @@ export default function Popup({
   return (
     <>
       <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden flex flex-col">
+        <DialogContent className="max-w-6xl max-h-[80vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <FileText className="h-5 w-5" />
@@ -128,7 +128,7 @@ export default function Popup({
               <div className="relative p-4 border rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 transition-all duration-300 hover:shadow-md">
                 <div className="relative aspect-video bg-black rounded-lg overflow-hidden group">
                   <video
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="w-full h-full transition-transform duration-300 "
                     poster={getPoster()}
                     controls
                     preload="metadata"
@@ -137,7 +137,7 @@ export default function Popup({
                     Your browser does not support the video tag.
                   </video>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/10 opacity-0 transition-opacity duration-300">
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/10 opacity-0 transition-opacity duration-300 pointer-events-none">
                     <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   </div>
                 </div>
