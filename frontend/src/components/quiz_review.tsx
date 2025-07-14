@@ -129,6 +129,9 @@ export default function QuizReview() {
 
   if (showAllQuestions) {
     return (
+      <>
+      <Navbar/>
+
       <div className="min-h-screen bg-gradient-to-br from-purple-200 via-pink-100 to-purple-300 py-8 px-6">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
@@ -223,10 +226,14 @@ export default function QuizReview() {
           </div>
         </div>
       </div>
+      </>
     )
   }
 
   return (
+    <>
+    <Navbar/>
+    
     <div className="min-h-screen bg-gradient-to-br from-purple-200 via-pink-100 to-purple-300 py-8 px-6">
       <div className="max-w-4xl mx-auto">
         {/* Header with Summary */}
@@ -438,5 +445,6 @@ export default function QuizReview() {
         </div>
       </div>
     </div>
+    </>
   )
 }
