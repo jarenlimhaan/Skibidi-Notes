@@ -38,5 +38,6 @@ run-redis:
 run:
 	@echo "Starting FastAPI Server and NextJS Application..."
 	@$(MAKE) run-be &
-	@$(MAKE) run-fe
+	@$(MAKE) run-fe &
+	@$(MAKE) run-redis 
 	@echo "Sucessfully ran NextJS Application & FastAPI Server🚀"
