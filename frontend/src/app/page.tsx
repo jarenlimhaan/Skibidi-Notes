@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 import {
   Upload,
   Gamepad2,
@@ -15,16 +15,17 @@ import {
   ArrowRight,
   Menu,
   X,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import Navbar from "@/components/navbar";
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Navbar from "@/components/navbar2";
 import Link from "next/link";
 
 const steps = [
   {
     number: 1,
     title: "Upload & Summarise",
-    description: "Upload your PDF, PPTX or JPEG lecture slides and our AI will create concise summaries",
+    description:
+      "Upload your PDF, PPTX or JPEG lecture slides and our AI will create concise summaries",
     icon: <Upload className="w-8 h-8" />,
     color: "from-purple-500 to-pink-500",
     image: "/placeholder.svg?height=200&width=300&text=Upload+Files",
@@ -32,7 +33,8 @@ const steps = [
   {
     number: 2,
     title: "Choose Your Background",
-    description: "Select backgrounds from popular games like Minecraft, Temple Run or Subway Surfers",
+    description:
+      "Select backgrounds from popular games like Minecraft, Temple Run or Subway Surfers",
     icon: <Gamepad2 className="w-8 h-8" />,
     color: "from-pink-500 to-purple-500",
     image: "/placeholder.svg?height=200&width=300&text=Game+Backgrounds",
@@ -40,12 +42,13 @@ const steps = [
   {
     number: 3,
     title: "Test Your Knowledge",
-    description: "Reinforce learning with Kahoot-style quizzes specially generated from your content",
+    description:
+      "Reinforce learning with Kahoot-style quizzes specially generated from your content",
     icon: <Brain className="w-8 h-8" />,
     color: "from-purple-600 to-pink-400",
     image: "/placeholder.svg?height=200&width=300&text=Interactive+Quiz",
   },
-]
+];
 
 const testimonials = [
   {
@@ -67,22 +70,29 @@ const testimonials = [
   {
     name: "Jaren Lim Haan",
     role: "University Student",
-    content:
-      "I love brain rotting coochiemeowmeow",
+    content: "I love brain rotting coochiemeowmeow",
     rating: 5,
     avatar: "/jaren_pic.png?height=60&width=60&text=ED",
   },
-]
+];
 
 const stats = [
   { number: "4", label: "Active Users", icon: <Users className="w-6 h-6" /> },
-  { number: "2", label: "Quizzes Created", icon: <Brain className="w-6 h-6" /> },
-  { number: "100%", label: "Success Rate", icon: <Trophy className="w-6 h-6" /> },
+  {
+    number: "2",
+    label: "Quizzes Created",
+    icon: <Brain className="w-6 h-6" />,
+  },
+  {
+    number: "100%",
+    label: "Success Rate",
+    icon: <Trophy className="w-6 h-6" />,
+  },
   { number: "24/7", label: "0 Support", icon: <Clock className="w-6 h-6" /> },
-]
+];
 
 export default function Component() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <>
@@ -91,7 +101,6 @@ export default function Component() {
       </div>
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 font-mono">
         <main className="flex-1">
-
           {/* Hero Section */}
           <section className="py-12 px-6">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -102,7 +111,8 @@ export default function Component() {
                   </span>
                 </h1>
                 <p className="text-xl md:text-2xl text-gray-600 mb-6 leading-relaxed">
-                  Transform your study materials into engaging quizzes with AI-powered summaries and gaming backgrounds.
+                  Transform your study materials into engaging quizzes with
+                  AI-powered summaries and gaming backgrounds.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link href="/register">
@@ -148,8 +158,12 @@ export default function Component() {
                     <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
                       <div className="text-white">{stat.icon}</div>
                     </div>
-                    <div className="text-3xl font-bold text-gray-800 mb-2">{stat.number}</div>
-                    <div className="text-gray-600 font-medium">{stat.label}</div>
+                    <div className="text-3xl font-bold text-gray-800 mb-2">
+                      {stat.number}
+                    </div>
+                    <div className="text-gray-600 font-medium">
+                      {stat.label}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -159,9 +173,12 @@ export default function Component() {
           {/* Features Section */}
           <section className="py-12 px-6">
             <div className="max-w-7xl mx-auto text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Powerful Features</h2>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                Powerful Features
+              </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Everything you need to create engaging, effective learning experiences
+                Everything you need to create engaging, effective learning
+                experiences
               </p>
             </div>
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -185,12 +202,21 @@ export default function Component() {
                   bg: "from-purple-600 to-pink-400",
                 },
               ].map((feature, i) => (
-                <div key={i} className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                  <div className={`w-16 h-16 bg-gradient-to-br ${feature.bg} rounded-2xl flex items-center justify-center mb-6`}>
+                <div
+                  key={i}
+                  className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                >
+                  <div
+                    className={`w-16 h-16 bg-gradient-to-br ${feature.bg} rounded-2xl flex items-center justify-center mb-6`}
+                  >
                     {feature.icon}
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-800 mb-4">{feature.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{feature.desc}</p>
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    {feature.desc}
+                  </p>
                 </div>
               ))}
             </div>
@@ -199,26 +225,42 @@ export default function Component() {
           {/* How It Works Section */}
           <section id="how-it-works" className="py-12 px-6">
             <div className="max-w-7xl mx-auto text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">How It Works</h2>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                How It Works
+              </h2>
               <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-                Our platform makes learning fun and easy through generating concise notes and questions to test your knowledge!
+                Our platform makes learning fun and easy through generating
+                concise notes and questions to test your knowledge!
               </p>
             </div>
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
               {steps.map((step) => (
-                <div key={step.number} className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <div
+                  key={step.number}
+                  className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                >
                   <div className="relative h-48 overflow-hidden">
-                    <img src={step.image || "/placeholder.svg"} alt={step.title} className="w-full h-full object-cover" />
+                    <img
+                      src={step.image || "/placeholder.svg"}
+                      alt={step.title}
+                      className="w-full h-full object-cover"
+                    />
                     <div className="absolute top-4 left-4 w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
-                      <span className="text-lg font-bold text-white">{step.number}</span>
+                      <span className="text-lg font-bold text-white">
+                        {step.number}
+                      </span>
                     </div>
                   </div>
                   <div className="p-8">
                     <div className="w-16 h-16 bg-gradient-to-br from-purple-200 to-pink-200 bg-opacity-20 rounded-2xl flex items-center justify-center mb-6">
                       <div className="text-purple-600">{step.icon}</div>
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-800 mb-4">{step.title}</h3>
-                    <p className="text-gray-600 leading-relaxed text-lg">{step.description}</p>
+                    <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                      {step.title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed text-lg">
+                      {step.description}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -228,23 +270,43 @@ export default function Component() {
           {/* Testimonials Section */}
           <section id="testimonials" className="py-12 px-6">
             <div className="max-w-7xl mx-auto text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Toilet Talks: User Reviews</h2>
-              <p className="text-xl text-gray-600">Join The Brainrotted Rizzlers</p>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                Toilet Talks: User Reviews
+              </h2>
+              <p className="text-xl text-gray-600">
+                Join The Brainrotted Rizzlers
+              </p>
             </div>
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
               {testimonials.map((testimonial, index) => (
-                <div key={index} className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
+                <div
+                  key={index}
+                  className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300"
+                >
                   <div className="flex items-center mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                      <Star
+                        key={i}
+                        className="w-5 h-5 text-yellow-400 fill-current"
+                      />
                     ))}
                   </div>
-                  <p className="text-gray-600 mb-6 leading-relaxed">"{testimonial.content}"</p>
+                  <p className="text-gray-600 mb-6 leading-relaxed">
+                    "{testimonial.content}"
+                  </p>
                   <div className="flex items-center">
-                    <img src={testimonial.avatar || "/placeholder.svg"} alt={testimonial.name} className="w-12 h-12 rounded-full mr-4" />
+                    <img
+                      src={testimonial.avatar || "/placeholder.svg"}
+                      alt={testimonial.name}
+                      className="w-12 h-12 rounded-full mr-4"
+                    />
                     <div>
-                      <div className="font-semibold text-gray-800">{testimonial.name}</div>
-                      <div className="text-gray-500 text-sm">{testimonial.role}</div>
+                      <div className="font-semibold text-gray-800">
+                        {testimonial.name}
+                      </div>
+                      <div className="text-gray-500 text-sm">
+                        {testimonial.role}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -256,9 +318,13 @@ export default function Component() {
           <section className="py-12 px-6">
             <div className="max-w-4xl mx-auto text-center">
               <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl p-12 shadow-2xl">
-                <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Ready to Roll Into Brainrot Brilliance?</h2>
+                <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                  Ready to Roll Into Brainrot Brilliance?
+                </h2>
                 <p className="text-xl text-purple-100 mb-8">
-                  I am no longer cooked. I will do the cooking. Join the Skibidi Notes revolution and transform your study sessions into a fun, interactive experience.
+                  I am no longer cooked. I will do the cooking. Join the Skibidi
+                  Notes revolution and transform your study sessions into a fun,
+                  interactive experience.
                 </p>
                 <div className="flex justify-center">
                   <Link href="/register">
@@ -270,7 +336,6 @@ export default function Component() {
               </div>
             </div>
           </section>
-
         </main>
 
         {/* Footer */}
@@ -292,5 +357,5 @@ export default function Component() {
         </footer>
       </div>
     </>
-  )
+  );
 }

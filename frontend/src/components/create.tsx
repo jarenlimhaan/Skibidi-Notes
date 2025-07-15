@@ -2,7 +2,7 @@
 
 import type React from "react";
 import { useState, useRef, useCallback } from "react";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar2";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -282,18 +282,18 @@ export default function BrainRotCustomizer() {
     <>
       <Navbar />
 
-        <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 p-6 font-mono">
-          <div className="max-w-4xl mx-auto">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-purple-700 mb-6">
-                Brain Rot Creator
-              </h1>
-              <p className="text-purple-600 text-sm">
-                Create engaging content by uploading your documents and
-                customizing the output.
-              </p>
-            </div>
+      <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 p-6 font-mono">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-purple-700 mb-6">
+              Brain Rot Creator
+            </h1>
+            <p className="text-purple-600 text-sm">
+              Create engaging content by uploading your documents and
+              customizing the output.
+            </p>
+          </div>
 
           {/* Tabs */}
           <Tabs

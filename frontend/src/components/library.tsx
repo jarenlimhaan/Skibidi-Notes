@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useMemo } from "react";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar2";
 import { Play, FileText, Search, Trash2 } from "lucide-react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -141,8 +141,9 @@ export default function Library() {
               />
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             </div>
-            <Button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg flex items-center gap-2"
-            onClick={() => (window.location.href = "/create")}
+            <Button
+              className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg flex items-center gap-2"
+              onClick={() => (window.location.href = "/create")}
             >
               <Plus className="w-4 h-4" />
               Create Video
@@ -160,7 +161,7 @@ export default function Library() {
 
           {/* Loading/Error States */}
           {loading && <div>Loading videos...</div>}
-      {error && <div className="text-red-500">{error}</div>}
+          {error && <div className="text-red-500">{error}</div>}
 
           {/* Videos Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

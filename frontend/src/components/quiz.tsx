@@ -12,7 +12,7 @@ import {
   Play,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar2";
 import { useQuiz } from "@/app/providers/queries/quiz";
 import Spinner from "./spinner";
 import useRedirectDataStore from "@/app/store/redirectStore";

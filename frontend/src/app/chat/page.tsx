@@ -9,7 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Send, Bot, User, Square } from "lucide-react";
 
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar2";
 
 export default function ChatBot() {
   const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
