@@ -75,10 +75,10 @@ const testimonials = [
 ]
 
 const stats = [
-  { number: "50K+", label: "Active Users", icon: <Users className="w-6 h-6" /> },
-  { number: "1M+", label: "Quizzes Created", icon: <Brain className="w-6 h-6" /> },
-  { number: "95%", label: "Success Rate", icon: <Trophy className="w-6 h-6" /> },
-  { number: "24/7", label: "Support", icon: <Clock className="w-6 h-6" /> },
+  { number: "4", label: "Active Users", icon: <Users className="w-6 h-6" /> },
+  { number: "2", label: "Quizzes Created", icon: <Brain className="w-6 h-6" /> },
+  { number: "100%", label: "Success Rate", icon: <Trophy className="w-6 h-6" /> },
+  { number: "24/7", label: "0 Support", icon: <Clock className="w-6 h-6" /> },
 ]
 
 export default function Component() {
