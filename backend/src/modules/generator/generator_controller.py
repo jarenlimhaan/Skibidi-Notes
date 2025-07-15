@@ -157,19 +157,19 @@ async def fetch_all_uploads_with_generations(current_user=Depends(get_current_us
 # Delete user uploaded file 
 @router.delete("/delete/upload/{upload_id}")
 async def delete_file(upload_id: str, generation_service: GenerationService = Depends(get_generation_service), db: AsyncSession = Depends(get_db)):
-
     try:
         # Retrieve from db the file path using the upload_id
         upload = await generation_service.get_user_upload_by_id(upload_id, db)
         if not upload:
             raise HTTPException(status_code=404, detail="File not found")
-        file_path = upload["file_path"]
+        file_path = upload.file_path
         if os.path.exists(file_path):
             os.remove(file_path)
             await generation_service.delete_user_upload(upload_id, db)
             return JSONResponse(content={"status": "File deleted successfully"})
         else:
             raise HTTPException(status_code=404, detail="File not found")
+        
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=str(e))

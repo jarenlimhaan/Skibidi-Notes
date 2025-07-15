@@ -886,7 +886,7 @@ export default function BrainRotCustomizer() {
                       }
                     }
 
-                    alert("Successfully sent to backend!");
+                    // alert("Successfully sent to backend!");
                   }}
                 >
                   Flush

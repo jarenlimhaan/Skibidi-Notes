@@ -311,6 +311,8 @@ export default function Library() {
                                       "Video deleted successfully",
                                       "success"
                                     );
+                                    // Remove the video from the state
+                                    handleDelete(video.uploadId);
                                   })
                                   .catch((err) => {
                                     console.error("Error deleting video:", err);
