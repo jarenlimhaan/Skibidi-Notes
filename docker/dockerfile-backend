@@ -1,0 +1,29 @@
+FROM python:3.10.8-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies, including ImageMagick
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        imagemagick \
+        curl \
+        build-essential \
+        && rm -rf /var/lib/apt/lists/*
+
+RUN rm /etc/ImageMagick-6/policy.xml || true      
+
+# Copy backend and env
+COPY ../backend/ ./backend
+COPY ../.env ./.env
+
+# Set working directory to backend
+WORKDIR /app/backend
+
+# Install Python dependencies
+RUN pip install --no-cache-dir poetry && poetry install --no-root
+
+EXPOSE 8000
+
+# Run Celery worker and main.py together
+CMD sh -c "poetry run celery -A src.modules.generator.runner.base worker --loglevel=info & poetry run python main.py"

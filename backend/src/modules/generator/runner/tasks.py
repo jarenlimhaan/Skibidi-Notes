@@ -55,7 +55,7 @@ def run_generation_task(self, pdf_path, upload_id, background, voice_id, quizcou
                     "user_id": user_id,
                     "file_path": path,
                     "upload_id": upload_id,
-                    "background_type": background,
+                    "background_type": background.split('.')[0],
                 },
                 db=db
             )

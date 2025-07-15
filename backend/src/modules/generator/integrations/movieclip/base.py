@@ -31,6 +31,10 @@ class Clip:
                 clip = clip.subclip(0, remaining)
             clips.append(clip)
             total_duration += clip.duration
+        # For youtube
+        # final_clip = concatenate_videoclips(clips).set_fps(30).resize((1920, 1080))
+        
+        # For TikTok
         final_clip = concatenate_videoclips(clips).set_fps(30).resize((1080, 1920))
         final_clip.write_videofile(combined_video_path, threads=threads)
         return combined_video_path
