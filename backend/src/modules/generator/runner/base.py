@@ -14,3 +14,6 @@ celery_app = Celery(
 
 celery_app.conf.task_track_started = True
 celery_app.conf.result_expires = 3600  # Optional: auto-expire results
+
+from src.modules.generator.runner import tasks
+celery_app.autodiscover_tasks(["src.modules.generator.runner.tasks"])

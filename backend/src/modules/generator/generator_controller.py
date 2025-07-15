@@ -62,7 +62,7 @@ async def upload_file(
         task = run_generation_task.delay(
             pdf_path=save_path,
             upload_id=upload_id,
-            background=background.split(".")[0],
+            background=background,
             voice_id=voice,
             quizcount=quizCount,
             user_id=user_id,
@@ -77,7 +77,7 @@ async def upload_file(
 
         print(f"Upload ID: {upload_id}")
 
-        return JSONResponse(content={"id": upload_id})
+        return JSONResponse(content={"id": str(upload_id)})
     except Exception as e:
         print(e)
         return JSONResponse(status_code=500, content={"error": str(e)})

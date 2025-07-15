@@ -92,7 +92,8 @@ class GenerationService:
         '''
         new_upload = Uploads(
             user_id = createUploadDTO["user_id"],
-            file_path = createUploadDTO["file_path"]
+            file_path = createUploadDTO["file_path"],
+            project_name = createUploadDTO["project_name"]
         )
 
         db.add(new_upload)
@@ -110,7 +111,6 @@ class GenerationService:
             file_path = createGenerationDTO["file_path"],
             upload_id = createGenerationDTO["upload_id"],
             background_type = createGenerationDTO["background_type"],
-            file_name = createGenerationDTO["file_name"]
         )
 
         db.add(new_generation_upload)
