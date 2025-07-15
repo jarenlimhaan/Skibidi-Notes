@@ -141,7 +141,9 @@ export default function Library() {
               />
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             </div>
-            <Button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg flex items-center gap-2">
+            <Button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg flex items-center gap-2"
+            onClick={() => (window.location.href = "/create")}
+            >
               <Plus className="w-4 h-4" />
               Create Video
             </Button>
