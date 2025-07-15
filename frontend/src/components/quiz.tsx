@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/navbar";
 import { useQuiz } from "@/app/providers/queries/quiz";
 import Spinner from "./spinner";
+import useRedirectDataStore from "@/app/store/redirectStore";
 
 interface Question {
   id: number;
@@ -40,6 +41,7 @@ export default function Quiz({ id }: { id: string }) {
   const [flaggedQuestions, setFlaggedQuestions] = useState<Set<number>>(
     new Set()
   );
+  const { setData } = useRedirectDataStore();
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   const sampleQuestions = data?.content || [];
@@ -72,6 +74,16 @@ export default function Quiz({ id }: { id: string }) {
       handleQuizComplete();
     }
   }, [quizState.timeRemaining, quizState.isPlaying, quizState.quizCompleted]);
+
+  useEffect(() => {
+    console.log("Quiz completed:", quizState.quizCompleted);
+    if (quizState.quizCompleted) {
+      setData({
+        questions: sampleQuestions,
+        answers: quizState.answers,
+      });
+    }
+  }, [quizState.quizCompleted]);
 
   if (isLoading) return <Spinner />;
   if (isError && error instanceof Error) return <p>Error: {error.message}</p>;
@@ -229,7 +241,7 @@ export default function Quiz({ id }: { id: string }) {
                 <Button
                   variant="outline"
                   className="border-purple-300 text-purple-600 px-8 py-3 rounded-2xl bg-transparent"
-                  onClick={() => (window.location.href = "/quiz_review")}
+                  onClick={() => (window.location.href = `/quiz_review/${id}`)}
                 >
                   Review Answers
                 </Button>

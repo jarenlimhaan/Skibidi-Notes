@@ -5,6 +5,8 @@ import { ArrowLeft, ArrowRight, CheckCircle, XCircle, Trophy, RotateCcw, Home, B
 import { Button } from "@/components/ui/button"
 import Navbar from "@/components/navbar";
 
+import useRedirectDataStore from "@/app/store/redirectStore";
+
 interface Question {
   id: number
   question: string
@@ -20,53 +22,53 @@ interface UserAnswer {
   isCorrect: boolean
 }
 
-const sampleQuestions: Question[] = [
-  {
-    id: 1,
-    question: "What is the capital of France?",
-    options: ["London", "Berlin", "Paris", "Madrid"],
-    correctAnswer: 2,
-    explanation:
-      "Paris is the capital and most populous city of France, known for landmarks like the Eiffel Tower and the Louvre Museum.",
-    difficulty: "Easy",
-  },
-  {
-    id: 2,
-    question: "Which planet is known as the Red Planet?",
-    options: ["Venus", "Mars", "Jupiter", "Saturn"],
-    correctAnswer: 1,
-    explanation:
-      "Mars is called the Red Planet due to iron oxide (rust) on its surface giving it a reddish appearance when viewed from Earth.",
-    difficulty: "Medium",
-  },
-  {
-    id: 3,
-    question: "What is the largest mammal in the world?",
-    options: ["African Elephant", "Blue Whale", "Giraffe", "Polar Bear"],
-    correctAnswer: 1,
-    explanation:
-      "The Blue Whale is the largest animal ever known to have lived on Earth, reaching lengths up to 100 feet and weights up to 200 tons.",
-    difficulty: "Medium",
-  },
-  {
-    id: 4,
-    question: "In which year did World War II end?",
-    options: ["1944", "1945", "1946", "1947"],
-    correctAnswer: 1,
-    explanation:
-      "World War II ended in 1945 with the surrender of Japan following the atomic bombings of Hiroshima and Nagasaki.",
-    difficulty: "Hard",
-  },
-  {
-    id: 5,
-    question: "What is the chemical symbol for gold?",
-    options: ["Go", "Gd", "Au", "Ag"],
-    correctAnswer: 2,
-    explanation:
-      "Au comes from the Latin word 'aurum' meaning gold. This is different from Ag (argentum) which is silver.",
-    difficulty: "Medium",
-  },
-]
+// const sampleQuestions: Question[] = [
+//   {
+//     id: 1,
+//     question: "What is the capital of France?",
+//     options: ["London", "Berlin", "Paris", "Madrid"],
+//     correctAnswer: 2,
+//     explanation:
+//       "Paris is the capital and most populous city of France, known for landmarks like the Eiffel Tower and the Louvre Museum.",
+//     difficulty: "Easy",
+//   },
+//   {
+//     id: 2,
+//     question: "Which planet is known as the Red Planet?",
+//     options: ["Venus", "Mars", "Jupiter", "Saturn"],
+//     correctAnswer: 1,
+//     explanation:
+//       "Mars is called the Red Planet due to iron oxide (rust) on its surface giving it a reddish appearance when viewed from Earth.",
+//     difficulty: "Medium",
+//   },
+//   {
+//     id: 3,
+//     question: "What is the largest mammal in the world?",
+//     options: ["African Elephant", "Blue Whale", "Giraffe", "Polar Bear"],
+//     correctAnswer: 1,
+//     explanation:
+//       "The Blue Whale is the largest animal ever known to have lived on Earth, reaching lengths up to 100 feet and weights up to 200 tons.",
+//     difficulty: "Medium",
+//   },
+//   {
+//     id: 4,
+//     question: "In which year did World War II end?",
+//     options: ["1944", "1945", "1946", "1947"],
+//     correctAnswer: 1,
+//     explanation:
+//       "World War II ended in 1945 with the surrender of Japan following the atomic bombings of Hiroshima and Nagasaki.",
+//     difficulty: "Hard",
+//   },
+//   {
+//     id: 5,
+//     question: "What is the chemical symbol for gold?",
+//     options: ["Go", "Gd", "Au", "Ag"],
+//     correctAnswer: 2,
+//     explanation:
+//       "Au comes from the Latin word 'aurum' meaning gold. This is different from Ag (argentum) which is silver.",
+//     difficulty: "Medium",
+//   },
+// ]
 
 // Sample user answers (1 correct out of 5)
 const sampleUserAnswers: UserAnswer[] = [
@@ -77,7 +79,13 @@ const sampleUserAnswers: UserAnswer[] = [
   { questionId: 5, selectedAnswer: 1, isCorrect: false }, // Selected Gd instead of Au
 ]
 
-export default function QuizReview() {
+export default function QuizReview({id}: { id: string }) {
+
+  const { questions, answers } = useRedirectDataStore();
+  const sampleQuestions: Question[] = questions;
+
+  console.log(sampleQuestions)
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [showAllQuestions, setShowAllQuestions] = useState(false)
 
@@ -87,6 +95,7 @@ export default function QuizReview() {
   const percentage = Math.round((correctAnswers / totalQuestions) * 100)
 
   const currentQuestion = sampleQuestions[currentQuestionIndex]
+  console.log(currentQuestion, currentQuestion.difficulty)
   const currentUserAnswer = sampleUserAnswers[currentQuestionIndex]
 
   const getAnswerStatus = (optionIndex: number, questionIndex: number) => {
@@ -242,7 +251,7 @@ export default function QuizReview() {
             <div className="flex items-center space-x-4">
               <Button variant="outline"
                     className="rounded-xl bg-transparent border-purple-300"
-                    onClick={() => (window.location.href = "/quiz")}>
+                    onClick={() => (window.location.href = `/quiz/${id}`)}>
                 <ArrowLeft className="w-5 h-5 mr-2" />
                 Back to Quiz
               </Button>
@@ -432,7 +441,7 @@ export default function QuizReview() {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-2xl"
-                onClick={() => (window.location.href = "/quiz")}>
+                onClick={() => (window.location.href = `/quiz/${id}`)}>
             <RotateCcw className="w-5 h-5 mr-2" />
             Try Again
           </Button>
