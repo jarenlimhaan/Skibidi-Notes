@@ -155,7 +155,7 @@ export default function AccountPage() {
                       id="username"
                       name="username"
                       defaultValue={user?.username}
-                      className="h-14 bg-transparent border-2 border-purple-400/50 text-white placeholder:text-purple-200/70 text-lg rounded-lg focus:border-cyan-400 focus:ring-cyan-400/20"
+                      className="h-14 bg-transparent border-2 border-purple-400/50 text-white placeholder:text-purple-200/70 text-lg rounded-lg focus:border-cyan-400 focus:ring-cyan-400/20 mb-5"
                       onChange={handleChange}
                     />
                   </div>
