@@ -232,7 +232,7 @@ export default function Library() {
                               className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white"
                             >
                               <Save className="w-4 h-4" />
-                              Sealed
+                              Seal
                             </Button>
                             <Button
                               onClick={handleCancelEdit}
