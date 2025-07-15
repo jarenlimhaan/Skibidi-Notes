@@ -276,12 +276,12 @@ export default function Library() {
                             </Button>
                           </>
                         )}
-                        <Button
+                        <Button //make this change 
                           variant="outline"
                           className="flex-shrink-0 bg-transparent text-red-600 hover:bg-red-700 hover:text-white border border-red-600"
                           onClick={() => {
                             Swal.fire({
-                              title: "Do you want to delete this project?",
+                              title: "Flush this project down the toilet?",
                               showDenyButton: true,
                               showCancelButton: true,
                               confirmButtonText: "Yes",
