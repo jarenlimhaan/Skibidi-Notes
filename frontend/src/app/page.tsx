@@ -20,6 +20,8 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/navbar2";
 import Link from "next/link";
 
+import { useAuthStore } from "./store/authStore";
+
 const steps = [
   {
     number: 1,
@@ -93,6 +95,7 @@ const stats = [
 
 export default function Component() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isAuthenticated } = useAuthStore();
 
   return (
     <>
@@ -327,7 +330,7 @@ export default function Component() {
                   interactive experience.
                 </p>
                 <div className="flex justify-center">
-                  <Link href="/register">
+                  <Link href={isAuthenticated ? "/account" :"/register"}>
                     <Button className="bg-white text-purple-600 px-8 py-4 text-lg font-semibold rounded-2xl hover:bg-gray-100 shadow-lg">
                       Start Cookin'
                     </Button>
