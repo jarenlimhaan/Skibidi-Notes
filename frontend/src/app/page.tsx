@@ -86,7 +86,9 @@ export default function Component() {
 
   return (
     <>
-      <Navbar />
+      <div className="sticky top-0 z-50">
+        <Navbar />
+      </div>
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 font-mono">
         <main className="flex-1">
 
