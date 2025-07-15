@@ -18,6 +18,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Navbar from "@/components/navbar";
+import Link from "next/link";
 
 const steps = [
   {
@@ -85,313 +86,209 @@ export default function Component() {
 
   return (
     <>
-    <Navbar/>
+      <Navbar />
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 font-mono">
+        <main className="flex-1">
 
-      {/* Hero Section */}
-      <section className="py-20 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 className="text-5xl md:text-7xl font-bold text-gray-800 mb-6 leading-tight">
-                Make Learning
-                <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"> Fun</span>{" "}
-                &
-                <span className="bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
-                  {" "}
-                  Interactive
-                </span>
-              </h1>
-              <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
-                Transform your study materials into engaging quizzes with AI-powered summaries and gaming backgrounds.
-                Learn faster, remember longer.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
-                  Start Creating Quizzes
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-                <Button
-                  variant="outline"
-                  className="border-2 border-purple-300 text-purple-600 px-8 py-4 text-lg font-semibold rounded-2xl hover:bg-purple-50 bg-transparent"
-                >
-                  <Play className="w-5 h-5 mr-2" />
-                  Watch Demo
-                </Button>
+          {/* Hero Section */}
+          <section className="py-12 px-6">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h1 className="text-5xl md:text-7xl font-bold text-gray-800 mb-4 leading-tight">
+                  <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                    Make Learning A Skibidi Bop Party
+                  </span>
+                </h1>
+                <p className="text-xl md:text-2xl text-gray-600 mb-6 leading-relaxed">
+                  Transform your study materials into engaging quizzes with AI-powered summaries and gaming backgrounds.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link href="/register">
+                    <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                      Brainrot Now
+                      <ArrowRight className="w-5 h-5 ml-2" />
+                    </Button>
+                  </Link>
+                  <Button
+                    variant="outline"
+                    className="border-2 border-purple-300 text-purple-600 px-8 py-4 text-lg font-semibold rounded-2xl hover:bg-purple-50"
+                  >
+                    <Play className="w-5 h-5 mr-2" />
+                    Watch Demo
+                  </Button>
+                </div>
               </div>
-            </div>
-            <div className="relative">
-              <div className="bg-white rounded-3xl p-8 shadow-2xl">
-                <img
-                  src="/placeholder.svg?height=400&width=500&text=Quiz+Platform+Demo"
-                  alt="Quiz Platform Demo"
+              <div className="relative">
+                <video
+                  src="/homepage_video.mp4"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
                   className="w-full h-80 object-cover rounded-2xl"
                 />
-              </div>
-              {/* Floating Elements */}
-              <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-xl">
-                <Trophy className="w-10 h-10 text-white" />
-              </div>
-              <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-xl">
-                <Star className="w-8 h-8 text-white" />
+                <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-xl">
+                  <Trophy className="w-10 h-10 text-white" />
+                </div>
+                <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-xl">
+                  <Star className="w-8 h-8 text-white" />
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      {/* Stats Section */}
-      <section className="py-16 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-3xl p-8 shadow-xl">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <div className="text-white">{stat.icon}</div>
+          {/* Stats Section */}
+          <section className="py-10 px-6">
+            <div className="max-w-7xl mx-auto bg-white rounded-3xl p-8 shadow-xl">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                {stats.map((stat, index) => (
+                  <div key={index} className="text-center">
+                    <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                      <div className="text-white">{stat.icon}</div>
+                    </div>
+                    <div className="text-3xl font-bold text-gray-800 mb-2">{stat.number}</div>
+                    <div className="text-gray-600 font-medium">{stat.label}</div>
                   </div>
-                  <div className="text-3xl font-bold text-gray-800 mb-2">{stat.number}</div>
-                  <div className="text-gray-600 font-medium">{stat.label}</div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Features Section */}
+          <section className="py-12 px-6">
+            <div className="max-w-7xl mx-auto text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Powerful Features</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Everything you need to create engaging, effective learning experiences
+              </p>
+            </div>
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                {
+                  title: "AI-Powered Summaries",
+                  desc: "Advanced AI creates concise, accurate summaries from your content, saving you hours of manual work.",
+                  icon: <FileText className="w-8 h-8 text-white" />,
+                  bg: "from-purple-500 to-pink-500",
+                },
+                {
+                  title: "Customizable Experience",
+                  desc: "Choose from various themes and backgrounds to match your style and keep learners engaged.",
+                  icon: <Settings className="w-8 h-8 text-white" />,
+                  bg: "from-pink-500 to-purple-500",
+                },
+                {
+                  title: "Engaging Quizzes",
+                  desc: "Interactive quizzes that make learning fun and memorable with instant feedback and progress tracking.",
+                  icon: <Trophy className="w-8 h-8 text-white" />,
+                  bg: "from-purple-600 to-pink-400",
+                },
+              ].map((feature, i) => (
+                <div key={i} className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                  <div className={`w-16 h-16 bg-gradient-to-br ${feature.bg} rounded-2xl flex items-center justify-center mb-6`}>
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">{feature.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{feature.desc}</p>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-20 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">Powerful Features</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Everything you need to create engaging, effective learning experiences
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:transform hover:scale-105">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6">
-                <FileText className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">AI-Powered Summaries</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Advanced AI creates concise, accurate summaries from your content, saving you hours of manual work.
+          {/* How It Works Section */}
+          <section id="how-it-works" className="py-12 px-6">
+            <div className="max-w-7xl mx-auto text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">How It Works</h2>
+              <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+                Our platform makes learning fun and easy through generating concise notes and questions to test your knowledge!
               </p>
             </div>
-
-            <div className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:transform hover:scale-105">
-              <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-500 rounded-2xl flex items-center justify-center mb-6">
-                <Settings className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">Customizable Experience</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Choose from various themes and backgrounds to match your style and keep learners engaged.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:transform hover:scale-105">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-400 rounded-2xl flex items-center justify-center mb-6">
-                <Trophy className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">Engaging Quizzes</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Interactive quizzes that make learning fun and memorable with instant feedback and progress tracking.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section id="how-it-works" className="py-20 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">How It Works</h2>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              Our platform makes learning fun and easy through generating concise notes and questions to test your
-              knowledge!
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {steps.map((step, index) => (
-              <div key={step.number} className="relative">
-                {index < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-32 left-full w-8 h-1 bg-gradient-to-r from-purple-300 to-pink-300 z-10 transform translate-x-4"></div>
-                )}
-
-                <div className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:transform hover:scale-105 relative">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {steps.map((step) => (
+                <div key={step.number} className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
                   <div className="relative h-48 overflow-hidden">
-                    <img
-                      src={step.image || "/placeholder.svg"}
-                      alt={step.title}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className={`absolute inset-0 bg-gradient-to-t ${step.color} opacity-20`}></div>
-                    <div className="absolute top-4 left-4">
-                      <div
-                        className={`w-12 h-12 bg-gradient-to-br ${step.color} rounded-xl flex items-center justify-center shadow-lg`}
-                      >
-                        <span className="text-lg font-bold text-white">{step.number}</span>
-                      </div>
+                    <img src={step.image || "/placeholder.svg"} alt={step.title} className="w-full h-full object-cover" />
+                    <div className="absolute top-4 left-4 w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
+                      <span className="text-lg font-bold text-white">{step.number}</span>
                     </div>
                   </div>
-
                   <div className="p-8">
-                    <div
-                      className={`w-16 h-16 bg-gradient-to-br ${step.color} bg-opacity-20 rounded-2xl flex items-center justify-center mb-6`}
-                    >
+                    <div className="w-16 h-16 bg-gradient-to-br from-purple-200 to-pink-200 bg-opacity-20 rounded-2xl flex items-center justify-center mb-6">
                       <div className="text-purple-600">{step.icon}</div>
                     </div>
                     <h3 className="text-2xl font-bold text-gray-800 mb-4">{step.title}</h3>
                     <p className="text-gray-600 leading-relaxed text-lg">{step.description}</p>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+              ))}
+            </div>
+          </section>
 
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">What Our Users Say</h2>
-            <p className="text-xl text-gray-600">Join thousands of satisfied learners and educators</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300"
-              >
-                <div className="flex items-center mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-600 mb-6 leading-relaxed">"{testimonial.content}"</p>
-                <div className="flex items-center">
-                  <img
-                    src={testimonial.avatar || "/placeholder.svg"}
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                  <div>
-                    <div className="font-semibold text-gray-800">{testimonial.name}</div>
-                    <div className="text-gray-500 text-sm">{testimonial.role}</div>
+          {/* Testimonials Section */}
+          <section id="testimonials" className="py-12 px-6">
+            <div className="max-w-7xl mx-auto text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Toilet Talks: User Reviews</h2>
+              <p className="text-xl text-gray-600">Join The Brainrotted Rizzlers</p>
+            </div>
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+              {testimonials.map((testimonial, index) => (
+                <div key={index} className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
+                  <div className="flex items-center mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  <p className="text-gray-600 mb-6 leading-relaxed">"{testimonial.content}"</p>
+                  <div className="flex items-center">
+                    <img src={testimonial.avatar || "/placeholder.svg"} alt={testimonial.name} className="w-12 h-12 rounded-full mr-4" />
+                    <div>
+                      <div className="font-semibold text-gray-800">{testimonial.name}</div>
+                      <div className="text-gray-500 text-sm">{testimonial.role}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl p-12 shadow-2xl">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Ready to Transform Your Learning?</h2>
-            <p className="text-xl text-purple-100 mb-8">
-              Join thousands of students and educators who are already creating amazing quizzes
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-white text-purple-600 px-8 py-4 text-lg font-semibold rounded-2xl hover:bg-gray-100 shadow-lg">
-                Start Free Trial
-              </Button>
-              <Button
-                variant="outline"
-                className="border-2 border-white text-white px-8 py-4 text-lg font-semibold rounded-2xl hover:bg-white hover:text-purple-600 bg-transparent"
-              >
-                View Pricing
-              </Button>
+              ))}
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-16 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center">
-                  <Brain className="w-6 h-6 text-white" />
+          {/* Call to Action */}
+          <section className="py-12 px-6">
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl p-12 shadow-2xl">
+                <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Ready to Roll Into Brainrot Brilliance?</h2>
+                <p className="text-xl text-purple-100 mb-8">
+                  I am no longer cooked. I will do the cooking. Join the Skibidi Notes revolution and transform your study sessions into a fun, interactive experience.
+                </p>
+                <div className="flex justify-center">
+                  <Link href="/register">
+                    <Button className="bg-white text-purple-600 px-8 py-4 text-lg font-semibold rounded-2xl hover:bg-gray-100 shadow-lg">
+                      Start Cookin'
+                    </Button>
+                  </Link>
                 </div>
-                <span className="text-2xl font-bold">SkibidiNotes</span>
               </div>
-              <p className="text-gray-400">Making learning fun and interactive with AI-powered quizzes.</p>
             </div>
-            <div>
-              <h3 className="font-semibold mb-4">Product</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Features
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Pricing
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    API
-                  </a>
-                </li>
-              </ul>
+          </section>
+
+        </main>
+
+        {/* Footer */}
+        <footer className="bg-gray-900 text-white py-8 text-center mt-auto">
+          <div className="w-full flex flex-col items-center gap-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center">
+                <Brain className="w-6 h-6 text-white" />
+              </div>
+              <span className="text-2xl font-bold">SkibidiNotes</span>
             </div>
-            <div>
-              <h3 className="font-semibold mb-4">Company</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    About
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Blog
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Careers
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Support</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Help Center
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Contact
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Privacy
-                  </a>
-                </li>
-              </ul>
+            <p className="text-gray-400 max-w-xl">
+              Making learning fun and interactive with AI-powered quizzes.
+            </p>
+            <div className="border-t border-gray-800 w-full max-w-xs mt-6 pt-4 text-gray-400 text-sm">
+              <p>&copy; 2025 Skibidi Notes. All rights reserved.</p>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 Skibidi Notes. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+        </footer>
+      </div>
     </>
   )
 }
