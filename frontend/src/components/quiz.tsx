@@ -37,6 +37,10 @@ interface QuizState {
 
 export default function Quiz({ id }: { id: string }) {
   const { data, isLoading, isError, error } = useQuiz(id);
+  const [flaggedQuestions, setFlaggedQuestions] = useState<Set<number>>(
+    new Set()
+  );
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   const sampleQuestions = data?.content || [];
 
@@ -146,6 +150,30 @@ export default function Quiz({ id }: { id: string }) {
       ...prev,
       isPlaying: !prev.isPlaying,
     }));
+  };
+
+  const handleSpeakQuestion = () => {
+    if ("speechSynthesis" in window) {
+      if (isSpeaking) {
+        window.speechSynthesis.cancel();
+        setIsSpeaking(false);
+      } else {
+        const utterance = new SpeechSynthesisUtterance(currentQ.question);
+        utterance.onstart = () => setIsSpeaking(true);
+        utterance.onend = () => setIsSpeaking(false);
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+  };
+
+  const handleFlagQuestion = () => {
+    const newFlagged = new Set(flaggedQuestions);
+    if (newFlagged.has(quizState.currentQuestion)) {
+      newFlagged.delete(quizState.currentQuestion);
+    } else {
+      newFlagged.add(quizState.currentQuestion);
+    }
+    setFlaggedQuestions(newFlagged);
   };
 
   const currentQ = sampleQuestions[quizState.currentQuestion];
@@ -315,9 +343,20 @@ export default function Quiz({ id }: { id: string }) {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="rounded-xl bg-transparent border-purple-300"
+                  onClick={handleFlagQuestion}
+                  className={`rounded-xl bg-transparent border-purple-300 ${
+                    flaggedQuestions.has(quizState.currentQuestion)
+                      ? "bg-yellow-50 border-yellow-300"
+                      : "border-gray-200"
+                  }`}
                 >
-                  <Flag className="w-5 h-5" />
+                  <Flag
+                    className={`w-5 h-5 ${
+                      flaggedQuestions.has(quizState.currentQuestion)
+                        ? "text-yellow-600 fill-current"
+                        : "text-gray-400"
+                    }`}
+                  />
                 </Button>
               </div>
 
