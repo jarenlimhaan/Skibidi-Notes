@@ -8,8 +8,6 @@ import { HelpCircle } from "lucide-react";
 import { Save } from "lucide-react";
 import { X } from "lucide-react";
 import { Edit } from "lucide-react";
-import { Input } from "@/components/ui/input";
-
 import { Card, CardContent } from "@/components/ui/card";
 import Swal from "sweetalert2";
 import Popup from "@/components/popup";
@@ -29,11 +27,11 @@ export default function Library() {
   const [newVideoTitle, setNewVideoTitle] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedVideo, setSelectedVideo] =
     useState<UploadWithGenerations | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [deletedVideos, setDeletedVideos] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>(""); // New state for search query
 
   const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -72,12 +70,14 @@ export default function Library() {
   }, []);
 
   const filteredVideos = useMemo(() => {
-    return videos.filter(
-      (video) =>
-        video.file_name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        !deletedVideos.includes(video.uploadId)
+    if (!searchQuery) {
+      return videos;
+    }
+    const lowerCaseQuery = searchQuery.toLowerCase();
+    return videos.filter((video) =>
+      video.file_name.toLowerCase().includes(lowerCaseQuery)
     );
-  }, [videos, searchTerm, deletedVideos]);
+  }, [videos, searchQuery]);
 
   const handleWatch = (generation: UploadWithGenerations) => {
     setSelectedVideo(generation);
@@ -117,7 +117,7 @@ export default function Library() {
   };
 
   return (
-   <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200">
+    <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200">
       <Navbar />
       <div className="p-6">
         <div className="max-w-7xl mx-auto">
@@ -136,6 +136,8 @@ export default function Library() {
                 type="text"
                 placeholder="Hunt For Brainrot Clips..."
                 className="w-full px-4 py-2 pl-10 pr-4 rounded-lg border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                value={searchQuery} // Bind value to state
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             </div>
@@ -144,9 +146,9 @@ export default function Library() {
               Create Video
             </Button>
           </div>
-        
-      {/* Results Counter */}
-      {/* <div className="text-center">
+
+          {/* Results Counter */}
+          {/* <div className="text-center">
           <p className="text-purple-800 text-center">
             {filteredVideos.length} video
             {filteredVideos.length !== 1 ? "s" : ""}
@@ -154,203 +156,204 @@ export default function Library() {
         </div>
       </div> */}
 
-      {/* Loading/Error States */}
-      {/* {loading && <div>Loading videos...</div>}
-      {error && <div className="text-red-500">{error}</div>} */}
+          {/* Loading/Error States */}
+          {loading && <div>Loading videos...</div>}
+      {error && <div className="text-red-500">{error}</div>}
 
-      {/* Videos Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredVideos &&
-          filteredVideos.map((video) => (
-            <Card
-              key={video.uploadId}
-              className="overflow-hidden p-0 hover:shadow-lg transition-shadow duration-300 bg-gradient-to-br from-white/60 to-purple-50/80 backdrop-blur-sm border border-white/30"
-            >
-              {/* Thumbnail */}
-              <CardContent className="p-0">
-                {/* Video Thumbnail */}
-                <div className="relative">
-                  <img
-                    src={
-                      video.background_type === "subway"
-                        ? "/subway_gameplay.png?height=120&width=160"
-                        : video.background_type === "temple"
-                          ? "/temple_gameplay.png?height=120&width=160"
-                          : video.background_type === "minecraft"
-                            ? "/minecraft_gameplay.png?height=120&width=160"
-                            : video.background_type === "gta"
-                              ? "/gta_gameplay.png?height=120&width=160"
-                              : video.background_type === "minecraft_parkour"
+          {/* Videos Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredVideos &&
+              filteredVideos.map((video) => (
+                <Card
+                  key={video.uploadId}
+                  className="overflow-hidden p-0 hover:shadow-lg transition-shadow duration-300 bg-gradient-to-br from-white/60 to-purple-50/80 backdrop-blur-sm border border-white/30"
+                >
+                  {/* Thumbnail */}
+                  <CardContent className="p-0">
+                    {/* Video Thumbnail */}
+                    <div className="relative">
+                      <img
+                        src={
+                          video.background_type === "subway"
+                            ? "/subway_gameplay.png?height=120&width=160"
+                            : video.background_type === "temple"
+                              ? "/temple_gameplay.png?height=120&width=160"
+                              : video.background_type === "minecraft"
                                 ? "/minecraft_gameplay.png?height=120&width=160"
-                                : "/placeholder_thumbnail.jpg" // Fallback thumbnail
-                    }
-                    alt={video.file_name}
-                    width={300}
-                    height={200}
-                     className="w-full h-48 object-cover rounded-t-lg"
-                  />
-                  {/* <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" /> */}
-                </div>
-
-                {/* Content */}
-                <div className="px-4 pt-4 pb-4">
-                <div className="h-[80px]">
-                  {" "}
-                  {/* Fixed height for consistent layout */}
-                  {editingVideoId === video.uploadId ? (
-                    <input
-                      type="text"
-                      value={newVideoTitle}
-                      onChange={(e) => setNewVideoTitle(e.target.value)}
-                      className="w-full px-2 py-1 mb-2 text-lg font-semibold border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          handleSaveRename(video.uploadId);
+                                : video.background_type === "gta"
+                                  ? "/gta_gameplay.png?height=120&width=160"
+                                  : video.background_type ===
+                                      "minecraft_parkour"
+                                    ? "/minecraft_gameplay.png?height=120&width=160"
+                                    : "/placeholder_thumbnail.jpg" // Fallback thumbnail
                         }
-                      }}
-                    />
-                  ) : (
-                    <h3 className="font-semibold text-lg mb-2 line-clamp-2 text-gray-800">
-                      {video.file_name}
-                    </h3>
-                  )}
-                  <p className="text-sm text-gray-600 mb-4">
-                    Spawned {video.date}
-                  </p>
-                  </div>
-                  {/* Action Buttons */}
-                  <div className="flex gap-2 items-center w-full mt-1">
-                      {" "}
-                      {/* Added mt-4 for spacing */}
-                      {editingVideoId === video.uploadId ? (
-                        <>
-                          <Button
-                            onClick={() => handleSaveRename(video.uploadId)}
-                            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white"
-                          >
-                            <Save className="w-4 h-4" />
-                            Sealed
-                          </Button>
-                          <Button
-                            onClick={handleCancelEdit}
-                            className="flex-1 flex items-center justify-center gap-2 bg-gray-400 hover:bg-gray-500 text-white"
-                          >
-                            <X className="w-4 h-4" />
-                            Abort
-                          </Button>
-                          <div className="flex-1" /> {/* Placeholder to maintain 3-column layout */}
-                        </>
-                      ) : (
-                        <>
-                          <Button
-                            onClick={() => handleWatch(video)}
-                            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
-                          >
-                            <Play className="w-4 h-4" />
-                            Watch
-                          </Button>
+                        alt={video.file_name}
+                        width={300}
+                        height={200}
+                        className="w-full h-48 object-cover rounded-t-lg"
+                      />
+                      {/* <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" /> */}
+                    </div>
 
-                      <Button
-                        variant="outline"
-                         className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white"
-                        onClick={() =>
-                          (window.location.href = "/quiz/" + video.quizID)
-                        }
-                      >
-                        <HelpCircle className="w-4 h-4" />
-                        Quiz
-                      </Button>
-                      <Button
-                            onClick={() => handleEdit(video)}
-                            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-orange-400 to-yellow-500 hover:from-orange-500 hover:to-yellow-600 text-white"
-                          >
-                            <Edit className="w-4 h-4" />
-                            Tweak
-                          </Button>
-                        </>
-                      )}
-            
-                    <Button
-                      variant="outline"
-                       className="flex-shrink-0 bg-transparent text-red-600 hover:bg-red-700 hover:text-white border border-red-600"
-                      onClick={() => {
-                        Swal.fire({
-                          title: "Do you want to delete this project?",
-                          showDenyButton: true,
-                          showCancelButton: true,
-                          confirmButtonText: "Yes",
-                          denyButtonText: `No`,
-                        }).then((result) => {
-                          /* Read more about isConfirmed, isDenied below */
-                          if (result.isConfirmed) {
-                            Swal.fire("Deleted!", "", "success");
-                            setDeletedVideos((prev) => [
-                              ...prev,
-                              video.uploadId,
-                            ]);
-                            // Delete the video from the backend
-                            fetch(
-                              `${backendURL}/api/generator/delete/upload/${video.uploadId}`,
-                              {
-                                method: "DELETE",
-                                credentials: "include",
+                    {/* Content */}
+                    <div className="px-4 pt-4 pb-4">
+                      <div className="h-[80px]">
+                        {" "}
+                        {/* Fixed height for consistent layout */}
+                        {editingVideoId === video.uploadId ? (
+                          <input
+                            type="text"
+                            value={newVideoTitle}
+                            onChange={(e) => setNewVideoTitle(e.target.value)}
+                            className="w-full px-2 py-1 mb-2 text-lg font-semibold border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                handleSaveRename(video.uploadId);
                               }
-                            )
-                              .then((res) => {
-                                if (!res.ok) {
-                                  throw new Error("Failed to delete video");
-                                }
-                                return res.json();
-                              })
-                              .then(() => {
-                                Swal.fire(
-                                  "Success!",
-                                  "Video deleted successfully",
-                                  "success"
-                                );
-                              })
-                              .catch((err) => {
-                                console.error("Error deleting video:", err);
-                                Swal.fire(
-                                  "Error deleting video",
-                                  err.message,
-                                  "error"
-                                );
-                              });
-                          } else if (result.isDenied) {
-                            Swal.fire("Changes are not saved", "", "info");
-                          }
-                        });
-                      }}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                      <span className="sr-only">Delete</span>
-                    </Button>
-                  </div>
-                  </div>
-               </CardContent>
-              </Card>
-            ))}
-      </div>
-      {/* Video Popup */}
-      <Popup
-        open={isPopupOpen}
-        video={selectedVideo}
-        onClose={handleClosePopup}
-      />
+                            }}
+                          />
+                        ) : (
+                          <h3 className="font-semibold text-lg mb-2 line-clamp-2 text-gray-800">
+                            {video.file_name}
+                          </h3>
+                        )}
+                        <p className="text-sm text-gray-600 mb-4">
+                          Spawned {video.date}
+                        </p>
+                      </div>
+                      {/* Action Buttons */}
+                      <div className="flex gap-2 items-center w-full mt-1">
+                        {" "}
+                        {/* Added mt-4 for spacing */}
+                        {editingVideoId === video.uploadId ? (
+                          <>
+                            <Button
+                              onClick={() => handleSaveRename(video.uploadId)}
+                              className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white"
+                            >
+                              <Save className="w-4 h-4" />
+                              Sealed
+                            </Button>
+                            <Button
+                              onClick={handleCancelEdit}
+                              className="flex-1 flex items-center justify-center gap-2 bg-gray-400 hover:bg-gray-500 text-white"
+                            >
+                              <X className="w-4 h-4" />
+                              Abort
+                            </Button>
+                            <div className="flex-1" />{" "}
+                            {/* Placeholder to maintain 3-column layout */}
+                          </>
+                        ) : (
+                          <>
+                            <Button
+                              onClick={() => handleWatch(video)}
+                              className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
+                            >
+                              <Play className="w-4 h-4" />
+                              Watch
+                            </Button>
 
-      {/* Empty State */}
-      {videos.length === 0 && (
-        <div className="text-center py-12">
-          <div className="text-gray-500 mb-4">
-            <Play className="w-16 h-16 mx-auto mb-4 opacity-50" />
-            <h3 className="text-xl font-semibold mb-2">No videos yet</h3>
-            <p>Your generated videos will appear here</p>
+                            <Button
+                              variant="outline"
+                              className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white"
+                              onClick={() =>
+                                (window.location.href = "/quiz/" + video.quizID)
+                              }
+                            >
+                              <HelpCircle className="w-4 h-4" />
+                              Quiz
+                            </Button>
+                            <Button
+                              onClick={() => handleEdit(video)}
+                              className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-orange-400 to-yellow-500 hover:from-orange-500 hover:to-yellow-600 text-white"
+                            >
+                              <Edit className="w-4 h-4" />
+                              Tweak
+                            </Button>
+                          </>
+                        )}
+                        <Button
+                          variant="outline"
+                          className="flex-shrink-0 bg-transparent text-red-600 hover:bg-red-700 hover:text-white border border-red-600"
+                          onClick={() => {
+                            Swal.fire({
+                              title: "Do you want to delete this project?",
+                              showDenyButton: true,
+                              showCancelButton: true,
+                              confirmButtonText: "Yes",
+                              denyButtonText: `No`,
+                            }).then((result) => {
+                              /* Read more about isConfirmed, isDenied below */
+                              if (result.isConfirmed) {
+                                Swal.fire("Deleted!", "", "success");
+                                setDeletedVideos((prev) => [
+                                  ...prev,
+                                  video.uploadId,
+                                ]);
+                                // Delete the video from the backend
+                                fetch(
+                                  `${backendURL}/api/generator/delete/upload/${video.uploadId}`,
+                                  {
+                                    method: "DELETE",
+                                    credentials: "include",
+                                  }
+                                )
+                                  .then((res) => {
+                                    if (!res.ok) {
+                                      throw new Error("Failed to delete video");
+                                    }
+                                    return res.json();
+                                  })
+                                  .then(() => {
+                                    Swal.fire(
+                                      "Success!",
+                                      "Video deleted successfully",
+                                      "success"
+                                    );
+                                  })
+                                  .catch((err) => {
+                                    console.error("Error deleting video:", err);
+                                    Swal.fire(
+                                      "Error deleting video",
+                                      err.message,
+                                      "error"
+                                    );
+                                  });
+                              } else if (result.isDenied) {
+                                Swal.fire("Changes are not saved", "", "info");
+                              }
+                            });
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          <span className="sr-only">Delete</span>
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
           </div>
+          {/* Video Popup */}
+          <Popup
+            open={isPopupOpen}
+            video={selectedVideo}
+            onClose={handleClosePopup}
+          />
+
+          {/* Empty State */}
+          {filteredVideos.length === 0 && !loading && (
+            <div className="text-center py-12">
+              <div className="text-gray-500 mb-4">
+                <Play className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                <h3 className="text-xl font-semibold mb-2">No videos yet</h3>
+                <p>Try adjusting your search or create new content.</p>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
-    </div>
-  </div>
   );
 }
