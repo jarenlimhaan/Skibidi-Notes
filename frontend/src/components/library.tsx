@@ -5,6 +5,9 @@ import { Play, FileText, Search, Trash2 } from "lucide-react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HelpCircle } from "lucide-react";
+import { Save } from "lucide-react";
+import { X } from "lucide-react";
+import { Edit } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -22,6 +25,8 @@ interface UploadWithGenerations {
 
 export default function Library() {
   const [videos, setVideos] = useState<UploadWithGenerations[]>([]);
+  const [editingVideoId, setEditingVideoId] = useState<string | null>(null);
+  const [newVideoTitle, setNewVideoTitle] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -84,8 +89,35 @@ export default function Library() {
     setSelectedVideo(null);
   };
 
+  const handleDelete = (videoId: string) => {
+    console.log(`Deleting video ${videoId}`);
+    setVideos(videos.filter((video) => video.uploadId !== videoId));
+  };
+
+  const handleEdit = (video: (typeof videos)[0]) => {
+    setEditingVideoId(video.uploadId);
+    setNewVideoTitle(video.file_name);
+  };
+
+  const handleSaveRename = (videoId: string) => {
+    setVideos(
+      videos.map((video) =>
+        video.uploadId === videoId
+          ? { ...video, file_name: newVideoTitle }
+          : video
+      )
+    );
+    setEditingVideoId(null);
+    setNewVideoTitle("");
+  };
+
+  const handleCancelEdit = () => {
+    setEditingVideoId(null);
+    setNewVideoTitle("");
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200">
+   <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200">
       <Navbar />
       <div className="p-6">
         <div className="max-w-7xl mx-auto">
@@ -102,7 +134,7 @@ export default function Library() {
             <div className="relative flex-1 max-w-md">
               <input
                 type="text"
-                placeholder="Hunt for Brainrot Clips..."
+                placeholder="Hunt For Brainrot Clips..."
                 className="w-full px-4 py-2 pl-10 pr-4 rounded-lg border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               />
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -112,8 +144,7 @@ export default function Library() {
               Create Video
             </Button>
           </div>
-        </div>
-      </div>
+        
       {/* Results Counter */}
       {/* <div className="text-center">
           <p className="text-purple-800 text-center">
@@ -154,34 +185,74 @@ export default function Library() {
                                 : "/placeholder_thumbnail.jpg" // Fallback thumbnail
                     }
                     alt={video.file_name}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    width={300}
+                    height={200}
+                     className="w-full h-48 object-cover rounded-t-lg"
                   />
                   {/* <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" /> */}
                 </div>
 
                 {/* Content */}
                 <div className="px-4 pt-4 pb-4">
-                  <h3 className="font-semibold text-lg mb-2 line-clamp-2 text-gray-800">
-                    {video.file_name}
-                  </h3>
+                <div className="h-[80px]">
+                  {" "}
+                  {/* Fixed height for consistent layout */}
+                  {editingVideoId === video.uploadId ? (
+                    <input
+                      type="text"
+                      value={newVideoTitle}
+                      onChange={(e) => setNewVideoTitle(e.target.value)}
+                      className="w-full px-2 py-1 mb-2 text-lg font-semibold border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleSaveRename(video.uploadId);
+                        }
+                      }}
+                    />
+                  ) : (
+                    <h3 className="font-semibold text-lg mb-2 line-clamp-2 text-gray-800">
+                      {video.file_name}
+                    </h3>
+                  )}
                   <p className="text-sm text-gray-600 mb-4">
                     Spawned {video.date}
                   </p>
-
+                  </div>
                   {/* Action Buttons */}
-                  <div className="flex justify-between items-center w-full">
-                    <div className="flex gap-2">
-                      <Button
-                        onClick={() => handleWatch(video)}
-                        className="flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
-                      >
-                        <Play className="w-4 h-4" />
-                        Watch
-                      </Button>
+                  <div className="flex gap-2 items-center w-full mt-1">
+                      {" "}
+                      {/* Added mt-4 for spacing */}
+                      {editingVideoId === video.uploadId ? (
+                        <>
+                          <Button
+                            onClick={() => handleSaveRename(video.uploadId)}
+                            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white"
+                          >
+                            <Save className="w-4 h-4" />
+                            Sealed
+                          </Button>
+                          <Button
+                            onClick={handleCancelEdit}
+                            className="flex-1 flex items-center justify-center gap-2 bg-gray-400 hover:bg-gray-500 text-white"
+                          >
+                            <X className="w-4 h-4" />
+                            Abort
+                          </Button>
+                          <div className="flex-1" /> {/* Placeholder to maintain 3-column layout */}
+                        </>
+                      ) : (
+                        <>
+                          <Button
+                            onClick={() => handleWatch(video)}
+                            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
+                          >
+                            <Play className="w-4 h-4" />
+                            Watch
+                          </Button>
 
                       <Button
                         variant="outline"
-                        className="flex items-center gap-2 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white"
+                         className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white"
                         onClick={() =>
                           (window.location.href = "/quiz/" + video.quizID)
                         }
@@ -189,10 +260,19 @@ export default function Library() {
                         <HelpCircle className="w-4 h-4" />
                         Quiz
                       </Button>
-                    </div>
+                      <Button
+                            onClick={() => handleEdit(video)}
+                            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-orange-400 to-yellow-500 hover:from-orange-500 hover:to-yellow-600 text-white"
+                          >
+                            <Edit className="w-4 h-4" />
+                            Tweak
+                          </Button>
+                        </>
+                      )}
+            
                     <Button
                       variant="outline"
-                      className="bg-transparent text-red-600 hover:bg-red-700 hover:text-white border border-red-600"
+                       className="flex-shrink-0 bg-transparent text-red-600 hover:bg-red-700 hover:text-white border border-red-600"
                       onClick={() => {
                         Swal.fire({
                           title: "Do you want to delete this project?",
@@ -247,10 +327,10 @@ export default function Library() {
                       <span className="sr-only">Delete</span>
                     </Button>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                  </div>
+               </CardContent>
+              </Card>
+            ))}
       </div>
       {/* Video Popup */}
       <Popup
@@ -270,5 +350,7 @@ export default function Library() {
         </div>
       )}
     </div>
+    </div>
+  </div>
   );
 }
