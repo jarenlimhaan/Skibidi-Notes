@@ -4,6 +4,7 @@ import ToiletAnimation from "@/components/loading"
 import withAuth from '@/components/auth/authGuard';
 import { useParams } from 'next/navigation';
 import { useEffect } from "react";
+import ToiletAnimation2 from "@/components/loading";
 
 
 
@@ -40,7 +41,7 @@ const GeneratingLoading = () => {
 
     // if is still generating show the toilet
     return (
-        <ToiletAnimation/>
+        <ToiletAnimation2/>
     )
 
 }

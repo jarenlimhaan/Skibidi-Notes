@@ -2,12 +2,12 @@
 
 import Navbar from "./navbar"
 
-export default function ToiletAnimation() {
+export default function ToiletAnimation2() {
   return (
     <>
     <Navbar/>
     <div className="flex justify-center items-center h-screen">
-      <img src="/toilet-animation.gif" alt="Toilet Animation" />
+      <img src="/toilet_flushing.gif" alt="Toilet Animation" />
     </div>
     </>
   )
