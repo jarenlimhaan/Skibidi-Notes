@@ -22,7 +22,7 @@ class App_Config(BaseSettings):
     TEMP_DIR: str
     VIDEOS_DIR: str
     UPLOAD_DIR: str
-    
+
     # Config for loading environment variables
     model_config = SettingsConfigDict(env_file="../.env", env_file_encoding="utf-8")
 

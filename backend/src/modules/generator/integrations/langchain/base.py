@@ -1,4 +1,4 @@
-# External Imports 
+# External Imports
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai.chat_models import ChatOpenAI
@@ -14,6 +14,7 @@ import time
 from config.env import get_app_configs
 
 app_config = get_app_configs()
+
 
 class Summarizer:
     def __init__(self):
@@ -247,7 +248,9 @@ class Summarizer:
         )
 
         try:
-            response = self.llm.predict(prompt.format(quizcount=quizcount, summary=summary))
+            response = self.llm.predict(
+                prompt.format(quizcount=quizcount, summary=summary)
+            )
             return response
         except Exception as e:
             print(f"Error generating quiz: {str(e)}")
@@ -295,7 +298,7 @@ class Summarizer:
                 "keypoints": result.get("keypoints", []),
                 "total_pages": len(raw_docs),
                 "total_chunks": len(chunks),
-                "quiz": quiz
+                "quiz": quiz,
             }
 
             print("PDF processing completed successfully!")

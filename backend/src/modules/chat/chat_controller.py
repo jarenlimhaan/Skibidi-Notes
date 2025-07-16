@@ -9,22 +9,20 @@ from src.deps import get_current_user_from_cookie, get_db
 router = APIRouter()
 app_config = get_app_configs()
 
+
 @router.post("/ask")
 async def ask_question(
     question: str = Form(...),
     chat_service: DocumentQAService = Depends(get_qa_service),
     current_user=Depends(get_current_user_from_cookie),
 ):
-    try:  
+    try:
         res = chat_service.ask_question(
             user_id=current_user["user_id"],
             question=question,
         )
-        
+
         return res["result"]
     except Exception as e:
         print(f"Error in ask_question: {e}")
-        return {
-            "status": "Error",
-            "message": str(e)
-        }
+        return {"status": "Error", "message": str(e)}

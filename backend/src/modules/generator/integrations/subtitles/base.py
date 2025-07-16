@@ -19,6 +19,7 @@ app_config = get_app_configs()
 
 change_settings({"IMAGEMAGICK_BINARY": get_app_configs().IMAGEMAGICK_BINARY})
 
+
 class Subtitles:
 
     def __init__(self):
@@ -33,10 +34,17 @@ class Subtitles:
         transcript = transcriber.transcribe(audio_path)
         return transcript.export_subtitles_srt()
 
-    def generate_subtitles(self, audio_path: str, sentences: List[str], audio_clips: List[AudioFileClip], voice: str) -> str:
+    def generate_subtitles(
+        self,
+        audio_path: str,
+        sentences: List[str],
+        audio_clips: List[AudioFileClip],
+        voice: str,
+    ) -> str:
         def equalize_subtitles(srt_path: str, max_chars: int = 10) -> None:
             srt_equalizer.equalize_srt_file(srt_path, srt_path, max_chars)
-        subtitles_path = self.subtitles_dir+ f"{uuid.uuid4()}.srt"
+
+        subtitles_path = self.subtitles_dir + f"{uuid.uuid4()}.srt"
         print(colored("[+] Creating subtitles using AssemblyAI", "blue"))
         subtitles = self.__generate_subtitles_assemblyai(audio_path, voice)
         with open(subtitles_path, "w") as file:
@@ -44,6 +52,7 @@ class Subtitles:
         equalize_subtitles(subtitles_path)
         print(colored("[+] Subtitles generated.", "green"))
         return subtitles_path
+
 
 def get_subtitles():
     return Subtitles()

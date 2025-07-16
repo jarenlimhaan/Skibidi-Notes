@@ -6,6 +6,7 @@ from sqlalchemy import select
 from src.modules.quiz.quiz_model import Quiz
 from src.modules.quiz.quiz_schema import CreateQuizSchema
 
+
 class QuizService:
 
     async def get_quiz_by_id(self, quiz_id: str, db: AsyncSession):
@@ -20,12 +21,15 @@ class QuizService:
         """
         Add a quiz to the database.
         """
-        quiz = Quiz(upload_id=createQuizDTO["upload_id"], content=createQuizDTO["content"])
+        quiz = Quiz(
+            upload_id=createQuizDTO["upload_id"], content=createQuizDTO["content"]
+        )
         db.add(quiz)
         await db.commit()
         await db.refresh(quiz)
         return quiz
-    
+
+
 def get_quiz_service():
     """
     Dependency to get the QuizService instance.

@@ -1,5 +1,6 @@
 import os
 
+
 def clean_dir(path: str) -> None:
     if not os.path.exists(path):
         os.mkdir(path)

@@ -2,6 +2,7 @@ from fastapi import Depends, HTTPException, Request
 from jose.exceptions import ExpiredSignatureError
 from src.modules.auth.auth_service import AuthService, get_auth_service
 
+
 async def get_current_user_from_cookie(
     request: Request,
     auth_service: AuthService = Depends(get_auth_service),

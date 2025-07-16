@@ -15,8 +15,9 @@ class Uploads(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     file_path = Column(Text, unique=True, nullable=False)
-    project_name =  Column(Text, nullable=False)
+    project_name = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+
 
 class Generations(Base):
     __tablename__ = "generations"

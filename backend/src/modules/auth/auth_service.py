@@ -27,5 +27,6 @@ class AuthService:
     def decode_token(self, token: str):
         return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
 
+
 def get_auth_service():
     return AuthService()

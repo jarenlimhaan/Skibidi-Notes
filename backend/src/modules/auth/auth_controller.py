@@ -16,9 +16,11 @@ from src.deps import get_auth_service
 
 router = APIRouter()
 
+
 @router.get("/authorized")
 async def get_me(current_user=Depends(get_current_user_from_cookie)):
     return {"user": current_user}
+
 
 @router.post("/register")
 async def register(
@@ -45,12 +47,16 @@ async def login(
     db: AsyncSession = Depends(get_db),
 ):
     user = await user_service.get_by_email(form_data.email, db)
-    if not user or not auth_service.verify_password(
-        form_data.password, user.password
-    ):
+    if not user or not auth_service.verify_password(form_data.password, user.password):
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
-    token = auth_service.create_access_token({"user_id": str(user.id), "email": str(user.email), "username": str(user.username)})
+    token = auth_service.create_access_token(
+        {
+            "user_id": str(user.id),
+            "email": str(user.email),
+            "username": str(user.username),
+        }
+    )
 
     # Set as secure HTTP-only cookie
     response = JSONResponse(content={"message": "Login successful"})
@@ -58,6 +64,7 @@ async def login(
         key="access_token", value=token, httponly=True, secure=True, samesite="Lax"
     )
     return response
+
 
 @router.post("/logout")
 def logout():

@@ -11,8 +11,11 @@ from src.modules.quiz.quiz_service import get_quiz_service
 from src.modules.generator.generator_service import get_generation_service
 from src.db.driver import SessionLocal
 
+
 @celery_app.task(bind=True)
-def run_generation_task(self, pdf_path, upload_id, background, voice_id, quizcount, user_id):
+def run_generation_task(
+    self, pdf_path, upload_id, background, voice_id, quizcount, user_id
+):
     self.update_state(state="PROGRESS", meta={"status": "Generating..."})
 
     summarizer = get_summarizer_service()
@@ -35,7 +38,7 @@ def run_generation_task(self, pdf_path, upload_id, background, voice_id, quizcou
             subtitles=subtitles,
             background=background,
             voice_id=voice_id,
-            quizcount=quizcount
+            quizcount=quizcount,
         )
 
         self.update_state(state="PROGRESS", meta={"status": "Saving to DB..."})
@@ -43,11 +46,7 @@ def run_generation_task(self, pdf_path, upload_id, background, voice_id, quizcou
         # Save quiz
         async with SessionLocal() as db:
             await quiz_service.add_quiz(
-                createQuizDTO={
-                    "upload_id": upload_id,
-                    "content": res['quiz']
-                },
-                db=db
+                createQuizDTO={"upload_id": upload_id, "content": res["quiz"]}, db=db
             )
 
             await generation_service.add_generation(
@@ -55,18 +54,20 @@ def run_generation_task(self, pdf_path, upload_id, background, voice_id, quizcou
                     "user_id": user_id,
                     "file_path": path,
                     "upload_id": upload_id,
-                    "background_type": background.split('.')[0],
+                    "background_type": background.split(".")[0],
                 },
-                db=db
+                db=db,
             )
 
-        self.update_state(state="SUCCESS", meta={"status": "Video generated successfully"})
+        self.update_state(
+            state="SUCCESS", meta={"status": "Video generated successfully"}
+        )
 
         return {
             "status": "Done",
             "url": path,
-            "summary": res['summary'],
-            "keypoints": res['keypoints']
+            "summary": res["summary"],
+            "keypoints": res["keypoints"],
         }
 
     try:
