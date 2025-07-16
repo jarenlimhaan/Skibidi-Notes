@@ -71,13 +71,13 @@ export default function AccountPage() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-purple-200 via-blue-200 to-pink-200 p-8">
+      <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 p-8">
         {/* Header */}
         <header className="backdrop-blur-sm rounded-md mt-4">
           <div className="max-w-6xl mx-auto px-6 py-4">
             <div className="flex items-center justify-start space-x-3">
-              <Settings className="h-8 w-8 text-white" />
-              <h1 className="text-3xl font-bold text-white tracking-wider">
+              <Settings className="h-8 w-8 text-purple-700 " />
+              <h1 className="text-3xl font-bold text-purple-700 tracking-wider">
                 Skibidi Toilet Control Pannel
               </h1>
             </div>
