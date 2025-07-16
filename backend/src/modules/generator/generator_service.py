@@ -160,6 +160,23 @@ class GenerationService:
 
         return results
     
+    async def update_upload_project_name(self, upload_id: uuid.UUID, new_project_name: str, db: AsyncSession):
+        '''
+        Update the project name of an upload.
+        This method modifies the project name of a specific upload in the database.
+        '''
+        stmt = select(Uploads).where(Uploads.id == upload_id)
+        result = await db.execute(stmt)
+        upload = result.scalar_one_or_none()
+
+        if not upload:
+            return {"status": "Error", "message": "Upload not found"}
+
+        upload.project_name = new_project_name
+        await db.commit()
+        await db.refresh(upload)
+        return {"status": "Success", "message": "Project name updated successfully"}
+    
     async def get_user_upload_by_id(self, upload_id: uuid.UUID, db: AsyncSession):
         '''
         Get a specific user upload by its ID.
