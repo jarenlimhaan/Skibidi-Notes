@@ -65,14 +65,14 @@ const testimonials = [
     name: "Yan Shuen",
     role: "High School Student",
     content:
-      "I am a dumbass so this is a good app for me to improve my grades from F to A",
+      "Skibidi Notes is a game changer! I can now turn my boring lecture notes into fun quizzes that actually help me remember things better. Plus, the backgrounds are so cool! Highly recommended!",
     rating: 5,
     avatar: "/yanshuen_pic.png?height=60&width=60&text=MC",
   },
   {
     name: "Jaren Lim Haan",
     role: "University Student",
-    content: "I love brain rotting coochiemeowmeow",
+    content: "Before Skibidi Notes, my brain was a soggy tissue. Now, it is a full toilet roll of knowledge! I can finally bop bop yes yes through my exams without crying like a potato in the shower.",
     rating: 5,
     avatar: "/jaren_pic.png?height=60&width=60&text=ED",
   },
