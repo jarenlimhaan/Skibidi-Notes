@@ -117,10 +117,10 @@ Docker is required to containerize and manage the services for this project. Fol
       ```
 
 ## Running the Development server 
-1. **Set up the Database**:
+1. **Set up Redis*:
     - Set up the database service by running:
       ```bash
-      make db-up
+      docker compose up -d
       ``` 
 
 2. **Run the Development Server**:
