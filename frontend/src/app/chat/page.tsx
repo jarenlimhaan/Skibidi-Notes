@@ -130,14 +130,6 @@ export default function ChatBot() {
     <div className="flex flex-col h-screen bg-gray-50">
       <Navbar />
 
-      {/* Header */}
-      <div className="border-b bg-white px-4 py-3">
-        <div className="flex items-center space-x-2">
-          <Bot className="h-6 w-6 text-blue-600" />
-          <h1 className="text-xl font-semibold text-gray-900">Ohio Rizzler</h1>
-        </div>
-      </div>
-
       {/* Messages Area */}
       <ScrollArea className="flex-1 px-4 py-6">
         <div className="max-w-3xl mx-auto space-y-6">
