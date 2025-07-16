@@ -44,12 +44,10 @@ export default function Popup({
   onClose,
   uploaded_file_path,
 }: PopupProps) {
-  
-const [documents, setDocuments] = useState<Document[]>([]);
+  const [documents, setDocuments] = useState<Document[]>([]);
 
-React.useEffect(() => {
-  const res =
-    uploaded_file_path
+  React.useEffect(() => {
+    const res = uploaded_file_path
       ? uploaded_file_path.slice(
           uploaded_file_path.indexOf("/static/uploads") +
             "/static/uploads".length +
@@ -57,20 +55,20 @@ React.useEffect(() => {
         )
       : "";
 
-  if (uploaded_file_path) {
-    setDocuments([
-      {
-        id: "1",
-        name: res,
-        size: "2.4 MB",
-        url: res,
-        type: "application/pdf",
-      },
-    ]);
-  } else {
-    setDocuments([]);
-  }
-}, [uploaded_file_path]);
+    if (uploaded_file_path) {
+      setDocuments([
+        {
+          id: "1",
+          name: res,
+          size: "2.4 MB",
+          url: res,
+          type: "application/pdf",
+        },
+      ]);
+    } else {
+      setDocuments([]);
+    }
+  }, [uploaded_file_path]);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(
     null
   );
@@ -86,21 +84,20 @@ React.useEffect(() => {
   const handleDownload = async (document: Document) => {
     const response = await fetch(backendURL + "/download/" + document.url);
     if (!response.ok) {
-      console.error("Failed to download document:", response.statusText)
-      return
-        }
-        const blob = await response.blob()
-        const url = window.URL.createObjectURL(blob)
-        const a = window.document.createElement("a")
-        a.href = url
-        a.download = document.name
-        window.document.body.appendChild(a)
-        a.click();
+      console.error("Failed to download document:", response.statusText);
+      return;
+    }
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = window.document.createElement("a");
+    a.href = url;
+    a.download = document.name;
+    window.document.body.appendChild(a);
+    a.click();
 
-        window.document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-};
-
+    window.document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  };
 
   // Generate the correct video poster based on background_type
   const getPoster = () => {
@@ -249,7 +246,13 @@ React.useEffect(() => {
         </DialogContent>
       </Dialog>
       {/* PDF Preview Dialog - separate from main Dialog */}
-      <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+      <Dialog
+        open={isPreviewOpen}
+        onOpenChange={() => {
+          setIsPreviewOpen(false);
+          window.location.reload();
+        }}
+      >
         <DialogContent className="max-w-4xl max-h-[90vh]">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
@@ -263,7 +266,7 @@ React.useEffect(() => {
           {selectedDocument && (
             <div className="flex-1 min-h-0">
               <iframe
-                src={backendURL + "/static/uploads/" +selectedDocument.url}
+                src={backendURL + "/static/uploads/" + selectedDocument.url}
                 className="w-full h-[600px] border rounded-lg"
                 title={selectedDocument.name}
               />
