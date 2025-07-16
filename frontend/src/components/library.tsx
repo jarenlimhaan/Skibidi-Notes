@@ -233,7 +233,40 @@ export default function Library() {
                         {editingVideoId === video.uploadId ? (
                           <>
                             <Button
-                              onClick={() => handleSaveRename(video.uploadId)}
+                              onClick={async () => {
+                                // if (!backendURL) {
+                                //   console.error("Backend URL is not set.");
+                                //   return;
+                                // }
+                                // if (!video.uploadId) {
+                                //   console.error("uploadId is missing.");
+                                //   return;
+                                // }
+                                const form = new FormData();
+                                form.append("project_name", newVideoTitle);
+
+                                await fetch(
+                                  `${backendURL}/api/generator/rename/upload/${video.uploadId}`,
+                                  {
+                                    method: "POST",
+                                    credentials: "include",
+                                    body: form, // Do not set Content-Type header, fetch will do it
+                                  }
+                                )
+                                .then((res) => {
+                                    if (!res.ok) {
+                                      throw new Error("Failed to rename video. Check if the file exists and the uploadId is correct.");
+                                    }
+                                    return res.json();
+                                  })
+                                  .then(() => {
+                                    handleSaveRename(video.uploadId);
+                                  })
+                                  .catch((err) => {
+                                    console.error("Error renaming video:", err);
+                                    // Optionally show an error message to the user
+                                  });
+                              }}
                               className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white"
                             >
                               <Save className="w-4 h-4" />

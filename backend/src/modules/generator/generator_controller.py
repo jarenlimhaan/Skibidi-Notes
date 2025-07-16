@@ -200,4 +200,21 @@ async def delete_upload_with_generations(upload_id: str, generation_service: Gen
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=str(e))
+    
+# Updating the project name of an upload
+@router.post("/rename/upload/{upload_id}")
+async def update_upload_project_name(
+    upload_id: str,
+    project_name: str = Form(...),
+    generation_service: GenerationService = Depends(get_generation_service),
+    db: AsyncSession = Depends(get_db)
+):
+    try:
+        updated_upload = await generation_service.update_upload_project_name(upload_id, project_name, db)
+        if not updated_upload:
+            raise HTTPException(status_code=404, detail="Upload not found")
+        return JSONResponse(content={"status": "Project name updated successfully", "upload": updated_upload})
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=str(e))
 

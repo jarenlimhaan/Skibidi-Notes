@@ -45,7 +45,7 @@ export default function BrainRotCustomizer() {
   const [isCustomMode, setIsCustomMode] = useState(false);
 
   const isFormComplete =
-    selectedBackground && selectedVoice && questionCount > 0;
+    selectedBackground && selectedVoice && questionCount > 0 && noteName;
 
   // need to upload the rest
   const backgroundVideos = [
