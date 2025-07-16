@@ -127,7 +127,7 @@ export default function ChatBot() {
   }, [messages, pendingMessage, showThinking]);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200">
       <Navbar />
 
       {/* Messages Area */}
@@ -137,10 +137,10 @@ export default function ChatBot() {
             <div className="text-center py-12">
               <Bot className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <h2 className="text-xl font-semibold text-gray-700 mb-2">
-                How can I help you today?
+                Hi, they call me the OhioRizzler. Rizz me up with your questions!
               </h2>
               <p className="text-gray-500">
-                Start a conversation by typing a message below.
+                Flush your doubts into the chat box below!
               </p>
             </div>
           )}
@@ -232,7 +232,7 @@ export default function ChatBot() {
       </ScrollArea>
 
       {/* Input Area */}
-      <div className="border-t bg-white px-4 py-4">
+      <div className="bg-transparent px-4 py-4">
         <div className="max-w-3xl mx-auto">
           <form onSubmit={onSubmit} className="flex items-end space-x-2">
             <div className="flex-1 relative">
@@ -240,9 +240,15 @@ export default function ChatBot() {
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Type your message here..."
+                onInput={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  target.style.height = "auto";
+                  target.style.height = target.scrollHeight + "px";
+                }}
+                placeholder="Unleash your baggages..."
                 disabled={isLoading}
-                className="w-full resize-none border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50"
+                rows={1}
+                className="w-full resize-none min-h-[44px] border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50"
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
@@ -251,7 +257,6 @@ export default function ChatBot() {
                 }}
               />
             </div>
-
             {isLoading ? (
               <Button
                 type="button"
