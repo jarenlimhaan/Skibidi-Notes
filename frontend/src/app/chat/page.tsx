@@ -58,7 +58,7 @@ export default function ChatBot() {
       setPendingMessage("");
 
       let index = 0;
-      const typingSpeed = 20;
+      const typingSpeed = 10;
 
       typingIntervalRef.current = setInterval(() => {
         setPendingMessage((prev) => (prev ?? "") + fullMessage[index]);
@@ -129,6 +129,13 @@ export default function ChatBot() {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200">
       <Navbar />
+
+          <div className="px-4 py-3">
+        <div className="flex items-center space-x-2">
+          <Bot className="h-6 w-6 text-blue-600" />
+          <h1 className="text-xl font-semibold text-gray-900">Ohio Rizzler</h1>
+        </div>
+      </div>
 
       {/* Messages Area */}
       <ScrollArea className="flex-1 px-4 py-6">
@@ -204,7 +211,7 @@ export default function ChatBot() {
                     ></div>
                   </div>
                   <span className="text-sm text-gray-500">
-                    AI is thinking...
+                    Rizzler is thinking...
                   </span>
                 </div>
               </Card>

@@ -243,7 +243,7 @@ export default function Library() {
                             ? "/subway_gameplay.png?height=120&width=160"
                             : video.background_type === "temple"
                               ? "/temple_gameplay.png?height=120&width=160"
-                              : video.background_type === "minecraft"
+                              : video.background_type.includes("minecraft")
                                 ? "/minecraft_gameplay.png?height=120&width=160"
                                 : video.background_type === "gta"
                                   ? "/gta_gameplay.png?height=120&width=160"

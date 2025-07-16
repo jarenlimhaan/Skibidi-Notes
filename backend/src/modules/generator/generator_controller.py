@@ -54,7 +54,11 @@ async def upload_file(
         with open(save_path, "wb") as buffer:
             buffer.write(content)
 
-        # Save the upload path to the database
+        if "minecraft" in background:
+            import random 
+            background = random.choice(["minecraft_gameplay_01.mp4", "minecraft_gameplay_02.mp4", "minecraft_gameplay_03.mp4"])
+
+        # Add upload record to DB
         upload_id = await generation_service.add_upload(
             createUploadDTO={
                 "user_id": user_id,

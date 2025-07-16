@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Minus, Plus } from "lucide-react";
+import Swal from "sweetalert2";
 
 interface UploadedFile {
   file: File;
@@ -885,6 +886,11 @@ export default function BrainRotCustomizer() {
                     noteName.trim() === ""
                   }
                   onClick={async () => {
+                    Swal.fire({
+                      title: "Flushing..",
+                      text: "Please wait while we prepare your content.",
+                      icon: "success",
+                    })
                     const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
                     for (const fileObj of uploadedFiles) {
