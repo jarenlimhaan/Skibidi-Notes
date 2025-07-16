@@ -208,7 +208,7 @@ export default function Popup({
                           </div>
                           <div className="flex-1 min-w-0">
                             <h3 className="font-medium truncate">
-                              {document.name}
+                              {document.name.split("_").pop() || "Untitled Document"}
                             </h3>
                             <div className="flex items-center gap-4 text-sm text-muted-foreground">
                               {/* <span>{document.size}</span> */}
