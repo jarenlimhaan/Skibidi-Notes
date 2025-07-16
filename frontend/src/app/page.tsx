@@ -30,7 +30,7 @@ const steps = [
       "Upload your PDF, PPTX or JPEG lecture slides and our AI will create concise summaries",
     icon: <Upload className="w-8 h-8" />,
     color: "from-purple-500 to-pink-500",
-    image: "/placeholder.svg?height=200&width=300&text=Upload+Files",
+    image: "/upload_and_summarise.png?height=200&width=300&text=Upload+Files",
   },
   {
     number: 2,
@@ -39,7 +39,7 @@ const steps = [
       "Select backgrounds from popular games like Minecraft, Temple Run or Subway Surfers",
     icon: <Gamepad2 className="w-8 h-8" />,
     color: "from-pink-500 to-purple-500",
-    image: "/placeholder.svg?height=200&width=300&text=Game+Backgrounds",
+    image: "/choose_background.png?height=200&width=300&text=Game+Backgrounds",
   },
   {
     number: 3,
@@ -48,7 +48,7 @@ const steps = [
       "Reinforce learning with Kahoot-style quizzes specially generated from your content",
     icon: <Brain className="w-8 h-8" />,
     color: "from-purple-600 to-pink-400",
-    image: "/placeholder.svg?height=200&width=300&text=Interactive+Quiz",
+    image: "/quiz_time.png?height=200&width=300&text=Interactive+Quiz",
   },
 ];
 
@@ -118,8 +118,8 @@ export default function Component() {
                   AI-powered summaries and gaming backgrounds.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/register">
-                    <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                  <Link href={isAuthenticated ? "/create" :"/register"}>
+                    <Button className="bg-gradient-to-r from-purple-600 to-purple-600 text-white px-8 py-4 text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
                       Brainrot Now
                       <ArrowRight className="w-5 h-5 ml-2" />
                     </Button>
@@ -194,7 +194,7 @@ export default function Component() {
                 },
                 {
                   title: "Customizable Experience",
-                  desc: "Choose from various themes and backgrounds to match your style and keep learners engaged.",
+                  desc: "Choose from various backgrounds and voices to match your style and keep learners engaged.",
                   icon: <Settings className="w-8 h-8 text-white" />,
                   bg: "from-pink-500 to-purple-500",
                 },
@@ -330,7 +330,7 @@ export default function Component() {
                   interactive experience.
                 </p>
                 <div className="flex justify-center">
-                  <Link href={isAuthenticated ? "/account" :"/register"}>
+                  <Link href={isAuthenticated ? "/create" :"/register"}>
                     <Button className="bg-white text-purple-600 px-8 py-4 text-lg font-semibold rounded-2xl hover:bg-gray-100 shadow-lg">
                       Start Cookin'
                     </Button>

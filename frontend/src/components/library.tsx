@@ -223,7 +223,7 @@ export default function Library() {
                           </h3>
                         )}
                         <p className="text-sm text-gray-600 mb-4">
-                          Spawned {video.date}
+                          Spawned On: {video.date}
                         </p>
                       </div>
                       {/* Action Buttons */}
