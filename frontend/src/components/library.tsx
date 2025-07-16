@@ -50,17 +50,30 @@ export default function Library() {
         if (!res.ok) throw new Error("Failed to fetch videos");
         const data = await res.json();
 
-        const formatted = data.map((item: any) => ({
-          uploadId: item[0][0],
-          background_type: item[1][0].background_type,
-          file_name: item[0][1],
-          file_path: item[1][0].file_path,
-          uploaded_file_path: item[0][2],
-          date: new Date(item[1][0].created_at).toLocaleDateString(), // Converts ISO to date stamp
-          quizID: item[2] ? item[2].id : null, // Assuming quiz ID is in the third element
-        }));
-        console.log("Fetched videos:", data);
-        console.log("Fetched videos:", formatted);
+        const formatted = data.map((item: any) => {
+          if (item[1].length === 0) {
+            return {
+              uploadId: item[0][0],
+              background_type: "unknown",
+              file_name: item[0][1],
+              file_path: item[1][0]?.file_path || "",
+              uploaded_file_path: item[0][2],
+              date: "Generating...",
+              quizID: null, // No quiz ID available
+            };
+          }
+
+          return {
+            uploadId: item[0][0],
+            background_type: item[1][0].background_type,
+            file_name: item[0][1],
+            file_path: item[1][0].file_path,
+            uploaded_file_path: item[0][2],
+            date: new Date(item[1][0].created_at).toLocaleDateString(), // Converts ISO to date stamp
+            quizID: item[2] ? item[2].id : null, // Assuming quiz ID is in the third element
+          };
+        });
+
         setVideos(formatted);
       } catch (err: any) {
         setError(err.message || "Unknown error");
@@ -69,6 +82,53 @@ export default function Library() {
       }
     }
     fetchUserVideos();
+  }, []);
+
+  // if there is a video that is still generating, we want to fetch it every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetch(`${backendURL}/api/generator/uploads_with_generations`, {
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          const formatted = data.map((item: any) => {
+            if (item[1].length === 0) {
+              return {
+                uploadId: item[0][0],
+                background_type: "unknown",
+                file_name: item[0][1],
+                file_path: item[1][0]?.file_path || "",
+                uploaded_file_path: item[0][2],
+                date: "Generating...",
+                quizID: null,
+                isGenerating: true,
+              };
+            }
+            return {
+              uploadId: item[0][0],
+              background_type: item[1][0].background_type,
+              file_name: item[0][1],
+              file_path: item[1][0].file_path,
+              uploaded_file_path: item[0][2],
+              date: new Date(item[1][0].created_at).toLocaleDateString(),
+              quizID: item[2] ? item[2].id : null,
+              isGenerating: false,
+            };
+          });
+
+          setVideos(formatted);
+
+          // Check if all items are done generating
+          const stillGenerating = formatted.some((item: any) => item.isGenerating);
+          if (!stillGenerating) {
+            clearInterval(interval);
+          }
+        })
+        .catch(console.error);
+    }, 30000); // every 10 seconds
+
+    return () => clearInterval(interval);
   }, []);
 
   const filteredVideos = useMemo(() => {
@@ -190,7 +250,7 @@ export default function Library() {
                                   : video.background_type ===
                                       "minecraft_parkour"
                                     ? "/minecraft_gameplay.png?height=120&width=160"
-                                    : "/placeholder_thumbnail.jpg" // Fallback thumbnail
+                                    : "/toilet_flushing.gif"
                         }
                         alt={video.file_name}
                         width={300}
@@ -234,14 +294,6 @@ export default function Library() {
                           <>
                             <Button
                               onClick={async () => {
-                                // if (!backendURL) {
-                                //   console.error("Backend URL is not set.");
-                                //   return;
-                                // }
-                                // if (!video.uploadId) {
-                                //   console.error("uploadId is missing.");
-                                //   return;
-                                // }
                                 const form = new FormData();
                                 form.append("project_name", newVideoTitle);
 
@@ -253,9 +305,11 @@ export default function Library() {
                                     body: form, // Do not set Content-Type header, fetch will do it
                                   }
                                 )
-                                .then((res) => {
+                                  .then((res) => {
                                     if (!res.ok) {
-                                      throw new Error("Failed to rename video. Check if the file exists and the uploadId is correct.");
+                                      throw new Error(
+                                        "Failed to rename video. Check if the file exists and the uploadId is correct."
+                                      );
                                     }
                                     return res.json();
                                   })
@@ -283,92 +337,106 @@ export default function Library() {
                             {/* Placeholder to maintain 3-column layout */}
                           </>
                         ) : (
-                          <>
-                            <Button
-                              onClick={() => handleWatch(video)}
-                              className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
-                            >
-                              <Play className="w-4 h-4" />
-                              Watch
-                            </Button>
+                          video.background_type !== "unknown" && (
+                            <>
+                              <Button
+                                onClick={() => handleWatch(video)}
+                                className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
+                              >
+                                <Play className="w-4 h-4" />
+                                Watch
+                              </Button>
 
-                            <Button
-                              variant="outline"
-                              className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white"
-                              onClick={() =>
-                                (window.location.href = "/quiz/" + video.quizID)
-                              }
-                            >
-                              <HelpCircle className="w-4 h-4" />
-                              Quiz
-                            </Button>
-                            <Button
-                              onClick={() => handleEdit(video)}
-                              className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-orange-400 to-yellow-500 hover:from-orange-500 hover:to-yellow-600 text-white"
-                            >
-                              <Edit className="w-4 h-4" />
-                              Tweak
-                            </Button>
-                          </>
+                              <Button
+                                variant="outline"
+                                className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white"
+                                onClick={() =>
+                                  (window.location.href =
+                                    "/quiz/" + video.quizID)
+                                }
+                              >
+                                <HelpCircle className="w-4 h-4" />
+                                Quiz
+                              </Button>
+                              <Button
+                                onClick={() => handleEdit(video)}
+                                className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-orange-400 to-yellow-500 hover:from-orange-500 hover:to-yellow-600 text-white"
+                              >
+                                <Edit className="w-4 h-4" />
+                                Tweak
+                              </Button>
+                            </>
+                          )
                         )}
-                        <Button //make this change 
-                          variant="outline"
-                          className="flex-shrink-0 bg-transparent text-red-600 hover:bg-red-700 hover:text-white border border-red-600"
-                          onClick={() => {
-                            Swal.fire({
-                              title: "Flush this project down the toilet?",
-                              showDenyButton: true,
-                              showCancelButton: true,
-                              confirmButtonText: "Yes",
-                              denyButtonText: `No`,
-                            }).then((result) => {
-                              /* Read more about isConfirmed, isDenied below */
-                              if (result.isConfirmed) {
-                                Swal.fire("Deleted!", "", "success");
-                                setDeletedVideos((prev) => [
-                                  ...prev,
-                                  video.uploadId,
-                                ]);
-                                // Delete the video from the backend
-                                fetch(
-                                  `${backendURL}/api/generator/delete/upload/${video.uploadId}`,
-                                  {
-                                    method: "DELETE",
-                                    credentials: "include",
-                                  }
-                                )
-                                  .then((res) => {
-                                    if (!res.ok) {
-                                      throw new Error("Failed to delete video");
+                        {video.background_type !== "unknown" && (
+                          <Button //make this change
+                            variant="outline"
+                            className="flex-shrink-0 bg-transparent text-red-600 hover:bg-red-700 hover:text-white border border-red-600"
+                            onClick={() => {
+                              Swal.fire({
+                                title: "Flush this project down the toilet?",
+                                showDenyButton: true,
+                                showCancelButton: true,
+                                confirmButtonText: "Yes",
+                                denyButtonText: `No`,
+                              }).then((result) => {
+                                /* Read more about isConfirmed, isDenied below */
+                                if (result.isConfirmed) {
+                                  Swal.fire("Deleted!", "", "success");
+                                  setDeletedVideos((prev) => [
+                                    ...prev,
+                                    video.uploadId,
+                                  ]);
+                                  // Delete the video from the backend
+                                  fetch(
+                                    `${backendURL}/api/generator/delete/upload/${video.uploadId}`,
+                                    {
+                                      method: "DELETE",
+                                      credentials: "include",
                                     }
-                                    return res.json();
-                                  })
-                                  .then(() => {
-                                    Swal.fire(
-                                      "Success!",
-                                      "Video deleted successfully",
-                                      "success"
-                                    );
-                                    // Remove the video from the state
-                                    handleDelete(video.uploadId);
-                                  })
-                                  .catch((err) => {
-                                    console.error("Error deleting video:", err);
-                                    Swal.fire(
-                                      "Error deleting video",
-                                      err.message,
-                                      "error"
-                                    );
-                                  });
-                              } else if (result.isDenied) {
-                                Swal.fire("Changes are not saved", "", "info");
-                              }
-                            });
-                          }}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                          <span className="sr-only">Delete</span>
-                        </Button>
+                                  )
+                                    .then((res) => {
+                                      if (!res.ok) {
+                                        throw new Error(
+                                          "Failed to delete video"
+                                        );
+                                      }
+                                      return res.json();
+                                    })
+                                    .then(() => {
+                                      Swal.fire(
+                                        "Success!",
+                                        "Video deleted successfully",
+                                        "success"
+                                      );
+                                      // Remove the video from the state
+                                      handleDelete(video.uploadId);
+                                    })
+                                    .catch((err) => {
+                                      console.error(
+                                        "Error deleting video:",
+                                        err
+                                      );
+                                      Swal.fire(
+                                        "Error deleting video",
+                                        err.message,
+                                        "error"
+                                      );
+                                    });
+                                } else if (result.isDenied) {
+                                  Swal.fire(
+                                    "Changes are not saved",
+                                    "",
+                                    "info"
+                                  );
+                                }
+                              });
+                            }}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            <span className="sr-only">Delete</span>
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </CardContent>
