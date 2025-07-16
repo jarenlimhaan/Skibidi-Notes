@@ -1,8 +1,11 @@
+import withAuth from '@/components/auth/authGuard';
 import Library from '@/components/library'; // adjust if needed
-export default function Page() {
+function Page() {
   return (
     <div>
       <Library />
     </div>
   );
 }
+
+export default withAuth(Page);
