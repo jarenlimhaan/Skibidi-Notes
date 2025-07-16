@@ -14,6 +14,8 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Eye, Download } from "lucide-react";
 
+const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
+
 interface Document {
   id: string;
   name: string;
@@ -32,6 +34,7 @@ interface PopupProps {
     background_type: string;
     quizID: string;
   } | null;
+  uploaded_file_path: string | undefined;
   onClose: () => void;
 }
 
@@ -39,20 +42,39 @@ export default function Popup({
   open,
   video,
   onClose,
+  uploaded_file_path,
 }: PopupProps) {
-  const [documents] = useState<Document[]>([
-    {
-      id: "1",
-      name: "Project Proposal.pdf",
-      size: "2.4 MB",
-      url: "/placeholder.svg?height=600&width=400",
-      type: "application/pdf",
-    },
-    // Add more documents as needed
-  ]);
-  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+  
+const [documents, setDocuments] = useState<Document[]>([]);
+
+React.useEffect(() => {
+  const res =
+    uploaded_file_path
+      ? uploaded_file_path.slice(
+          uploaded_file_path.indexOf("/static/uploads") +
+            "/static/uploads".length +
+            1
+        )
+      : "";
+
+  if (uploaded_file_path) {
+    setDocuments([
+      {
+        id: "1",
+        name: res,
+        size: "2.4 MB",
+        url: res,
+        type: "application/pdf",
+      },
+    ]);
+  } else {
+    setDocuments([]);
+  }
+}, [uploaded_file_path]);
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(
+    null
+  );
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
   // PDF preview handler
   const handlePreview = (document: Document) => {
@@ -61,12 +83,24 @@ export default function Popup({
   };
 
   // PDF download handler
-  const handleDownload = (document: Document) => {
-    const link = window.document.createElement("a");
-    link.href = document.url;
-    link.download = document.name;
-    link.click();
-  };
+  const handleDownload = async (document: Document) => {
+    const response = await fetch(backendURL + "/download/" + document.url);
+    if (!response.ok) {
+      console.error("Failed to download document:", response.statusText)
+      return
+        }
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const a = window.document.createElement("a")
+        a.href = url
+        a.download = document.name
+        window.document.body.appendChild(a)
+        a.click();
+
+        window.document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+};
+
 
   // Generate the correct video poster based on background_type
   const getPoster = () => {
@@ -86,16 +120,15 @@ export default function Popup({
 
   // Generate the correct video source path, handling relative URLs from backend
   const getVideoSrc = () => {
-  if (!video?.file_path) return "/placeholder.mp4";
-  if (video.file_path.startsWith("http")) return video.file_path;
-  // Always prepend backend URL for static files
-  return `${backendURL.replace(/\/$/, "")}/${video.file_path.replace(/^\/?/, "")}`;
-};
-
+    if (!video?.file_path) return "/placeholder.mp4";
+    if (video.file_path.startsWith("http")) return video.file_path;
+    // Always prepend backend URL for static files
+    return `${backendURL.replace(/\/$/, "")}/${video.file_path.replace(/^\/?/, "")}`;
+  };
 
   return (
     <>
-      <Dialog open={open} onOpenChange={onClose} >
+      <Dialog open={open} onOpenChange={onClose}>
         <DialogContent className="max-w-6xl max-h-[95vh] overflow-hidden scrollbar-none flex flex-col">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
@@ -103,7 +136,9 @@ export default function Popup({
               Video Preview
             </DialogTitle>
             <DialogDescription>
-              {video?.file_name ? `Watch "${video.file_name}" below` : "Watch your generated video below"}
+              {video?.file_name
+                ? `Watch "${video.file_name}" below`
+                : "Watch your generated video below"}
             </DialogDescription>
             <div className="pt-2">
               <Button
@@ -146,7 +181,9 @@ export default function Popup({
                     {video?.file_name || "Document Preview Video"}
                   </h3>
                   <p className="text-sm text-muted-foreground transition-colors duration-200 group-hover:text-gray-600">
-                    {video?.date ? `Created: ${video.date}` : "Click play to watch the document overview"}
+                    {video?.date
+                      ? `Created: ${video.date}`
+                      : "Click play to watch the document overview"}
                   </p>
                 </div>
               </div>
@@ -158,7 +195,9 @@ export default function Popup({
                     <div className="text-center py-8 text-muted-foreground">
                       <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
                       <p>No documents uploaded yet</p>
-                      <p className="text-sm">Ask your admin to add documents to your account</p>
+                      <p className="text-sm">
+                        Ask your admin to add documents to your account
+                      </p>
                     </div>
                   ) : (
                     documents.map((document) => (
@@ -171,9 +210,11 @@ export default function Popup({
                             <FileText className="h-6 w-6 text-red-600" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-medium truncate">{document.name}</h3>
+                            <h3 className="font-medium truncate">
+                              {document.name}
+                            </h3>
                             <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              <span>{document.size}</span>
+                              {/* <span>{document.size}</span> */}
                             </div>
                             <Badge variant="secondary">PDF</Badge>
                           </div>
@@ -222,7 +263,7 @@ export default function Popup({
           {selectedDocument && (
             <div className="flex-1 min-h-0">
               <iframe
-                src={selectedDocument.url}
+                src={backendURL + "/static/uploads/" +selectedDocument.url}
                 className="w-full h-[600px] border rounded-lg"
                 title={selectedDocument.name}
               />

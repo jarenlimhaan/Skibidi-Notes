@@ -19,6 +19,7 @@ interface UploadWithGenerations {
   date: string;
   background_type: string;
   quizID: string;
+  uploaded_file_path?: string;
 }
 
 export default function Library() {
@@ -54,6 +55,7 @@ export default function Library() {
           background_type: item[1][0].background_type,
           file_name: item[0][1],
           file_path: item[1][0].file_path,
+          uploaded_file_path: item[0][2],
           date: new Date(item[1][0].created_at).toLocaleDateString(), // Converts ISO to date stamp
           quizID: item[2] ? item[2].id : null, // Assuming quiz ID is in the third element
         }));
@@ -345,6 +347,7 @@ export default function Library() {
             open={isPopupOpen}
             video={selectedVideo}
             onClose={handleClosePopup}
+            uploaded_file_path={selectedVideo?.uploaded_file_path}
           />
 
           {/* Empty State */}
