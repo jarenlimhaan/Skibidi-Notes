@@ -61,7 +61,7 @@ async def login(
     # Set as secure HTTP-only cookie
     response = JSONResponse(content={"message": "Login successful"})
     response.set_cookie(
-        key="access_token", value=token, httponly=True, secure=True, samesite="Lax"
+        key="access_token", value=token, httponly=True, secure=False, samesite="Lax"
     )
     return response
 
