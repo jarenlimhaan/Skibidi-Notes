@@ -504,7 +504,7 @@ export default function BrainRotCustomizer() {
               {/* Note Name */}
               <Card className="bg-white p-6 border-2 border-purple-300">
                 <h3 className="text-purple-700 text-lg font-medium mb-4">
-                  Name your Note
+                  Name your note
                 </h3>
                 <div className="flex flex-col gap-2">
                   <Input
