@@ -157,33 +157,23 @@ export default function Popup({
           <ScrollArea className="flex-1 ">
             <div className="space-y-4 p-1">
               {/* Video Preview Section */}
-              <div className="relative p-4 border rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 transition-all duration-300 hover:shadow-md">
-                <div className="relative aspect-video bg-black rounded-lg overflow-hidden group">
-                  <video
-                    className="w-full h-full transition-transform duration-300 "
-                    poster={getPoster()}
-                    controls
-                    preload="metadata"
-                  >
-                    <source src={getVideoSrc()} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/10 opacity-0 transition-opacity duration-300 pointer-events-none">
-                    <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="relative p-1 border rounded-md bg-gradient-to-br from-gray-50 to-gray-100 transition-all duration-300 max-w-2xl mx-auto hover:shadow-sm">
+                  <div className="relative aspect-video bg-black rounded-lg overflow-hidden group">
+                    <video
+                      className="w-full h-full transition-transform duration-300"
+                      poster={getPoster()}
+                      controls
+                      preload="metadata"
+                    >
+                      <source src={getVideoSrc()} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/10 opacity-0 transition-opacity duration-300 pointer-events-none">
+                      <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    </div>
                   </div>
                 </div>
-                <div className="mt-4 text-center transform transition-all duration-300 hover:translate-y-[-2px]">
-                  <h3 className="font-medium text-gray-900 transition-colors duration-200">
-                    {video?.file_name || "Document Preview Video"}
-                  </h3>
-                  <p className="text-sm text-muted-foreground transition-colors duration-200 group-hover:text-gray-600">
-                    {video?.date
-                      ? `Created: ${video.date}`
-                      : "Click play to watch the document overview"}
-                  </p>
-                </div>
-              </div>
               <Separator />
               {/* Documents List */}
               <ScrollArea className="h-[400px]">
@@ -200,7 +190,7 @@ export default function Popup({
                     documents.map((document) => (
                       <div
                         key={document.id}
-                        className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+                        className="flex items-center justify-between p-2 border rounded-lg hover:bg-gray-50 transition-colors"
                       >
                         <div className="flex items-center gap-3 flex-1">
                           <div className="p-2 bg-red-100 rounded-lg">
