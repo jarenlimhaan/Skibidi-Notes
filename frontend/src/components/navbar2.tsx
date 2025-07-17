@@ -16,7 +16,11 @@ export default function Navbar() {
     <header className="w-full border-b bg-gradient-to-r from-purple-800 via-pink-500 to-cyan-400 z-50">
       <div className="w-full flex h-16 items-center px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl font-bold text-white">Logo</span>
+          <img
+            src="/skibidi_logo.png"
+            alt="Logo"
+            className="h-16 w-auto"
+          />
         </Link>
         <nav className="ml-auto hidden gap-6 md:flex">
           <Link
