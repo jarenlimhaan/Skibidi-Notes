@@ -54,3 +54,4 @@ backend/static/uploads
 backend/static/temp
 backend/static/subtitles
 backend/static/videos
+backend/static/output
