@@ -15,7 +15,7 @@ export default function ToiletAnimation2() {
         }
         return oldProgress + 1
       })
-    }, 150) // Adjust speed here (slower: 150ms per increment)
+    }, 500) // Adjust speed here (slower: 500ms per increment)
 
     return () => {
       clearInterval(interval)
