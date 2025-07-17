@@ -62,7 +62,7 @@ const testimonials = [
     avatar: "/ada_pic.png?height=60&width=60&text=SJ",
   },
   {
-    name: "Yan Shuen",
+    name: "Yan Shuen Lim",
     role: "High School Student",
     content:
       "Skibidi Notes is a game changer! I can now turn my boring lecture notes into fun quizzes that actually help me remember things better. Plus, the backgrounds are so cool! Highly recommended!",
