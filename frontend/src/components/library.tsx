@@ -369,50 +369,73 @@ export default function Library() {
                           )
                         )}
                         {video.background_type !== "unknown" && (
-                         <Button
-                          variant="outline"
-                          className="flex-shrink-0 bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 text-red-600 hover:bg-red-700 hover:text-white border border-red-600"
-                          onClick={() => {
-                            Swal.fire({
-                              title: "Flush this project down the toilet?",
-                              showDenyButton: true,
-                              showCancelButton: true,
-                              confirmButtonText: "Yes",
-                              denyButtonText: `No`,
-                            }).then((result) => {
-                              if (result.isConfirmed) {
-                                Swal.fire("Deleted!", "", "success");
-                                setDeletedVideos((prev) => [...prev, video.uploadId]);
-
-                                // Delete the video from the backend
-                                fetch(`${backendURL}/api/generator/delete/upload/${video.uploadId}`, {
-                                  method: "DELETE",
-                                  credentials: "include",
-                                })
-                                  .then((res) => {
-                                    if (!res.ok) {
-                                      throw new Error("Failed to delete video");
+                          <Button //make this change
+                            variant="outline"
+                            className="flex-shrink-0 bg-transparent text-red-600 hover:bg-red-700 hover:text-white border border-red-600"
+                            onClick={() => {
+                              Swal.fire({
+                                title: "Flush this project down the toilet?",
+                                showDenyButton: true,
+                                showCancelButton: true,
+                                confirmButtonText: "Yes",
+                                denyButtonText: `No`,
+                              }).then((result) => {
+                                /* Read more about isConfirmed, isDenied below */
+                                if (result.isConfirmed) {
+                                  Swal.fire("Deleted!", "", "success");
+                                  setDeletedVideos((prev) => [
+                                    ...prev,
+                                    video.uploadId,
+                                  ]);
+                                  // Delete the video from the backend
+                                  fetch(
+                                    `${backendURL}/api/generator/delete/upload/${video.uploadId}`,
+                                    {
+                                      method: "DELETE",
+                                      credentials: "include",
                                     }
-                                    return res.json();
-                                  })
-                                  .then(() => {
-                                    Swal.fire("Success!", "Video deleted successfully", "success");
-                                    // Remove the video from the state
-                                    handleDelete(video.uploadId);
-                                  })
-                                  .catch((err) => {
-                                    console.error("Error deleting video:", err);
-                                    Swal.fire("Error deleting video", err.message, "error");
-                                  });
-                              } else if (result.isDenied) {
-                                Swal.fire("Changes are not saved", "", "info");
-                              }
-                            });
-                          }}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                          <span className="sr-only">Delete</span>
-                        </Button>
+                                  )
+                                    .then((res) => {
+                                      if (!res.ok) {
+                                        throw new Error(
+                                          "Failed to delete video"
+                                        );
+                                      }
+                                      return res.json();
+                                    })
+                                    .then(() => {
+                                      Swal.fire(
+                                        "Success!",
+                                        "Video deleted successfully",
+                                        "success"
+                                      );
+                                      // Remove the video from the state
+                                      handleDelete(video.uploadId);
+                                    })
+                                    .catch((err) => {
+                                      console.error(
+                                        "Error deleting video:",
+                                        err
+                                      );
+                                      Swal.fire(
+                                        "Error deleting video",
+                                        err.message,
+                                        "error"
+                                      );
+                                    });
+                                } else if (result.isDenied) {
+                                  Swal.fire(
+                                    "Changes are not saved",
+                                    "",
+                                    "info"
+                                  );
+                                }
+                              });
+                            }}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            <span className="sr-only">Delete</span>
+                          </Button>
                         )}
                       </div>
                     </div>

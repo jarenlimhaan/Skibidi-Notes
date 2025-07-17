@@ -17,7 +17,7 @@ export default function Navbar() {
       <div className="w-full flex h-16 items-center px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2">
           <img
-            src="/skibidi_logo.png"
+            src="/skibidi_logo2.png"
             alt="Logo"
             className="h-16 w-auto"
           />
