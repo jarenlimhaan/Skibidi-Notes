@@ -7,6 +7,9 @@ import AppWrapper from "@/components/auth/appWrapper";
 export const metadata: Metadata = {
   title: "Skibidi Notes",
   description: "Your Favourite Educational Platform",
+  icons: {
+    icon: "/skibidi_websiteicon.png",
+  },
 };
 
 export default function RootLayout({
