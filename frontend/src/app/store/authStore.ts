@@ -9,13 +9,15 @@ type AuthState = {
   logout: () => void;
 };
 
+const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL 
+
 export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: null,
   user: null,
 
   login: async (email, password) => {
     try {
-      const res = await fetch("http://localhost:8000/api/auth/login", {
+      const res = await fetch( backendUrl + "/api/auth/login", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -41,7 +43,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   checkAuth: async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/auth/authorized", {
+      const res = await fetch(backendUrl + "/api/auth/authorized", {
         credentials: "include",
       });
 
@@ -57,7 +59,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: async () => {
-    const res = await fetch("http://localhost:8000/api/auth/logout", {
+    const res = await fetch(backendUrl + "/api/auth/logout", {
       method: "POST",
       credentials: "include",
     });

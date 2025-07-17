@@ -25,7 +25,7 @@ run-be:
 # Run FE
 run-fe:
 	@echo "Starting NextJS Application..."
-	@cd frontend && npm run dev
+	@cd frontend && HOST=0.0.0.0 npm run dev
 	@echo "Sucessfully ran NextJS Application🚀"
 
 # Run Redis 
