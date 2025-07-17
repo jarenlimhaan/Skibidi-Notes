@@ -59,7 +59,7 @@ class Summarizer:
             You are an expert assistant in summarizing short-form video scripts (e.g., TikTok or YouTube Shorts).
 
             Your task is to:
-            1. Provide a 2-3 sentence summary that captures the main idea and tone of the script (funny, inspiring, educational, etc.).
+            1. Provide a 8 sentence summary that captures the main idea and tone of the script (funny, inspiring, educational, etc.).
             2. Extract 3-4 punchy key points — these could be hooks, facts, tips, jokes, or moments designed to grab attention.
 
             Focus on brevity, clarity, and impact.

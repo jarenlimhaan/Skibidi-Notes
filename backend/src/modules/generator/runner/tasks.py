@@ -1,6 +1,7 @@
 # tasks.py
 from .base import celery_app
 import asyncio
+import nest_asyncio
 
 # Internal Imports
 from src.modules.generator.integrations.langchain.base import get_summarizer_service
@@ -13,9 +14,7 @@ from src.db.driver import SessionLocal
 
 
 @celery_app.task(bind=True)
-def run_generation_task(
-    self, pdf_path, upload_id, background, voice_id, quizcount, user_id
-):
+def run_generation_task(self, pdf_path, upload_id, background, voice_id, quizcount, user_id):
     self.update_state(state="PROGRESS", meta={"status": "Generating..."})
 
     summarizer = get_summarizer_service()
@@ -26,7 +25,6 @@ def run_generation_task(
     quiz_service = get_quiz_service()
 
     async def process():
-
         self.update_state(state="PROGRESS", meta={"status": "Generating Video..."})
 
         # generate video
@@ -43,7 +41,7 @@ def run_generation_task(
 
         self.update_state(state="PROGRESS", meta={"status": "Saving to DB..."})
 
-        # Save quiz
+        # Save quiz and video to DB
         async with SessionLocal() as db:
             await quiz_service.add_quiz(
                 createQuizDTO={"upload_id": upload_id, "content": res["quiz"]}, db=db
@@ -59,9 +57,7 @@ def run_generation_task(
                 db=db,
             )
 
-        self.update_state(
-            state="SUCCESS", meta={"status": "Video generated successfully"}
-        )
+        self.update_state(state="SUCCESS", meta={"status": "Video generated successfully"})
 
         return {
             "status": "Done",
@@ -71,7 +67,9 @@ def run_generation_task(
         }
 
     try:
-        return asyncio.run(process())
+        nest_asyncio.apply()  # ✅ Allows nested event loops
+        loop = asyncio.get_event_loop()
+        return loop.run_until_complete(process())  # ✅ Safely runs async code
     except Exception as e:
         self.update_state(state="FAILURE", meta={"status": str(e)})
         raise
