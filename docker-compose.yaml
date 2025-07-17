@@ -12,18 +12,18 @@ services:
     restart: unless-stopped
 
   # Comment this out if you are running the backend service locally
-  backend:
-    build:
-      context: .
-      dockerfile: docker/dockerfile-backend
-    container_name: backend-server
-    ports:
-      - "8000:8000"
-    environment:
-      - REDIS_URL=redis://redis:6379
-    depends_on:
-      - redis
-    restart: unless-stopped
+  # backend:
+  #   build:
+  #     context: .
+  #     dockerfile: docker/dockerfile-backend
+  #   container_name: backend-server
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - REDIS_URL=redis://redis:6379
+  #   depends_on:
+  #     - redis
+  #   restart: unless-stopped
 
 volumes:
   redis-data:
