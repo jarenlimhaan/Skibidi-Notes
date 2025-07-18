@@ -20,6 +20,9 @@
 ## Branches
 For local development and testing, use the `dev` branch. All new features and changes should be committed here. The `prod` branch is reserved for deployment and production releases. Merge tested changes from `dev` into `prod` when ready to deploy.
 
+## Deployment
+You can view detailed deployment instructions by clicking [here](docs/deployment/info.md).
+
 ## How to Download and Install Make on Windows and Mac
 We will be using make to run our development server as well as core custom commands within our makefile to ease development.
 
