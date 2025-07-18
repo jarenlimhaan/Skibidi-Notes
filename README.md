@@ -1,6 +1,25 @@
 # Skibidi Notes
 ---
 
+## Table of Contents
+
+- [How to Download and Install Make on Windows and Mac](#how-to-download-and-install-make-on-windows-and-mac)
+  - [Installing Make on Windows](#installing-make-on-windows)
+  - [Installing Make on Mac](#installing-make-on-mac)
+  - [Additional Notes](#additional-notes)
+- [Project Dependencies requirement](#project-dependencies-requirement)
+  - [Frontend Dependencies](#frontend-dependencies)
+  - [Backend Dependencies](#backend-dependencies)
+  - [Database](#database)
+    - [Installing Docker on Windows](#installing-docker-on-windows)
+    - [Installing Docker on Mac](#installing-docker-on-mac)
+    - [Additional Notes](#additional-notes-1)
+  - [Installing all dependencies in one go](#installing-all-dependencies-in-one-go)
+- [Running the Development server](#running-the-development-server)
+
+## Branches
+For local development and testing, use the `dev` branch. All new features and changes should be committed here. The `prod` branch is reserved for deployment and production releases. Merge tested changes from `dev` into `prod` when ready to deploy.
+
 ## How to Download and Install Make on Windows and Mac
 We will be using make to run our development server as well as core custom commands within our makefile to ease development.
 
@@ -67,9 +86,9 @@ For the backend, we are using Python with Poetry for dependency management.
   - Download and install Python from [Python Official Website](https://www.python.org/).
   - Ensure Python is added to your system's PATH.
 
-### Database
+### Redis Service
 
-Docker is required to containerize and manage the services for this project. Follow the steps below to install Docker on your system:
+Docker is required to containerize and manage the redis service used for this project. Follow the steps below to install Docker on your system:
 
 #### Installing Docker on Windows
 
@@ -118,7 +137,7 @@ Docker is required to containerize and manage the services for this project. Fol
 
 ## Running the Development server 
 1. **Set up Redis*:
-    - Set up the database service by running:
+    - Set up the redis service by running:
       ```bash
       docker compose up -d
       ``` 
