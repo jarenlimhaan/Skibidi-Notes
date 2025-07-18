@@ -18,7 +18,7 @@ This is an example of how our project structure would look like (not 100% yet)
     src/
     ├── app/             # All pages and routes live here (App Router)
     │   ├── page.tsx     # Home page ("/")
-    │   └── dashboard/   # Nested route ("/dashboard")
+    │   └── create/   # Nested route ("/create")
     │       ├── layout.tsx
     │       └── page.tsx
     │
