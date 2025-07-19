@@ -11,4 +11,4 @@ function LoginPage() {
   );
 }
 
-export default withoutAuth(LoginPage);
+export default LoginPage;
