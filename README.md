@@ -1,6 +1,8 @@
 # Skibidi Notes
 ---
 
+Please use python `3.10.18`
+
 ## Table of Contents
 
 - [How to Download and Install Make on Windows and Mac](#how-to-download-and-install-make-on-windows-and-mac)
