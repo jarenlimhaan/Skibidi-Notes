@@ -1,7 +1,11 @@
 # Skibidi Notes
----
 
-Please use python `3.10.18`
+The inspiration for SkibidiNotes came from a simple observation: many students – including myself and my peers – struggle to stay focused and motivated when it comes to revising. We’re living in an age where short-form, visually stimulating content dominates our attention spans, yet the tools we use for learning haven’t evolved to match that shift.
+
+We noticed that while students spend hours consuming content like TikTok or YouTube Shorts, they find it hard to sit through even ten minutes of reading their notes. This raised a question: What if studying could feel as effortless and engaging as scrolling social media?
+
+What it does: 
+- SkibidiNotes transforms traditional revision into an interactive, scroll-worthy experience. Users simply upload their notes, and the platform uses AI to summarise the content into clear, bite-sized points. -- These summaries are then presented over short-form gameplay or visually engaging videos, paired with AI-generated voiceovers to reinforce auditory learning. Finally, students are prompted with quick quizzes to test their understanding and retention – making studying feel more like watching a TikTok video than reading a textbook.
 
 ## Table of Contents
 
@@ -67,7 +71,7 @@ We will be using make to run our development server as well as core custom comma
 
 ## Project Dependencies requiremnet 
 
-For this section, you only need to install NodeJS + python, we will be installing everything in one go in the [section](#running-the-development-server) :
+For this section, you only need to install NodeJS + python (Please use python `3.10.18`), we will be installing everything in one go in the [section](#running-the-development-server) :
 1. We will be using `npm` to manage our frontend dependencies 
 2. We will be using `poetry` to manage our backend dependencies 
 
