@@ -1,29 +1,15 @@
 # Skibidi Notes
----
+SkibidiNotes transforms traditional revision into an interactive, scroll-worthy experience. Users simply upload their notes, and the platform uses AI to summarise the content into clear, bite-sized points. These summaries are then presented over short-form gameplay or visually engaging videos, paired with AI-generated voiceovers to reinforce auditory learning. Finally, students are prompted with quick quizzes to test their understanding and retention – making studying feel more like watching a TikTok video than reading a textbook.
 
-Please use python `3.10.18`
-
-## Table of Contents
-
-- [How to Download and Install Make on Windows and Mac](#how-to-download-and-install-make-on-windows-and-mac)
-  - [Installing Make on Windows](#installing-make-on-windows)
-  - [Installing Make on Mac](#installing-make-on-mac)
-  - [Additional Notes](#additional-notes)
-- [Project Dependencies requirement](#project-dependencies-requirement)
-  - [Frontend Dependencies](#frontend-dependencies)
-  - [Backend Dependencies](#backend-dependencies)
-  - [Database](#database)
-    - [Installing Docker on Windows](#installing-docker-on-windows)
-    - [Installing Docker on Mac](#installing-docker-on-mac)
-    - [Additional Notes](#additional-notes-1)
-  - [Installing all dependencies in one go](#installing-all-dependencies-in-one-go)
-- [Running the Development server](#running-the-development-server)
-
-## Branches
-For local development and testing, use the `dev` branch. All new features and changes should be committed here. The `prod` branch is reserved for deployment and production releases. Merge tested changes from `dev` into `prod` when ready to deploy.
-
-## Deployment
-You can view detailed deployment instructions by clicking [here](docs/deployment/info.md).
+## Teck-Stack
+* **Frontend:** [Next.js](https://nextjs.org/) (React framework)
+* **Backend:** [FastAPI](https://fastapi.tiangolo.com/) (Python API framework)
+* **Database & Auth:** [Supabase](https://supabase.com/) (PostgreSQL + Auth)
+* **Cache & Queue:** [Redis](https://redis.io/) (in-memory datastore)
+* **AI Services:**
+  * [OpenAI API](https://platform.openai.com/) → text generation & embeddings
+  * [AssemblyAI API](https://www.assemblyai.com/) → transcription & speech analysis
+  * [ElevenLabs API](https://elevenlabs.io/) → text-to-speech voice synthesis
 
 ## How to Download and Install Make on Windows and Mac
 We will be using make to run our development server as well as core custom commands within our makefile to ease development.
@@ -85,10 +71,10 @@ For the frontend, we are using a Next.js application. To set up the environment,
 
 ### Backend Dependencies
 
-For the backend, we are using Python with Poetry for dependency management.
+For the backend, we are using Python with Poetry for dependency management (Please use python `3.10.6`).
 
 1. **Install Python**:
-  - Download and install Python from [Python Official Website](https://www.python.org/).
+  - Download and install Python from [Python Official Website](https://www.python.org/downloads/release/python-3106/).
   - Ensure Python is added to your system's PATH.
 
 ### Redis Service
@@ -152,3 +138,6 @@ Docker is required to containerize and manage the redis service used for this pr
       ```bash
       make run
       ```
+
+## Deployment
+You can view detailed deployment instructions by clicking [here](docs/deployment/info.md).
