@@ -2,7 +2,10 @@
 SkibidiNotes transforms traditional revision into an interactive, scroll-worthy experience. Users simply upload their notes, and the platform uses AI to summarise the content into clear, bite-sized points. These summaries are then presented over short-form gameplay or visually engaging videos, paired with AI-generated voiceovers to reinforce auditory learning. Finally, students are prompted with quick quizzes to test their understanding and retention – making studying feel more like watching a TikTok video than reading a textbook.
 
 ## Video Demo
-https://github.com/user-attachments/assets/e149e9fa-262e-4352-bb30-938f4ba1d88c
+
+https://github.com/user-attachments/assets/539c041b-3b3d-4980-838a-f4318ed9ef85
+
+
 
 
 ## Teck-Stack
